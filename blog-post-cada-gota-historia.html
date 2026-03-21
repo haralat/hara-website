@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HARA Blog — El día que perdí mi eslogan</title>
+<meta name="description" content="Durante un año, 'Cada Gota Cuenta' fue la filosofía de HARA. Hasta que quise protegerla legalmente y descubrí que ya era de otro.">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Noto+Sans+KR:wght@200;300;400;500;600&family=Noto+Sans:wght@200;300;400;500;600&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+:root{--espresso:#1a1210;--crema:#d4a574;--cream:#f5efe6;--warm-white:#faf8f4;--roast-mid:#6b4226;--copper:#b87333;--sage:#8a9a7b;--ice-deep:#5a8aa0;--text-primary:#1a1210;--text-secondary:#6b5b50;--text-light:#a09080;--border-light:rgba(212,165,116,.15)}
+*{margin:0;padding:0;box-sizing:border-box}html{scroll-behavior:smooth;font-size:16px}
+body{background:var(--warm-white);color:var(--text-primary);font-family:'Noto Sans','Noto Sans KR',sans-serif;font-weight:300;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:var(--warm-white)}::-webkit-scrollbar-thumb{background:var(--crema);border-radius:3px}
+nav{position:fixed;top:0;left:0;right:0;z-index:200;padding:1.2rem 3rem;display:flex;justify-content:space-between;align-items:center;transition:all .5s}
+nav.scrolled{background:rgba(250,248,244,.92);backdrop-filter:blur(24px);padding:.9rem 3rem;box-shadow:0 1px 0 rgba(26,18,16,.06)}
+.nav-left{display:flex;align-items:center;gap:2.5rem}
+.nav-logo{font-family:'Cormorant Garamond',serif;font-weight:500;letter-spacing:.15em;color:var(--text-primary);text-decoration:none;font-size:1.3rem;line-height:1}
+.nav-logo small{display:block;font-weight:300;font-size:.55rem;letter-spacing:.3em;color:var(--text-secondary);margin-top:2px}
+.nav-back{font-size:.72rem;font-weight:400;letter-spacing:.08em;color:var(--text-secondary);text-decoration:none;display:flex;align-items:center;gap:.4rem;transition:color .3s}
+.nav-back:hover{color:var(--espresso)}
+.lang-switcher{display:flex;border:1px solid var(--border-light);border-radius:6px;overflow:hidden}
+.lang-btn{font-family:'JetBrains Mono',monospace;font-size:.6rem;letter-spacing:.1em;padding:.4rem .65rem;border:none;background:transparent;color:var(--text-light);cursor:pointer;transition:all .3s}
+.lang-btn:not(:last-child){border-right:1px solid var(--border-light)}
+.lang-btn.active{background:var(--espresso);color:var(--cream)}
+.lang-btn:hover:not(.active){background:rgba(212,165,116,.08);color:var(--roast-mid)}
+.progress-bar{position:fixed;top:0;left:0;height:2px;z-index:300;width:0%;background:linear-gradient(to right,var(--copper),var(--crema));transition:width .1s linear}
+.post-hero{height:85vh;min-height:540px;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;background:var(--espresso)}
+.post-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 30% 60%,rgba(107,66,38,.18),transparent 50%),radial-gradient(ellipse at 75% 35%,rgba(90,138,160,.06),transparent 45%)}
+.hero-content{position:relative;z-index:2;text-align:center;padding:2rem;max-width:720px}
+.hero-overline{font-family:'JetBrains Mono',monospace;font-size:.55rem;letter-spacing:.5em;color:rgba(245,239,230,.25);margin-bottom:2.5rem;opacity:0;animation:fadeUp .8s ease .3s forwards}
+.hero-title{font-family:'Cormorant Garamond',serif;font-size:clamp(2.2rem,5vw,3.8rem);font-weight:300;line-height:1.15;color:var(--cream);margin-bottom:1.5rem;opacity:0;animation:fadeUp 1s ease .5s forwards}
+.hero-title em{font-style:italic;color:var(--crema)}
+.hero-title s{text-decoration:line-through;color:rgba(245,239,230,.25);font-style:normal}
+.hero-sub{font-size:.95rem;line-height:1.9;color:rgba(245,239,230,.42);max-width:500px;margin:0 auto;opacity:0;animation:fadeUp .8s ease .8s forwards}
+.hero-meta{margin-top:2.5rem;display:flex;justify-content:center;gap:1.5rem;flex-wrap:wrap;opacity:0;animation:fadeUp .8s ease 1s forwards}
+.hero-badge{font-family:'JetBrains Mono',monospace;font-size:.55rem;letter-spacing:.2em;padding:.35rem .8rem;border-radius:4px;background:rgba(107,66,38,.25);color:var(--copper)}
+.hero-date,.hero-read{font-family:'JetBrains Mono',monospace;font-size:.6rem;color:rgba(245,239,230,.25);letter-spacing:.1em}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+.article-body{max-width:680px;margin:0 auto;padding:5rem 2rem 4rem}
+.article-body h2{font-family:'Cormorant Garamond',serif;font-size:1.75rem;font-weight:400;color:var(--espresso);margin:3.5rem 0 1rem;line-height:1.3}
+.article-body h2:first-child{margin-top:0}
+.article-body p{font-size:.95rem;line-height:2.1;color:var(--text-secondary);margin-bottom:1.4rem}
+.article-body p strong{color:var(--text-primary);font-weight:500}
+.article-body p em.t{font-style:italic;color:var(--copper);font-family:'Cormorant Garamond',serif;font-size:1.05em}
+.sep{width:40px;height:1px;background:var(--crema);margin:3rem auto;opacity:.4}
+.scene{margin:2.5rem -1rem;padding:2.5rem;background:var(--espresso);border-radius:20px;color:var(--cream);position:relative;overflow:hidden}
+.scene::before{content:'';position:absolute;top:-40%;right:-20%;width:250px;height:250px;border-radius:50%;background:radial-gradient(circle,rgba(107,66,38,.12),transparent)}
+.scene-label{font-family:'JetBrains Mono',monospace;font-size:.55rem;letter-spacing:.3em;color:var(--copper);margin-bottom:1.2rem}
+.scene p{font-size:.88rem;line-height:2;color:rgba(245,239,230,.55);margin-bottom:1rem;position:relative;z-index:1}
+.scene p:last-child{margin-bottom:0}
+.scene p strong{color:var(--crema)}
+.scene p em{font-style:italic;color:rgba(245,239,230,.75)}
+.proverb{margin:2.5rem -1rem;padding:2.5rem;border-radius:20px;border-left:3px solid var(--copper);background:rgba(184,115,51,.04);display:flex;gap:1.5rem;align-items:flex-start}
+.proverb-ko{font-family:'Noto Sans KR',sans-serif;font-size:1.1rem;font-weight:400;color:var(--espresso);line-height:1.6;white-space:nowrap}
+.proverb-divider{width:1px;background:var(--border-light);flex-shrink:0;align-self:stretch}
+.proverb-text{font-size:.88rem;line-height:1.9;color:var(--text-secondary)}
+.proverb-text em{display:block;margin-top:.5rem;font-style:italic;color:var(--copper);font-family:'Cormorant Garamond',serif;font-size:1rem}
+.timeline{margin:2.5rem -1rem;padding:2.5rem;background:var(--cream);border-radius:20px;border:1px solid var(--border-light)}
+.timeline-label{font-family:'JetBrains Mono',monospace;font-size:.55rem;letter-spacing:.3em;color:var(--text-light);margin-bottom:1.8rem;text-align:center}
+.timeline-item{display:flex;gap:1.2rem;margin-bottom:1.4rem;align-items:flex-start}
+.timeline-item:last-child{margin-bottom:0}
+.tl-dot{width:8px;height:8px;border-radius:50%;background:var(--copper);flex-shrink:0;margin-top:.45rem}
+.tl-dot.dead{background:rgba(26,18,16,.15)}
+.tl-content{}
+.tl-date{font-family:'JetBrains Mono',monospace;font-size:.55rem;letter-spacing:.1em;color:var(--text-light);margin-bottom:.25rem}
+.tl-text{font-size:.88rem;line-height:1.8;color:var(--text-secondary)}
+.tl-text strong{color:var(--text-primary);font-weight:500}
+.tl-text s{color:var(--text-light)}
+.insight{margin:2.5rem -1rem;padding:2.5rem;border-radius:20px;border:2px solid rgba(107,66,38,.15);background:rgba(107,66,38,.03);text-align:center}
+.insight-icon{font-size:2rem;margin-bottom:.8rem}
+.insight h4{font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:400;margin-bottom:.6rem;color:var(--roast-mid)}
+.insight p{font-size:.88rem;line-height:1.9;color:var(--text-secondary);max-width:520px;margin:0 auto}
+.callout{background:var(--espresso);color:var(--cream);border-radius:16px;padding:2.5rem;margin:2.5rem -1rem;position:relative;overflow:hidden}
+.callout::before{content:'';position:absolute;top:-40%;right:-20%;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,rgba(184,115,51,.06),transparent)}
+.callout .callout-label{font-family:'JetBrains Mono',monospace;font-size:.55rem;letter-spacing:.3em;color:var(--crema);margin-bottom:1rem}
+.callout p{font-size:.88rem;line-height:1.95;color:rgba(245,239,230,.55);margin-bottom:.8rem}
+.callout p:last-child{margin-bottom:0}
+.callout p strong{color:var(--crema)}
+.related-note{margin:2.5rem -1rem;padding:1.8rem 2.5rem;border-radius:16px;border:1px dashed rgba(184,115,51,.25);background:transparent;display:flex;align-items:center;gap:1.2rem}
+.related-icon{font-size:1.4rem;flex-shrink:0}
+.related-text{font-size:.82rem;line-height:1.8;color:var(--text-secondary)}
+.related-text a{color:var(--copper);text-decoration:none;border-bottom:1px solid rgba(184,115,51,.3)}
+.related-text a:hover{border-color:var(--copper)}
+.author-card{max-width:680px;margin:0 auto 4rem;padding:2rem 2rem 0;display:flex;align-items:center;gap:1.5rem;border-top:1px solid var(--border-light)}
+.author-avatar{width:56px;height:56px;border-radius:50%;background:var(--espresso);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.author-avatar span{font-family:'Cormorant Garamond',serif;font-size:1.2rem;color:var(--crema);font-weight:500}
+.author-info h4{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:500;margin-bottom:.15rem}
+.author-info p{font-size:.78rem;color:var(--text-secondary);line-height:1.5}
+footer{padding:3rem 2rem;text-align:center}
+footer p{font-family:'JetBrains Mono',monospace;font-size:.58rem;letter-spacing:.15em;color:var(--text-light)}
+footer a{color:var(--copper);text-decoration:none}
+.lang-content{display:none}
+.lang-content.active{display:block}
+@media(max-width:768px){nav{padding:1rem 1.2rem}nav.scrolled{padding:.8rem 1.2rem}.article-body{padding:3.5rem 1.2rem 3rem}.scene,.insight,.timeline,.callout,.proverb,.related-note{margin:2rem -.2rem}.proverb{flex-direction:column;gap:1rem}.proverb-divider{display:none}}
+</style>
+</head>
+<body>
+
+<div class="progress-bar" id="progress"></div>
+
+<nav id="navbar">
+  <div class="nav-left">
+    <a href="index.html" class="nav-logo">HARA<small>COFFEE LAB</small></a>
+    <a href="blog-index.html" class="nav-back">← Blog</a>
+  </div>
+  <div class="lang-switcher">
+    <button class="lang-btn active" data-lang="es">ES</button>
+    <button class="lang-btn" data-lang="ko">KO</button>
+    <button class="lang-btn" data-lang="en">EN</button>
+  </div>
+</nav>
+
+<!-- ═══ HERO ═══ -->
+<section class="post-hero">
+  <div class="hero-content">
+
+    <div class="hero-overline lang-content active" data-lang="es">GENTE · HARA COFFEE LAB</div>
+    <div class="hero-overline lang-content" data-lang="ko">GENTE · HARA COFFEE LAB</div>
+    <div class="hero-overline lang-content" data-lang="en">GENTE · HARA COFFEE LAB</div>
+
+    <h1 class="hero-title lang-content active" data-lang="es">
+      El día que quise proteger<br>mi eslogan y descubrí que<br><em>ya era de otro</em>
+    </h1>
+    <h1 class="hero-title lang-content" data-lang="ko">
+      슬로건을 지키려다<br>버려야 한다는 걸<br><em>알게 된 날</em>
+    </h1>
+    <h1 class="hero-title lang-content" data-lang="en">
+      The Day I Tried to Protect<br>My Slogan and Discovered<br><em>It Already Belonged to Someone Else</em>
+    </h1>
+
+    <p class="hero-sub lang-content active" data-lang="es">
+      Un año construyendo una filosofía alrededor de cuatro palabras. Y justo cuando fui a registrarlas, entendí por qué no podía.
+    </p>
+    <p class="hero-sub lang-content" data-lang="ko">
+      4개의 단어를 중심으로 1년간 철학을 쌓아왔다. 그리고 막 등록하려는 순간, 왜 할 수 없는지를 알게 됐다.
+    </p>
+    <p class="hero-sub lang-content" data-lang="en">
+      One year building a philosophy around four words. And just when I went to register them, I understood why I couldn't.
+    </p>
+
+    <div class="hero-meta">
+      <span class="hero-badge">GENTE</span>
+      <span class="hero-date">2026</span>
+      <span class="hero-read lang-content active" data-lang="es">6 min lectura</span>
+      <span class="hero-read lang-content" data-lang="ko">6분 읽기</span>
+      <span class="hero-read lang-content" data-lang="en">6 min read</span>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══ ARTICLE — ES ═══ -->
+<article class="article-body lang-content active" data-lang="es">
+
+  <h2>Cómo nació el eslogan</h2>
+
+  <p>Todo empezó con la física del goteo frío. Cuando diseñé el proceso de extracción del <strong>CdGF</strong> — Café de Goteo Frío — lo que más me impresionaba era la precisión absoluta que requería. No hay calor. No hay presión. Solo gravedad y tiempo. Cada gota que cae lo hace porque las leyes de la física lo permiten en ese instante preciso.</p>
+
+  <p>Desde esa imagen surgió el eslogan: <em class="t">Cada Gota Cuenta.</em> No era solo marketing. Era una descripción literal del proceso. Cada gota importa — en la extracción, en la receta, en el producto final.</p>
+
+  <p>Durante un año, esas tres palabras fueron HARA. Estaban en el blog, en las presentaciones, en la cabeza de todos los que habían escuchado hablar del proyecto.</p>
+
+  <div class="sep"></div>
+
+  <h2>El momento de querer protegerlo</h2>
+
+  <p>Cuando una marca empieza a crecer, llega el momento de pensar en la propiedad intelectual. Nombre comercial, logo, eslogan — todo eso puede y debe registrarse. Es el paso natural de "tengo algo que vale la pena proteger."</p>
+
+  <p>Así que abrí el navegador para investigar cómo registrar <em class="t">Cada Gota Cuenta</em> como marca en Argentina.</p>
+
+  <div class="scene">
+    <div class="scene-label">LO QUE ENCONTRÉ</div>
+    <p>Primera búsqueda. Primeros resultados. Y ahí estaba: <strong>Agua del Norte</strong>. La empresa proveedora de agua potable de Salta. La misma que abastece mi local. La misma con la que convivo todos los días.</p>
+    <p><em>"Cada Gota Cuenta"</em> era su campaña de concientización sobre el uso responsable del agua. No solo eso — en el mundo hispanohablante, la frase es un slogan genérico de campañas de ahorro de agua desde hace décadas. Una búsqueda rápida lo confirma: Chile, México, España, Colombia — todos la usan.</p>
+  </div>
+
+  <div class="proverb">
+    <div class="proverb-ko">등잔 밑이 어둡다</div>
+    <div class="proverb-divider"></div>
+    <div class="proverb-text">
+      Proverbio coreano. Literalmente: "bajo la lámpara es donde más oscuro está."
+      <em>El lugar más cercano es el que menos ves.</em>
+    </div>
+  </div>
+
+  <p>Agua del Norte. La empresa que me provee agua. Mi proveedor más cotidiano, más inmediato, más presente. Y yo construyendo una filosofía de marca sobre su eslogan de campaña sin saberlo.</p>
+
+  <p>Si hubiera sido una empresa de otra provincia, de otro país — el golpe habría sido menor. Pero esto era literalmente el agua que usaba para limpiar el local.</p>
+
+  <div class="sep"></div>
+
+  <h2>El inventario del daño</h2>
+
+  <div class="timeline">
+    <div class="timeline-label">LO QUE YA EXISTÍA CUANDO LO DESCUBRÍ</div>
+    <div class="timeline-item">
+      <div class="tl-dot"></div>
+      <div class="tl-content">
+        <div class="tl-date">12+ MESES</div>
+        <div class="tl-text">Blog posts publicados con <strong>"Cada Gota Cuenta"</strong> como filosofía central</div>
+      </div>
+    </div>
+    <div class="timeline-item">
+      <div class="tl-dot"></div>
+      <div class="tl-content">
+        <div class="tl-date">FEBRERO 2026</div>
+        <div class="tl-text">Tarjetas de presentación impresas en Corea del Sur. <strong>Ya distribuidas.</strong></div>
+      </div>
+    </div>
+    <div class="timeline-item">
+      <div class="tl-dot"></div>
+      <div class="tl-content">
+        <div class="tl-date">MÚLTIPLES VERSIONES</div>
+        <div class="tl-text">Materiales de identidad visual, presentaciones, contenido digital — todo referenciando el eslogan</div>
+      </div>
+    </div>
+    <div class="timeline-item">
+      <div class="tl-dot dead"></div>
+      <div class="tl-content">
+        <div class="tl-date">HOY</div>
+        <div class="tl-text"><s>Cada Gota Cuenta</s> → <strong>Cold Universe</strong></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sep"></div>
+
+  <h2>Lo que aprendí</h2>
+
+  <div class="insight">
+    <div class="insight-icon">⚖️</div>
+    <h4>La due diligence de marca no es opcional</h4>
+    <p>Antes de enamorarte de un nombre, un eslogan, un concepto — buscalo. En Google, en el registro de marcas, en las redes sociales. Lo que parece único desde adentro puede ser genérico desde afuera.</p>
+  </div>
+
+  <p>Pero hay algo más importante que el error en sí: <strong>el error lo encontré yo, buscando activamente proteger lo que había construido.</strong> No me lo señaló nadie. No hubo una demanda legal. El sistema funcionó — tarde, pero antes de que fuera irreversible.</p>
+
+  <p>Las tarjetas ya están impresas. Eso no cambia. Pero el website, el blog, la identidad digital — todo eso sí puede corregirse. Y se corrigió.</p>
+
+  <p>Hay toda una historia detrás de cómo llegamos al nombre <em class="t">Cold Universe</em> — la identidad visual, el logo, las tarjetas de presentación. Esa es otra historia, y merece su propio espacio.</p>
+
+  <div class="related-note">
+    <div class="related-icon">📌</div>
+    <div class="related-text">
+      La historia completa de la identidad visual de HARA — desde el primer boceto hasta las tres versiones de la tarjeta de presentación — está documentada en la serie <a href="#">HARA Visual Identity</a>. Próximamente.
+    </div>
+  </div>
+
+  <div class="callout">
+    <div class="callout-label">COLD UNIVERSE · DESDE HARA</div>
+    <p>En el CdGF, si algo sale mal durante la extracción, no podés revertirlo calentando. No existe "deshacer con calor." Solo podés seguir hacia adelante — ajustar, aprender, mejorar el siguiente lote.</p>
+    <p>Las tarjetas impresas con el eslogan antiguo son ese lote. Ya salieron. <strong>Lo que sigue es el siguiente.</strong></p>
+    <p><strong>Bienvenidos al Cold Universe.</strong></p>
+  </div>
+
+</article>
+
+<!-- ═══ ARTICLE — KO ═══ -->
+<article class="article-body lang-content" data-lang="ko">
+
+  <h2>슬로건이 탄생한 방법</h2>
+
+  <p>모든 것은 냉점적의 물리학에서 시작됐다. <strong>CdGF</strong> — Café de Goteo Frío, 냉점적 커피 — 의 추출 과정을 설계할 때, 가장 인상적이었던 건 그것이 요구하는 절대적인 정밀함이었다. 열이 없다. 압력이 없다. 오직 중력과 시간만. 떨어지는 한 방울 한 방울은 그 정확한 순간에 물리 법칙이 허락하기 때문에 떨어진다.</p>
+
+  <p>그 이미지에서 슬로건이 탄생했다: <em class="t">Cada Gota Cuenta.</em> 단순한 마케팅이 아니었다. 추출 과정의 문자 그대로의 묘사였다. 한 방울 한 방울이 중요하다 — 추출에서, 레시피에서, 최종 제품에서.</p>
+
+  <p>1년 동안, 그 세 단어가 곧 HARA였다. 블로그에, 프레젠테이션에, 이 프로젝트에 대해 들어본 모든 사람의 머릿속에.</p>
+
+  <div class="sep"></div>
+
+  <h2>지키려 했던 순간</h2>
+
+  <p>브랜드가 성장하기 시작하면, 지적재산권을 생각할 때가 온다. 상호, 로고, 슬로건 — 이 모든 것은 등록될 수 있고, 되어야 한다. "내가 지킬 가치 있는 무언가를 갖고 있다"는 자연스러운 다음 단계다.</p>
+
+  <p>그래서 브라우저를 열어 아르헨티나에서 <em class="t">Cada Gota Cuenta</em>를 상표로 등록하는 방법을 조사하기 시작했다.</p>
+
+  <div class="scene">
+    <div class="scene-label">내가 발견한 것</div>
+    <p>첫 번째 검색. 첫 번째 결과들. 그리고 거기 있었다: <strong>Agua del Norte</strong>. 살타의 수돗물 공급 업체. 내 매장에 물을 공급하는 바로 그 회사. 매일 함께하는 바로 그 곳.</p>
+    <p><em>"Cada Gota Cuenta"</em>는 그들의 물 절약 캠페인 슬로건이었다. 그뿐만이 아니었다 — 스페인어 문화권에서 이 문구는 수십 년 전부터 물 절약 캠페인의 일반적인 슬로건이었다. 칠레, 멕시코, 스페인, 콜롬비아 — 모두 사용하고 있었다.</p>
+  </div>
+
+  <div class="proverb">
+    <div class="proverb-ko">등잔 밑이 어둡다</div>
+    <div class="proverb-divider"></div>
+    <div class="proverb-text">
+      한국 속담. 직역하면: "등잔 아래가 가장 어둡다."
+      <em>가장 가까운 곳이 가장 보이지 않는 법이다.</em>
+    </div>
+  </div>
+
+  <p>Agua del Norte. 내게 물을 공급하는 업체. 가장 일상적이고, 가장 가깝고, 가장 현존하는 그 존재. 그리고 나는 그들의 캠페인 슬로건 위에 브랜드 철학을 쌓고 있었다, 모른 채로.</p>
+
+  <p>다른 주였다면, 다른 나라였다면 — 충격이 조금은 덜했을지 모른다. 하지만 이건 말 그대로 내가 매장을 청소하는 데 쓰는 물을 공급하는 회사였다.</p>
+
+  <div class="sep"></div>
+
+  <h2>피해 목록</h2>
+
+  <div class="timeline">
+    <div class="timeline-label">발견했을 때 이미 존재했던 것들</div>
+    <div class="timeline-item">
+      <div class="tl-dot"></div>
+      <div class="tl-content">
+        <div class="tl-date">12개월 이상</div>
+        <div class="tl-text"><strong>"Cada Gota Cuenta"</strong>를 핵심 철학으로 발행된 블로그 포스트들</div>
+      </div>
+    </div>
+    <div class="timeline-item">
+      <div class="tl-dot"></div>
+      <div class="tl-content">
+        <div class="tl-date">2026년 2월</div>
+        <div class="tl-text">한국에서 인쇄된 명함. <strong>이미 배포됨.</strong></div>
+      </div>
+    </div>
+    <div class="timeline-item">
+      <div class="tl-dot"></div>
+      <div class="tl-content">
+        <div class="tl-date">다수의 버전</div>
+        <div class="tl-text">브랜드 아이덴티티 자료, 프레젠테이션, 디지털 콘텐츠 — 모두 슬로건 참조</div>
+      </div>
+    </div>
+    <div class="timeline-item">
+      <div class="tl-dot dead"></div>
+      <div class="tl-content">
+        <div class="tl-date">현재</div>
+        <div class="tl-text"><s>Cada Gota Cuenta</s> → <strong>Cold Universe</strong></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sep"></div>
+
+  <h2>배운 것</h2>
+
+  <div class="insight">
+    <div class="insight-icon">⚖️</div>
+    <h4>브랜드 실사(due diligence)는 선택이 아니다</h4>
+    <p>이름, 슬로건, 컨셉에 빠지기 전에 — 검색해라. 구글에서, 상표 등록부에서, SNS에서. 내부에서 독창적으로 보이는 것이 외부에서는 흔할 수 있다.</p>
+  </div>
+
+  <p>하지만 실수 자체보다 더 중요한 게 있다: <strong>이 실수를 발견한 건 내가 능동적으로 내가 만든 것을 보호하려 했기 때문이다.</strong> 누가 지적한 게 아니었다. 법적 분쟁도 없었다. 시스템이 작동했다 — 늦었지만, 돌이킬 수 없게 되기 전에.</p>
+
+  <p>명함은 이미 인쇄됐다. 그건 바뀌지 않는다. 하지만 웹사이트, 블로그, 디지털 아이덴티티 — 그건 수정할 수 있다. 그리고 수정됐다.</p>
+
+  <p><em class="t">Cold Universe</em>라는 이름에 이르기까지의 이야기 — 비주얼 아이덴티티, 로고, 명함 — 그것은 또 다른 이야기이고, 그만한 공간을 가져야 한다.</p>
+
+  <div class="related-note">
+    <div class="related-icon">📌</div>
+    <div class="related-text">
+      첫 스케치부터 명함 세 버전까지, HARA 비주얼 아이덴티티의 전체 이야기는 <a href="#">HARA Visual Identity 시리즈</a>에 기록됩니다. 곧 공개.
+    </div>
+  </div>
+
+  <div class="callout">
+    <div class="callout-label">COLD UNIVERSE · HARA에서</div>
+    <p>CdGF에서, 추출 중에 뭔가 잘못됐다면 열로 되돌릴 수 없다. "열로 되돌리기"란 존재하지 않는다. 앞으로만 나아갈 수 있다 — 조정하고, 배우고, 다음 배치를 개선한다.</p>
+    <p>구 슬로건이 찍힌 명함들이 그 배치다. 이미 나갔다. <strong>다음은 그 다음 배치다.</strong></p>
+    <p><strong>Cold Universe에 오신 것을 환영합니다.</strong></p>
+  </div>
+
+</article>
+
+<!-- ═══ ARTICLE — EN ═══ -->
+<article class="article-body lang-content" data-lang="en">
+
+  <h2>How the slogan was born</h2>
+
+  <p>It all started with the physics of cold drip. When I designed the <strong>CdGF</strong> extraction process — Café de Goteo Frío, Cold Drip Coffee — what impressed me most was the absolute precision it required. No heat. No pressure. Just gravity and time. Each drop falls because the laws of physics allow it at that precise moment.</p>
+
+  <p>From that image came the slogan: <em class="t">Cada Gota Cuenta.</em> It wasn't just marketing. It was a literal description of the process. Every drop matters — in the extraction, in the recipe, in the final product.</p>
+
+  <p>For a year, those three words were HARA. They were in the blog, in presentations, in the minds of everyone who had heard about the project.</p>
+
+  <div class="sep"></div>
+
+  <h2>The moment I wanted to protect it</h2>
+
+  <p>When a brand starts to grow, the time comes to think about intellectual property. Trade name, logo, slogan — all of it can and should be registered. It's the natural next step of "I have something worth protecting."</p>
+
+  <p>So I opened the browser to research how to register <em class="t">Cada Gota Cuenta</em> as a trademark in Argentina.</p>
+
+  <div class="scene">
+    <div class="scene-label">WHAT I FOUND</div>
+    <p>First search. First results. And there it was: <strong>Agua del Norte</strong>. The drinking water provider for Salta. The same company that supplies my shop. The same one I deal with every single day.</p>
+    <p><em>"Cada Gota Cuenta"</em> was their water conservation campaign slogan. And not just that — across the Spanish-speaking world, the phrase is a generic slogan for water-saving campaigns going back decades. A quick search confirmed it: Chile, Mexico, Spain, Colombia — everyone uses it.</p>
+  </div>
+
+  <div class="proverb">
+    <div class="proverb-ko">등잔 밑이 어둡다</div>
+    <div class="proverb-divider"></div>
+    <div class="proverb-text">
+      Korean proverb. Literally: "it's darkest right beneath the lamp."
+      <em>The closest place is the one you least see.</em>
+    </div>
+  </div>
+
+  <p>Agua del Norte. The company that supplies my water. My most daily, most immediate, most present provider. And I had been building a brand philosophy on top of their campaign slogan without knowing it.</p>
+
+  <p>If it had been a company from another province, another country — the blow might have been smaller. But this was literally the water I used to clean the shop.</p>
+
+  <div class="sep"></div>
+
+  <h2>The damage inventory</h2>
+
+  <div class="timeline">
+    <div class="timeline-label">WHAT ALREADY EXISTED WHEN I FOUND OUT</div>
+    <div class="timeline-item">
+      <div class="tl-dot"></div>
+      <div class="tl-content">
+        <div class="tl-date">12+ MONTHS</div>
+        <div class="tl-text">Published blog posts with <strong>"Cada Gota Cuenta"</strong> as the central philosophy</div>
+      </div>
+    </div>
+    <div class="timeline-item">
+      <div class="tl-dot"></div>
+      <div class="tl-content">
+        <div class="tl-date">FEBRUARY 2026</div>
+        <div class="tl-text">Business cards printed in South Korea. <strong>Already distributed.</strong></div>
+      </div>
+    </div>
+    <div class="timeline-item">
+      <div class="tl-dot"></div>
+      <div class="tl-content">
+        <div class="tl-date">MULTIPLE VERSIONS</div>
+        <div class="tl-text">Visual identity materials, presentations, digital content — all referencing the slogan</div>
+      </div>
+    </div>
+    <div class="timeline-item">
+      <div class="tl-dot dead"></div>
+      <div class="tl-content">
+        <div class="tl-date">TODAY</div>
+        <div class="tl-text"><s>Cada Gota Cuenta</s> → <strong>Cold Universe</strong></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sep"></div>
+
+  <h2>What I learned</h2>
+
+  <div class="insight">
+    <div class="insight-icon">⚖️</div>
+    <h4>Brand due diligence is not optional</h4>
+    <p>Before falling in love with a name, a slogan, a concept — search for it. On Google, in the trademark registry, on social media. What seems unique from the inside can be generic from the outside.</p>
+  </div>
+
+  <p>But there's something more important than the mistake itself: <strong>I found this mistake because I was actively trying to protect what I had built.</strong> Nobody pointed it out. There was no legal dispute. The system worked — late, but before it became irreversible.</p>
+
+  <p>The cards are already printed. That doesn't change. But the website, the blog, the digital identity — all of that can be corrected. And it was.</p>
+
+  <p>There's a whole story behind how we arrived at <em class="t">Cold Universe</em> — the visual identity, the logo, the business cards. That's another story, and it deserves its own space.</p>
+
+  <div class="related-note">
+    <div class="related-icon">📌</div>
+    <div class="related-text">
+      The complete story of HARA's visual identity — from the first sketch to the three versions of the business card — is documented in the <a href="#">HARA Visual Identity series</a>. Coming soon.
+    </div>
+  </div>
+
+  <div class="callout">
+    <div class="callout-label">COLD UNIVERSE · FROM HARA</div>
+    <p>In CdGF, if something goes wrong during extraction, you can't reverse it with heat. There is no "undo with heat." You can only move forward — adjust, learn, improve the next batch.</p>
+    <p>The business cards printed with the old slogan are that batch. They're already out. <strong>What comes next is the next batch.</strong></p>
+    <p><strong>Welcome to the Cold Universe.</strong></p>
+  </div>
+
+</article>
+
+<!-- ═══ AUTHOR ═══ -->
+<div class="author-card">
+  <div class="author-avatar"><span>M</span></div>
+  <div class="author-info">
+    <h4>Michael Han · 한상원</h4>
+    <p>Fundador de HARA Coffee Lab · Salta, Argentina<br>
+    <span class="lang-content active" data-lang="es">Construyendo Cold Universe desde los Andes.</span>
+    <span class="lang-content" data-lang="ko">안데스에서 Cold Universe를 만들어가고 있습니다.</span>
+    <span class="lang-content" data-lang="en">Building Cold Universe from the Andes.</span>
+    </p>
+  </div>
+</div>
+
+<footer>
+  <p>© 2026 HARA COFFEE LAB · SALTA, ARGENTINA · <a href="index.html">COLD UNIVERSE</a></p>
+</footer>
+
+<script>
+window.addEventListener('scroll',()=>{
+  const d=document.documentElement;
+  document.getElementById('progress').style.width=((d.scrollTop/(d.scrollHeight-d.clientHeight))*100)+'%';
+  document.getElementById('navbar').classList.toggle('scrolled',window.scrollY>60);
+});
+
+function setLang(lang){
+  document.querySelectorAll('.lang-btn').forEach(b=>b.classList.toggle('active',b.dataset.lang===lang));
+  document.querySelectorAll('.lang-content').forEach(el=>el.classList.toggle('active',el.dataset.lang===lang));
+  document.documentElement.lang=lang==='ko'?'ko':'es';
+  try{localStorage.setItem('hara-lang',lang);}catch(e){}
+}
+
+document.querySelectorAll('.lang-btn').forEach(b=>b.addEventListener('click',()=>setLang(b.dataset.lang)));
+
+(function(){
+  let lang='es';
+  try{const s=localStorage.getItem('hara-lang');if(s&&['es','ko','en'].includes(s))lang=s;}catch(e){}
+  setLang(lang);
+})();
+</script>
+
+</body>
+</html>

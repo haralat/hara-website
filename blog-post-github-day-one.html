@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HARA Blog — Hoy creé mi primer repositorio en GitHub</title>
+<meta name="description" content="Un fundador sin conocimientos técnicos aprende a gestionar su sitio web con GitHub. La historia de cómo Cold Universe encontró su sistema nervioso digital.">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Noto+Sans+KR:wght@200;300;400;500;600&family=Noto+Sans:wght@200;300;400;500;600&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+:root{--espresso:#1a1210;--crema:#d4a574;--cream:#f5efe6;--warm-white:#faf8f4;--roast-mid:#6b4226;--copper:#b87333;--sage:#8a9a7b;--ice-deep:#5a8aa0;--text-primary:#1a1210;--text-secondary:#6b5b50;--text-light:#a09080;--border-light:rgba(212,165,116,.15)}
+*{margin:0;padding:0;box-sizing:border-box}html{scroll-behavior:smooth;font-size:16px}
+body{background:var(--warm-white);color:var(--text-primary);font-family:'Noto Sans','Noto Sans KR',sans-serif;font-weight:300;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:var(--warm-white)}::-webkit-scrollbar-thumb{background:var(--crema);border-radius:3px}
+nav{position:fixed;top:0;left:0;right:0;z-index:200;padding:1.2rem 3rem;display:flex;justify-content:space-between;align-items:center;transition:all .5s}
+nav.scrolled{background:rgba(250,248,244,.92);backdrop-filter:blur(24px);padding:.9rem 3rem;box-shadow:0 1px 0 rgba(26,18,16,.06)}
+.nav-left{display:flex;align-items:center;gap:2.5rem}
+.nav-logo{font-family:'Cormorant Garamond',serif;font-weight:500;letter-spacing:.15em;color:var(--text-primary);text-decoration:none;font-size:1.3rem;line-height:1}
+.nav-logo small{display:block;font-weight:300;font-size:.55rem;letter-spacing:.3em;color:var(--text-secondary);margin-top:2px}
+.nav-back{font-size:.72rem;font-weight:400;letter-spacing:.08em;color:var(--text-secondary);text-decoration:none;display:flex;align-items:center;gap:.4rem;transition:color .3s}
+.nav-back:hover{color:var(--espresso)}
+.lang-switcher{display:flex;border:1px solid var(--border-light);border-radius:6px;overflow:hidden}
+.lang-btn{font-family:'JetBrains Mono',monospace;font-size:.6rem;letter-spacing:.1em;padding:.4rem .65rem;border:none;background:transparent;color:var(--text-light);cursor:pointer;transition:all .3s}
+.lang-btn:not(:last-child){border-right:1px solid var(--border-light)}
+.lang-btn.active{background:var(--espresso);color:var(--cream)}
+.lang-btn:hover:not(.active){background:rgba(212,165,116,.08);color:var(--roast-mid)}
+.progress-bar{position:fixed;top:0;left:0;height:2px;z-index:300;width:0%;background:linear-gradient(to right,var(--copper),var(--crema),var(--roast-mid));transition:width .1s linear}
+.post-hero{height:85vh;min-height:540px;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;background:var(--espresso)}
+.post-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 30% 60%,rgba(107,66,38,.15),transparent 50%),radial-gradient(ellipse at 70% 40%,rgba(184,115,51,.08),transparent 45%)}
+.hero-content{position:relative;z-index:2;text-align:center;padding:2rem;max-width:720px}
+.hero-overline{font-family:'JetBrains Mono',monospace;font-size:.55rem;letter-spacing:.5em;color:rgba(245,239,230,.25);margin-bottom:2.5rem;opacity:0;animation:fadeUp .8s ease .3s forwards}
+.hero-title{font-family:'Cormorant Garamond',serif;font-size:clamp(2.2rem,5vw,3.8rem);font-weight:300;line-height:1.15;color:var(--cream);margin-bottom:1.5rem;opacity:0;animation:fadeUp 1s ease .5s forwards}
+.hero-title em{font-style:italic;color:var(--crema)}
+.hero-sub{font-size:.95rem;line-height:1.9;color:rgba(245,239,230,.42);max-width:500px;margin:0 auto;opacity:0;animation:fadeUp .8s ease .8s forwards}
+.hero-meta{margin-top:2.5rem;display:flex;justify-content:center;gap:1.5rem;flex-wrap:wrap;opacity:0;animation:fadeUp .8s ease 1s forwards}
+.hero-badge{font-family:'JetBrains Mono',monospace;font-size:.55rem;letter-spacing:.2em;padding:.35rem .8rem;border-radius:4px;background:rgba(107,66,38,.25);color:var(--copper)}
+.hero-date,.hero-read{font-family:'JetBrains Mono',monospace;font-size:.6rem;color:rgba(245,239,230,.25);letter-spacing:.1em}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+.article-body{max-width:680px;margin:0 auto;padding:5rem 2rem 4rem}
+.article-body h2{font-family:'Cormorant Garamond',serif;font-size:1.75rem;font-weight:400;color:var(--espresso);margin:3.5rem 0 1rem;line-height:1.3}
+.article-body h2:first-child{margin-top:0}
+.article-body p{font-size:.95rem;line-height:2.1;color:var(--text-secondary);margin-bottom:1.4rem}
+.article-body p strong{color:var(--text-primary);font-weight:500}
+.article-body p em.t{font-style:italic;color:var(--copper);font-family:'Cormorant Garamond',serif;font-size:1.05em}
+.sep{width:40px;height:1px;background:var(--crema);margin:3rem auto;opacity:.4}
+.scene{margin:2.5rem -1rem;padding:2.5rem;background:var(--espresso);border-radius:20px;color:var(--cream);position:relative;overflow:hidden}
+.scene::before{content:'';position:absolute;top:-40%;right:-20%;width:250px;height:250px;border-radius:50%;background:radial-gradient(circle,rgba(107,66,38,.12),transparent)}
+.scene-label{font-family:'JetBrains Mono',monospace;font-size:.55rem;letter-spacing:.3em;color:var(--copper);margin-bottom:1.2rem}
+.scene p{font-size:.88rem;line-height:2;color:rgba(245,239,230,.55);margin-bottom:1rem;position:relative;z-index:1}
+.scene p:last-child{margin-bottom:0}
+.scene p strong{color:var(--crema)}
+.insight{margin:2.5rem -1rem;padding:2.5rem;border-radius:20px;border:2px solid rgba(107,66,38,.15);background:rgba(107,66,38,.03);text-align:center}
+.insight-icon{font-size:2rem;margin-bottom:.8rem}
+.insight h4{font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:400;margin-bottom:.6rem;color:var(--roast-mid)}
+.insight p{font-size:.88rem;line-height:1.9;color:var(--text-secondary);max-width:520px;margin:0 auto}
+.flow-diagram{margin:2.5rem -1rem;padding:2.5rem;background:var(--cream);border-radius:20px;border:1px solid var(--border-light)}
+.flow-label{font-family:'JetBrains Mono',monospace;font-size:.55rem;letter-spacing:.3em;color:var(--text-light);margin-bottom:1.8rem;text-align:center}
+.flow-steps{display:flex;align-items:center;justify-content:center;gap:.5rem;flex-wrap:wrap}
+.flow-step{text-align:center;padding:.9rem 1.2rem;border-radius:10px;border:1px solid rgba(184,115,51,.15);background:white;min-width:90px;flex:1;max-width:140px}
+.flow-step .fs-icon{font-size:1.2rem;margin-bottom:.4rem}
+.flow-step .fs-title{font-size:.72rem;font-weight:500;color:var(--text-primary);margin-bottom:.2rem}
+.flow-step .fs-sub{font-family:'JetBrains Mono',monospace;font-size:.5rem;color:var(--text-light)}
+.flow-arrow{color:rgba(184,115,51,.35);font-size:1rem;flex-shrink:0}
+.callout{background:var(--espresso);color:var(--cream);border-radius:16px;padding:2.5rem;margin:2.5rem -1rem;position:relative;overflow:hidden}
+.callout::before{content:'';position:absolute;top:-40%;right:-20%;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,rgba(184,115,51,.06),transparent)}
+.callout .callout-label{font-family:'JetBrains Mono',monospace;font-size:.55rem;letter-spacing:.3em;color:var(--crema);margin-bottom:1rem}
+.callout p{font-size:.88rem;line-height:1.95;color:rgba(245,239,230,.55);margin-bottom:.8rem}
+.callout p:last-child{margin-bottom:0}
+.callout p strong{color:var(--crema)}
+.author-card{max-width:680px;margin:0 auto 4rem;padding:2rem 2rem 0;display:flex;align-items:center;gap:1.5rem;border-top:1px solid var(--border-light)}
+.author-avatar{width:56px;height:56px;border-radius:50%;background:var(--espresso);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.author-avatar span{font-family:'Cormorant Garamond',serif;font-size:1.2rem;color:var(--crema);font-weight:500}
+.author-info h4{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:500;margin-bottom:.15rem}
+.author-info p{font-size:.78rem;color:var(--text-secondary);line-height:1.5}
+footer{padding:3rem 2rem;text-align:center}
+footer p{font-family:'JetBrains Mono',monospace;font-size:.58rem;letter-spacing:.15em;color:var(--text-light)}
+footer a{color:var(--copper);text-decoration:none}
+.lang-content{display:none}
+.lang-content.active{display:block}
+@media(max-width:768px){nav{padding:1rem 1.2rem}nav.scrolled{padding:.8rem 1.2rem}.article-body{padding:3.5rem 1.2rem 3rem}.scene,.insight,.flow-diagram,.callout{margin:2rem -.2rem}.flow-steps{gap:.3rem}.flow-step{min-width:70px;padding:.7rem .8rem}}
+</style>
+</head>
+<body>
+
+<div class="progress-bar" id="progress"></div>
+
+<nav id="navbar">
+  <div class="nav-left">
+    <a href="index.html" class="nav-logo">HARA<small>COFFEE LAB</small></a>
+    <a href="blog-index.html" class="nav-back">← Blog</a>
+  </div>
+  <div class="lang-switcher">
+    <button class="lang-btn active" data-lang="es">ES</button>
+    <button class="lang-btn" data-lang="ko">KO</button>
+    <button class="lang-btn" data-lang="en">EN</button>
+  </div>
+</nav>
+
+<!-- ═══ HERO ═══ -->
+<section class="post-hero">
+  <div class="hero-content">
+
+    <div class="hero-overline lang-content active" data-lang="es">GENTE · HARA COFFEE LAB</div>
+    <div class="hero-overline lang-content" data-lang="ko">GENTE · HARA COFFEE LAB</div>
+    <div class="hero-overline lang-content" data-lang="en">GENTE · HARA COFFEE LAB</div>
+
+    <h1 class="hero-title lang-content active" data-lang="es">
+      Hoy creé mi primer<br><em>repositorio en GitHub</em>
+    </h1>
+    <h1 class="hero-title lang-content" data-lang="ko">
+      오늘 처음으로<br><em>GitHub을 만들었다</em>
+    </h1>
+    <h1 class="hero-title lang-content" data-lang="en">
+      Today I Created My<br><em>First GitHub Repository</em>
+    </h1>
+
+    <p class="hero-sub lang-content active" data-lang="es">
+      Sin saber programar. Sin un equipo técnico. Solo con una pregunta: ¿dónde viven las ideas cuando el chat se cierra?
+    </p>
+    <p class="hero-sub lang-content" data-lang="ko">
+      코딩을 몰라도. 기술팀이 없어도. 단 하나의 질문만 가지고: 채팅창이 닫히면 아이디어는 어디로 가는가?
+    </p>
+    <p class="hero-sub lang-content" data-lang="en">
+      Without knowing how to code. Without a tech team. With just one question: where do ideas live when the chat closes?
+    </p>
+
+    <div class="hero-meta">
+      <span class="hero-badge lang-content active" data-lang="es">GENTE</span>
+      <span class="hero-badge lang-content" data-lang="ko">GENTE</span>
+      <span class="hero-badge lang-content" data-lang="en">GENTE</span>
+      <span class="hero-date">21 · 03 · 2026</span>
+      <span class="hero-read lang-content active" data-lang="es">5 min lectura</span>
+      <span class="hero-read lang-content" data-lang="ko">5분 읽기</span>
+      <span class="hero-read lang-content" data-lang="en">5 min read</span>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══ ARTICLE — ES ═══ -->
+<article class="article-body lang-content active" data-lang="es">
+
+  <h2>El problema que no sabía nombrar</h2>
+
+  <p>Durante meses, HARA vivió en fragmentos. Un texto de la homepage aquí, una idea para el menú allá, un borrador de blog en otra conversación. Cada vez que quería retomar algo, tenía que empezar de cero — o perder veinte minutos buscando en qué chat había quedado aquello.</p>
+
+  <p>No era un problema técnico. Era un problema de <strong>dónde vive lo que construís</strong>.</p>
+
+  <div class="scene">
+    <div class="scene-label">EL SÍNTOMA</div>
+    <p>Abrís un chat nuevo. Le pedís a la IA que te ayude con la homepage. Te hace algo bueno. Lo cerrás. Al día siguiente, necesitás modificar algo. Abrís otro chat. La IA no sabe nada de lo anterior. Empezás de nuevo.</p>
+    <p><strong>Multiplicá eso por seis meses y entendés cómo llegué a tener cuatro versiones del mismo archivo sin saber cuál era la más reciente.</strong></p>
+  </div>
+
+  <div class="sep"></div>
+
+  <h2>La pregunta que lo cambió todo</h2>
+
+  <p>Un día, en lugar de pedirle a Claude que me hiciera algo nuevo, le pregunté: <em class="t">"¿Cuál es el problema real?"</em></p>
+
+  <p>La respuesta fue directa: no tenía una <strong>fuente única de verdad</strong>. Ningún lugar donde el archivo oficial viviera. Ningún sistema que dijera "esta es la versión que existe en el mundo".</p>
+
+  <p>En el mundo del software, ese problema se resolvió hace décadas. Se llama control de versiones. La herramienta más usada se llama Git. Y el lugar donde los equipos guardan ese historial se llama GitHub.</p>
+
+  <div class="insight">
+    <div class="insight-icon">💡</div>
+    <h4>Single Source of Truth</h4>
+    <p>Un solo lugar donde vive la versión oficial de cada archivo. Todo lo demás son copias, borradores, experimentos. Pero hay un lugar que siempre tiene razón.</p>
+  </div>
+
+  <div class="sep"></div>
+
+  <h2>Lo que hice hoy</h2>
+
+  <p>Sin experiencia en programación. Sin un equipo técnico. Solo con paciencia y una guía paso a paso, en menos de una hora:</p>
+
+  <div class="flow-diagram">
+    <div class="flow-label">EL PROCESO · HOY · 21.03.2026</div>
+    <div class="flow-steps">
+      <div class="flow-step">
+        <div class="fs-icon">📁</div>
+        <div class="fs-title">GitHub</div>
+        <div class="fs-sub">Cuenta creada</div>
+      </div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-step">
+        <div class="fs-icon">🗂️</div>
+        <div class="fs-title">Repositorio</div>
+        <div class="fs-sub">hara-website</div>
+      </div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-step">
+        <div class="fs-icon">☁️</div>
+        <div class="fs-title">Cloudflare</div>
+        <div class="fs-sub">Conectado</div>
+      </div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-step">
+        <div class="fs-icon">🌐</div>
+        <div class="fs-title">hara.lat</div>
+        <div class="fs-sub">En vivo</div>
+      </div>
+    </div>
+  </div>
+
+  <p>Ahora, cada vez que modifico un archivo y lo subo a GitHub, <strong>hara.lat se actualiza automáticamente en menos de dos minutos</strong>. Sin servidores. Sin código. Sin intermediarios.</p>
+
+  <p>Y lo más importante: si alguien me pregunta "¿cuál es la versión oficial de la homepage?", tengo una respuesta única y clara.</p>
+
+  <div class="sep"></div>
+
+  <h2>Por qué esto importa más allá del código</h2>
+
+  <p>Construir una marca sin equipo técnico en 2026 significa aprender a usar herramientas que no fueron diseñadas para vos. Pero también significa que las barreras nunca fueron tan bajas.</p>
+
+  <p>Hoy no aprendí a programar. Aprendí algo más útil: <strong>cómo darle estructura a lo que creo</strong>. Cómo hacer que las ideas no se pierdan cuando cierro el chat.</p>
+
+  <div class="callout">
+    <div class="callout-label">COLD UNIVERSE · DESDE HARA</div>
+    <p>En el proceso de extracción del CdGF, hay una regla simple: <strong>la temperatura solo desciende</strong>. Nunca sube. Cada paso tiene una dirección.</p>
+    <p>Hoy aprendí que construir una marca también necesita esa dirección. Un archivo. Una fuente de verdad. Una sola temperatura de referencia.</p>
+    <p><strong>Bienvenidos al Cold Universe.</strong></p>
+  </div>
+
+</article>
+
+<!-- ═══ ARTICLE — KO ═══ -->
+<article class="article-body lang-content" data-lang="ko">
+
+  <h2>이름 붙이지 못했던 문제</h2>
+
+  <p>몇 달 동안 HARA는 조각들 속에 살았다. 홈페이지 텍스트는 여기, 메뉴 아이디어는 저기, 블로그 초안은 또 다른 대화 속에. 뭔가를 다시 이어가려 할 때마다 처음부터 시작해야 했다 — 아니면 어느 채팅에서 뭘 했는지 찾느라 20분을 써야 했다.</p>
+
+  <p>기술적인 문제가 아니었다. <strong>내가 만드는 것들이 어디에 사는가</strong>의 문제였다.</p>
+
+  <div class="scene">
+    <div class="scene-label">증상</div>
+    <p>새 채팅을 연다. AI에게 홈페이지 작업을 부탁한다. 잘 된다. 닫는다. 다음 날, 뭔가 수정이 필요하다. 다른 채팅을 연다. AI는 이전 것을 아무것도 모른다. 다시 시작한다.</p>
+    <p><strong>그걸 6개월 동안 반복했더니, 같은 파일의 버전이 네 개가 생겼고 어떤 게 최신인지 알 수 없게 됐다.</strong></p>
+  </div>
+
+  <div class="sep"></div>
+
+  <h2>모든 것을 바꾼 질문</h2>
+
+  <p>어느 날, Claude에게 새로운 걸 만들어달라는 대신 이렇게 물었다: <em class="t">"진짜 문제가 뭐야?"</em></p>
+
+  <p>답은 명확했다: 나에게는 <strong>단일 진실의 원천(Single Source of Truth)</strong>이 없었다. 공식 파일이 사는 곳. "이게 세상에 존재하는 버전이다"라고 말해주는 시스템.</p>
+
+  <p>소프트웨어 세계에서는 수십 년 전에 해결된 문제다. 버전 관리라고 부른다. 가장 많이 쓰는 도구가 Git이고, 팀들이 그 이력을 보관하는 곳이 GitHub이다.</p>
+
+  <div class="insight">
+    <div class="insight-icon">💡</div>
+    <h4>단일 진실의 원천</h4>
+    <p>모든 파일의 공식 버전이 사는 단 한 곳. 나머지는 모두 복사본, 초안, 실험. 하지만 항상 정답인 곳은 하나다.</p>
+  </div>
+
+  <div class="sep"></div>
+
+  <h2>오늘 한 것</h2>
+
+  <p>프로그래밍 경험 없이. 기술팀 없이. 인내심 하나와 단계별 안내만으로, 한 시간도 안 걸려:</p>
+
+  <div class="flow-diagram">
+    <div class="flow-label">오늘의 과정 · 2026.03.21</div>
+    <div class="flow-steps">
+      <div class="flow-step">
+        <div class="fs-icon">📁</div>
+        <div class="fs-title">GitHub</div>
+        <div class="fs-sub">계정 생성</div>
+      </div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-step">
+        <div class="fs-icon">🗂️</div>
+        <div class="fs-title">저장소</div>
+        <div class="fs-sub">hara-website</div>
+      </div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-step">
+        <div class="fs-icon">☁️</div>
+        <div class="fs-title">Cloudflare</div>
+        <div class="fs-sub">연결 완료</div>
+      </div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-step">
+        <div class="fs-icon">🌐</div>
+        <div class="fs-title">hara.lat</div>
+        <div class="fs-sub">라이브</div>
+      </div>
+    </div>
+  </div>
+
+  <p>이제 파일을 수정하고 GitHub에 올리면, <strong>hara.lat이 2분 안에 자동으로 업데이트된다</strong>. 서버 없이. 코딩 없이. 중간 단계 없이.</p>
+
+  <p>그리고 가장 중요한 것: 누군가 "홈페이지 공식 버전이 뭐야?"라고 물으면, 하나의 명확한 답이 있다.</p>
+
+  <div class="sep"></div>
+
+  <h2>코드를 넘어선 의미</h2>
+
+  <p>2026년에 기술팀 없이 브랜드를 만든다는 건 나를 위해 설계되지 않은 도구들을 배우는 것을 의미한다. 하지만 장벽이 이렇게 낮았던 적도 없다.</p>
+
+  <p>오늘 나는 프로그래밍을 배운 게 아니다. 더 유용한 걸 배웠다: <strong>내가 만드는 것들에 구조를 주는 방법</strong>. 채팅창을 닫아도 아이디어가 사라지지 않는 방법.</p>
+
+  <div class="callout">
+    <div class="callout-label">COLD UNIVERSE · HARA에서</div>
+    <p>CdGF 추출 과정에는 단순한 규칙이 있다: <strong>온도는 오직 내려간다</strong>. 절대 올라가지 않는다. 각 단계에는 방향이 있다.</p>
+    <p>오늘 브랜드를 만드는 것도 그 방향이 필요하다는 걸 배웠다. 하나의 파일. 하나의 진실. 하나의 기준 온도.</p>
+    <p><strong>Cold Universe에 오신 것을 환영합니다.</strong></p>
+  </div>
+
+</article>
+
+<!-- ═══ ARTICLE — EN ═══ -->
+<article class="article-body lang-content" data-lang="en">
+
+  <h2>The problem I couldn't name</h2>
+
+  <p>For months, HARA lived in fragments. A homepage text here, a menu idea there, a blog draft in another conversation. Every time I wanted to pick something up again, I had to start from scratch — or spend twenty minutes searching which chat had that thing I needed.</p>
+
+  <p>It wasn't a technical problem. It was a problem of <strong>where the things you build actually live</strong>.</p>
+
+  <div class="scene">
+    <div class="scene-label">THE SYMPTOM</div>
+    <p>You open a new chat. You ask the AI to help with the homepage. It does something good. You close it. Next day, you need to change something. You open another chat. The AI knows nothing about the previous one. You start again.</p>
+    <p><strong>Multiply that by six months and you understand how I ended up with four versions of the same file, with no idea which was the most recent.</strong></p>
+  </div>
+
+  <div class="sep"></div>
+
+  <h2>The question that changed everything</h2>
+
+  <p>One day, instead of asking Claude to make something new, I asked: <em class="t">"What's the real problem?"</em></p>
+
+  <p>The answer was direct: I had no <strong>Single Source of Truth</strong>. No place where the official file lived. No system that said "this is the version that exists in the world."</p>
+
+  <p>In the software world, this problem was solved decades ago. It's called version control. The most widely used tool is called Git. And the place where teams store that history is called GitHub.</p>
+
+  <div class="insight">
+    <div class="insight-icon">💡</div>
+    <h4>Single Source of Truth</h4>
+    <p>One single place where the official version of every file lives. Everything else is copies, drafts, experiments. But there's one place that's always right.</p>
+  </div>
+
+  <div class="sep"></div>
+
+  <h2>What I did today</h2>
+
+  <p>Without programming experience. Without a tech team. With just patience and a step-by-step guide, in less than an hour:</p>
+
+  <div class="flow-diagram">
+    <div class="flow-label">THE PROCESS · TODAY · 21.03.2026</div>
+    <div class="flow-steps">
+      <div class="flow-step">
+        <div class="fs-icon">📁</div>
+        <div class="fs-title">GitHub</div>
+        <div class="fs-sub">Account created</div>
+      </div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-step">
+        <div class="fs-icon">🗂️</div>
+        <div class="fs-title">Repository</div>
+        <div class="fs-sub">hara-website</div>
+      </div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-step">
+        <div class="fs-icon">☁️</div>
+        <div class="fs-title">Cloudflare</div>
+        <div class="fs-sub">Connected</div>
+      </div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-step">
+        <div class="fs-icon">🌐</div>
+        <div class="fs-title">hara.lat</div>
+        <div class="fs-sub">Live</div>
+      </div>
+    </div>
+  </div>
+
+  <p>Now, every time I modify a file and upload it to GitHub, <strong>hara.lat updates automatically in less than two minutes</strong>. No servers. No code. No intermediaries.</p>
+
+  <p>And most importantly: if someone asks "what's the official version of the homepage?", I have one clear answer.</p>
+
+  <div class="sep"></div>
+
+  <h2>Why this matters beyond code</h2>
+
+  <p>Building a brand without a technical team in 2026 means learning to use tools that weren't designed for you. But it also means the barriers have never been lower.</p>
+
+  <p>Today I didn't learn to code. I learned something more useful: <strong>how to give structure to what I create</strong>. How to make ideas not disappear when I close the chat.</p>
+
+  <div class="callout">
+    <div class="callout-label">COLD UNIVERSE · FROM HARA</div>
+    <p>In the CdGF extraction process, there's a simple rule: <strong>temperature only descends</strong>. It never goes up. Each step has a direction.</p>
+    <p>Today I learned that building a brand also needs that direction. One file. One source of truth. One reference temperature.</p>
+    <p><strong>Welcome to the Cold Universe.</strong></p>
+  </div>
+
+</article>
+
+<!-- ═══ AUTHOR ═══ -->
+<div class="author-card">
+  <div class="author-avatar"><span>M</span></div>
+  <div class="author-info">
+    <h4>Michael Han · 한상원</h4>
+    <p>Fundador de HARA Coffee Lab · Salta, Argentina<br>
+    <span class="lang-content active" data-lang="es">Construyendo Cold Universe desde los Andes.</span>
+    <span class="lang-content" data-lang="ko">안데스에서 Cold Universe를 만들어가고 있습니다.</span>
+    <span class="lang-content" data-lang="en">Building Cold Universe from the Andes.</span>
+    </p>
+  </div>
+</div>
+
+<footer>
+  <p>© 2026 HARA COFFEE LAB · SALTA, ARGENTINA · <a href="index.html">COLD UNIVERSE</a></p>
+</footer>
+
+<script>
+// Progress bar
+window.addEventListener('scroll',()=>{
+  const d=document.documentElement;
+  const pct=(d.scrollTop/(d.scrollHeight-d.clientHeight))*100;
+  document.getElementById('progress').style.width=pct+'%';
+});
+
+// Navbar scroll
+window.addEventListener('scroll',()=>{
+  document.getElementById('navbar').classList.toggle('scrolled',window.scrollY>60);
+});
+
+// Language switcher
+function setLang(lang){
+  document.querySelectorAll('.lang-btn').forEach(b=>b.classList.toggle('active',b.dataset.lang===lang));
+  document.querySelectorAll('.lang-content').forEach(el=>{
+    el.classList.toggle('active',el.dataset.lang===lang);
+  });
+  document.documentElement.lang=lang==='ko'?'ko':'es';
+  try{localStorage.setItem('hara-lang',lang);}catch(e){}
+}
+
+document.querySelectorAll('.lang-btn').forEach(b=>b.addEventListener('click',()=>setLang(b.dataset.lang)));
+
+(function(){
+  let lang='es';
+  try{const s=localStorage.getItem('hara-lang');if(s&&['es','ko','en'].includes(s))lang=s;}catch(e){}
+  setLang(lang);
+})();
+</script>
+
+</body>
+</html>

@@ -754,7 +754,7 @@ footer {
 <!-- ═══ NEWSLETTER ═══ -->
 <div class="newsletter">
   <div class="newsletter-inner">
-    <h3 class="newsletter-title" data-i18n="nl-title">Cada Gota Cuenta</h3>
+    <h3 class="newsletter-title" data-i18n="nl-title">Cold Universe</h3>
     <p class="newsletter-desc" data-i18n="nl-desc">Recibí ciencia del café, recetas exclusivas e historias de HARA directamente en tu bandeja de entrada.</p>
     <div class="newsletter-form">
       <input type="email" class="newsletter-input" data-i18n-placeholder="nl-placeholder" placeholder="tu@email.com">
@@ -766,7 +766,7 @@ footer {
 <!-- ═══ FOOTER ═══ -->
 <footer>
   <div class="footer-left">© 2026 HARA COFFEE LAB · SALTA, ARGENTINA</div>
-  <div class="footer-right">Cada Gota Cuenta</div>
+  <div class="footer-right">Cold Universe</div>
 </footer>
 
 
@@ -794,7 +794,7 @@ const i18n = {
     'filter-story': 'Historias',
     'filter-recipe': 'Recetas',
     'post-count-label': 'artículos',
-    'nl-title': 'Cada Gota Cuenta',
+    'nl-title': 'Cold Universe',
     'nl-desc': 'Recibí ciencia del café, recetas exclusivas e historias de HARA directamente en tu bandeja de entrada.',
     'nl-placeholder': 'tu@email.com',
     'nl-btn': 'SUSCRIBIR',
@@ -857,6 +857,40 @@ const i18n = {
 // ═══════════════════════════════════════
 const posts = [
   {
+    id: 'cada-gota-historia',
+    cat: 'story',
+    date: '2026-03-21',
+    readMin: 6,
+    thumbClass: 'story-bg',
+    title: {
+      es: 'El día que quise proteger mi eslogan y descubrí que ya era de otro',
+      ko: '슬로건을 지키려다 버려야 한다는 걸 알게 된 날',
+      en: 'The Day I Tried to Protect My Slogan and Discovered It Already Belonged to Someone Else'
+    },
+    excerpt: {
+      es: 'Un año construyendo una filosofía alrededor de "Cada Gota Cuenta". Justo cuando fui a registrarla, descubrí que era el eslogan de mi proveedor de agua.',
+      ko: '1년간 쌓아온 슬로건을 상표 등록하려는 순간, 그것이 내 수도 공급 업체의 캠페인 슬로건임을 알게 됐다.',
+      en: 'One year building a philosophy around "Cada Gota Cuenta". Just when I went to register it, I discovered it was my water supplier\'s campaign slogan.'
+    }
+  },
+  {
+    id: 'github-day-one',
+    cat: 'story',
+    date: '2026-03-21',
+    readMin: 5,
+    thumbClass: 'story-bg',
+    title: {
+      es: 'Hoy creé mi primer repositorio en GitHub',
+      ko: '오늘 처음으로 GitHub을 만들었다',
+      en: 'Today I Created My First GitHub Repository'
+    },
+    excerpt: {
+      es: 'Sin saber programar, un fundador aprende a darle estructura a lo que crea. La historia de cómo Cold Universe encontró su fuente única de verdad.',
+      ko: '코딩을 몰라도, 창업자는 자신이 만드는 것에 구조를 주는 법을 배운다. Cold Universe가 단일 진실의 원천을 찾은 이야기.',
+      en: 'Without knowing how to code, a founder learns to give structure to what they create. The story of how Cold Universe found its single source of truth.'
+    }
+  },
+  {
     id: 'espresso-physics',
     cat: 'science',
     date: '2026-02-14',
@@ -885,9 +919,9 @@ const posts = [
       en: 'From Korea to Salta: how HARA Coffee Lab was born'
     },
     excerpt: {
-      es: 'La historia de cómo la precisión coreana se encontró con la calidez sudamericana para crear una filosofía de café donde cada gota cuenta.',
-      ko: '한국의 정밀함과 남미의 따뜻함이 만나 "매 한 방울이 의미를 갖는다"는 커피 철학이 탄생한 이야기.',
-      en: 'The story of how Korean precision met South American warmth to create a coffee philosophy where every drop counts.'
+      es: 'La historia de cómo la precisión coreana se encontró con la calidez sudamericana para crear una filosofía de café donde la temperatura solo desciende.',
+      ko: '한국의 정밀함과 남미의 따뜻함이 만나 온도가 오직 내려가기만 하는 커피 철학이 탄생한 이야기.',
+      en: 'The story of how Korean precision met South American warmth to create a coffee philosophy where temperature only descends.'
     }
   },
   {
