@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HARA Blog — La ciencia de la extracción</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Noto+Sans+KR:wght@200;300;400;500;600&family=Noto+Sans:wght@200;300;400;500;600&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --espresso: #1a1210;
+  --crema: #d4a574;
+  --cream: #f5efe6;
+  --warm-white: #faf8f4;
+  --roast-dark: #2c1f1a;
+  --roast-mid: #6b4226;
+  --copper: #b87333;
+  --sage: #8a9a7b;
+  --water-blue: #7ba0b8;
+  --text-primary: #1a1210;
+  --text-secondary: #6b5b50;
+  --text-light: #a09080;
+  --border-light: rgba(212, 165, 116, 0.15);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; font-size: 16px; }
+
+body {
+  background: var(--warm-white);
+  color: var(--text-primary);
+  font-family: 'Noto Sans', 'Noto Sans KR', sans-serif;
+  font-weight: 300;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: var(--warm-white); }
+::-webkit-scrollbar-thumb { background: var(--crema); border-radius: 3px; }
+
+/* ─── NAV ─── */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 200;
+  padding: 1.2rem 3rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all 0.5s ease;
+}
+nav.scrolled {
+  background: rgba(250, 248, 244, 0.92);
+  backdrop-filter: blur(24px);
+  padding: 0.9rem 3rem;
+  box-shadow: 0 1px 0 rgba(26,18,16,0.06);
+}
+
+.nav-left { display: flex; align-items: center; gap: 2.5rem; }
+
+.nav-logo {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 500;
+  letter-spacing: 0.15em;
+  color: var(--text-primary);
+  text-decoration: none;
+  font-size: 1.3rem;
+  line-height: 1;
+}
+.nav-logo small {
+  display: block;
+  font-weight: 300;
+  font-size: 0.55rem;
+  letter-spacing: 0.3em;
+  color: var(--text-secondary);
+  margin-top: 2px;
+}
+
+.nav-back {
+  font-size: 0.72rem;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  color: var(--text-secondary);
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  transition: color 0.3s;
+}
+.nav-back:hover { color: var(--espresso); }
+.nav-back span { transition: transform 0.3s; }
+.nav-back:hover span { transform: translateX(-3px); }
+
+.lang-switcher {
+  display: flex;
+  border: 1px solid var(--border-light);
+  border-radius: 6px;
+  overflow: hidden;
+}
+.lang-btn {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.1em;
+  padding: 0.4rem 0.65rem;
+  border: none;
+  background: transparent;
+  color: var(--text-light);
+  cursor: pointer;
+  transition: all 0.3s;
+}
+.lang-btn:not(:last-child) { border-right: 1px solid var(--border-light); }
+.lang-btn.active { background: var(--espresso); color: var(--cream); }
+.lang-btn:hover:not(.active) { background: rgba(212,165,116,0.08); color: var(--roast-mid); }
+
+/* ─── PROGRESS BAR ─── */
+.progress-bar {
+  position: fixed;
+  top: 0; left: 0;
+  height: 2px;
+  background: linear-gradient(to right, var(--crema), var(--copper));
+  z-index: 300;
+  width: 0%;
+  transition: width 0.1s linear;
+}
+
+/* ─── ARTICLE HEADER ─── */
+.article-header {
+  padding: 10rem 2rem 4rem;
+  max-width: 780px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.article-meta {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  opacity: 0;
+  animation: fadeUp 0.8s ease 0.2s forwards;
+}
+
+.article-badge {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.55rem;
+  letter-spacing: 0.2em;
+  padding: 0.35rem 0.8rem;
+  border-radius: 4px;
+  text-transform: uppercase;
+  background: rgba(123,160,184,0.12);
+  color: var(--water-blue);
+}
+
+.article-date {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.6rem;
+  color: var(--text-light);
+  letter-spacing: 0.1em;
+}
+
+.article-read-time {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.6rem;
+  color: var(--text-light);
+}
+
+.article-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(2.2rem, 4.5vw, 3.5rem);
+  font-weight: 300;
+  line-height: 1.15;
+  color: var(--espresso);
+  margin-bottom: 1.5rem;
+  opacity: 0;
+  animation: fadeUp 1s ease 0.4s forwards;
+}
+.article-title em {
+  font-style: italic;
+  color: var(--copper);
+}
+
+.article-subtitle {
+  font-size: 1.05rem;
+  line-height: 1.8;
+  color: var(--text-secondary);
+  max-width: 560px;
+  margin: 0 auto;
+  opacity: 0;
+  animation: fadeUp 0.8s ease 0.6s forwards;
+}
+
+/* ─── ARTICLE BODY ─── */
+.article-body {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 0 2rem 4rem;
+}
+
+.article-body h2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.8rem;
+  font-weight: 400;
+  color: var(--espresso);
+  margin: 3.5rem 0 1.2rem;
+  line-height: 1.3;
+}
+
+.article-body h3 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.35rem;
+  font-weight: 500;
+  color: var(--roast-mid);
+  margin: 2.5rem 0 0.8rem;
+}
+
+.article-body p {
+  font-size: 0.92rem;
+  line-height: 2;
+  color: var(--text-secondary);
+  margin-bottom: 1.2rem;
+}
+
+.article-body strong {
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+/* Callout Box */
+.callout {
+  background: var(--espresso);
+  color: var(--cream);
+  border-radius: 16px;
+  padding: 2.5rem;
+  margin: 2.5rem 0;
+  position: relative;
+  overflow: hidden;
+}
+.callout::before {
+  content: '';
+  position: absolute;
+  top: -40%; right: -20%;
+  width: 200px; height: 200px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(212,165,116,0.08), transparent);
+}
+.callout .callout-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.55rem;
+  letter-spacing: 0.3em;
+  color: var(--crema);
+  margin-bottom: 1rem;
+}
+.callout .formula {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.6rem;
+  font-weight: 300;
+  color: var(--cream);
+  margin-bottom: 0.3rem;
+}
+.callout .formula em { color: var(--crema); font-style: italic; }
+.callout p {
+  font-size: 0.78rem;
+  color: rgba(245,239,230,0.5);
+  line-height: 1.8;
+  margin-bottom: 0;
+}
+
+/* Inline Figure / Compare */
+.compare-block {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin: 2.5rem 0;
+}
+
+.compare-item {
+  background: white;
+  border: 1px solid var(--border-light);
+  border-radius: 14px;
+  padding: 2rem;
+  text-align: center;
+}
+
+.compare-item .val {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 2rem;
+  color: var(--copper);
+  display: block;
+  margin-bottom: 0.2rem;
+}
+.compare-item .lbl {
+  font-size: 0.65rem;
+  letter-spacing: 0.15em;
+  color: var(--text-light);
+  text-transform: uppercase;
+  margin-bottom: 0.8rem;
+}
+.compare-item .sub {
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+/* Flow Chain */
+.chain {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3rem;
+  margin: 2.5rem 0;
+  flex-wrap: wrap;
+}
+.chain-step {
+  padding: 0.7rem 1rem;
+  border: 1px solid var(--border-light);
+  border-radius: 8px;
+  background: white;
+  text-align: center;
+}
+.chain-step .sv {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.75rem;
+  color: var(--copper);
+  display: block;
+}
+.chain-step .sl {
+  font-size: 0.58rem;
+  color: var(--text-light);
+  letter-spacing: 0.08em;
+}
+.chain-sep {
+  color: var(--crema);
+  font-size: 1rem;
+  opacity: 0.5;
+}
+
+/* Separator */
+.article-sep {
+  width: 40px;
+  height: 1px;
+  background: var(--crema);
+  margin: 3rem auto;
+  opacity: 0.5;
+}
+
+/* ─── AUTHOR ─── */
+.author-card {
+  max-width: 700px;
+  margin: 0 auto 4rem;
+  padding: 0 2rem;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--border-light);
+}
+
+.author-avatar {
+  width: 56px; height: 56px;
+  border-radius: 50%;
+  background: var(--espresso);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.author-avatar span {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.2rem;
+  color: var(--crema);
+  font-weight: 500;
+}
+
+.author-info h4 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.1rem;
+  font-weight: 500;
+  margin-bottom: 0.15rem;
+}
+.author-info p {
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+/* ─── RELATED POSTS ─── */
+.related-section {
+  background: white;
+  padding: 4rem 2rem;
+  border-top: 1px solid var(--border-light);
+}
+
+.related-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.related-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.3em;
+  color: var(--crema);
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
+
+.related-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+
+.related-card {
+  padding: 2rem;
+  border: 1px solid var(--border-light);
+  border-radius: 14px;
+  text-decoration: none;
+  color: inherit;
+  transition: all 0.4s ease;
+  background: var(--warm-white);
+}
+.related-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(26,18,16,0.06);
+  border-color: rgba(212,165,116,0.3);
+}
+
+.related-card .rc-badge {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.5rem;
+  letter-spacing: 0.15em;
+  padding: 0.2rem 0.5rem;
+  border-radius: 3px;
+  display: inline-block;
+  margin-bottom: 0.8rem;
+}
+.rc-science { background: rgba(123,160,184,0.12); color: var(--water-blue); }
+.rc-story { background: rgba(212,165,116,0.12); color: var(--copper); }
+.rc-recipe { background: rgba(138,154,123,0.12); color: var(--sage); }
+
+.related-card h4 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.15rem;
+  font-weight: 500;
+  line-height: 1.3;
+  margin-bottom: 0.5rem;
+}
+.related-card p {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+/* ─── FOOTER ─── */
+footer {
+  padding: 3rem 2rem;
+  text-align: center;
+}
+.footer-brand {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.58rem;
+  letter-spacing: 0.25em;
+  color: var(--text-light);
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 768px) {
+  nav { padding: 1rem 1.5rem; }
+  .article-header { padding: 7rem 1.5rem 3rem; }
+  .article-body { padding: 0 1.5rem 3rem; }
+  .compare-block { grid-template-columns: 1fr; }
+  .chain { flex-direction: column; }
+  .chain-sep { transform: rotate(90deg); }
+  .related-grid { grid-template-columns: 1fr; }
+  .author-card { padding: 1.5rem; flex-direction: column; text-align: center; }
+}
+</style>
+</head>
+<body>
+
+<div class="progress-bar" id="progressBar"></div>
+
+<!-- NAV -->
+<nav id="mainNav">
+  <div class="nav-left">
+    <a href="/" class="nav-logo">HARA<small>COFFEE LAB</small></a>
+    <a href="blog-index.html" class="nav-back"><span>←</span> <span data-i18n="back-blog">Blog</span></a>
+  </div>
+  <div class="lang-switcher">
+    <button class="lang-btn active" data-lang="es">ES</button>
+    <button class="lang-btn" data-lang="ko">KO</button>
+    <button class="lang-btn" data-lang="en">EN</button>
+  </div>
+</nav>
+
+<!-- HEADER -->
+<header class="article-header">
+  <div class="article-meta">
+    <span class="article-badge" data-i18n="badge">CIENCIA</span>
+    <span class="article-date">16 FEB 2026</span>
+    <span class="article-read-time" data-i18n="read-time">12 min lectura</span>
+  </div>
+  <h1 class="article-title" data-i18n="title">La ciencia de la extracción: molienda, flujo y geometría del <em>dripper</em></h1>
+  <p class="article-subtitle" data-i18n="subtitle">Desde la ley de Fick hasta la dinámica de fluidos en un V60 — la ingeniería química detrás de tu café matutino.</p>
+</header>
+
+<!-- BODY -->
+<article class="article-body" id="articleBody">
+  <!-- ES Content (default) -->
+  <div class="lang-content" data-lang="es">
+    <h2>La molienda: superficie y difusión</h2>
+    <p>La extracción del café es, en esencia, un proceso de extracción sólido-líquido. Dos factores físicos la gobiernan: la <strong>superficie específica</strong> de las partículas y la <strong>distancia de difusión</strong> que los compuestos deben recorrer desde el interior del grano hasta el agua.</p>
+    <p>Cuando reducimos el tamaño de partícula, ambos factores trabajan a nuestro favor. Una partícula de 200 μm ofrece cinco veces más superficie de contacto que una de 1.000 μm, y la distancia de difusión se reduce a la mitad del diámetro.</p>
+
+    <div class="callout">
+      <div class="callout-label">LEY DE FICK — SEGUNDA LEY</div>
+      <div class="formula"><em>t</em> ∝ <em>r</em>² / <em>D</em></div>
+      <p>El tiempo de extracción (t) es proporcional al cuadrado del radio (r) dividido por el coeficiente de difusión efectivo (D). Al reducir la partícula a la mitad, el tiempo teórico de extracción se reduce a 1/4.</p>
+    </div>
+
+    <p>Esto tiene una consecuencia práctica directa: con molienda fina, los ácidos orgánicos de bajo peso molecular se extraen rápidamente junto con los compuestos aromáticos. Pero simultáneamente, los polifenoles y taninos de alto peso molecular también se extraen más rápido, llevando a amargor y astringencia si no controlamos el tiempo.</p>
+
+    <h2>El tiempo crea capas de sabor</h2>
+    <p>La extracción no es un evento único, sino una secuencia. Los compuestos se disuelven en orden de peso molecular: primero los ácidos y aromas ligeros, luego los azúcares y aminoácidos, y finalmente los taninos pesados. Esta secuencia natural es lo que permite la <strong>extracción fraccional</strong>.</p>
+
+    <div class="compare-block">
+      <div class="compare-item">
+        <span class="val">0–30s</span>
+        <span class="lbl">Primera ola</span>
+        <span class="sub">Ácidos orgánicos, notas florales y frutales. Acidez brillante.</span>
+      </div>
+      <div class="compare-item">
+        <span class="val">30–90s</span>
+        <span class="lbl">Segunda ola</span>
+        <span class="sub">Azúcares, aminoácidos, cafeína. Dulzura y cuerpo pleno.</span>
+      </div>
+    </div>
+
+    <p>Más allá de los 90 segundos comienzan a extraerse los polifenoles de alto peso molecular. Controlados con precisión aportan profundidad; en exceso, crean amargor y una textura áspera. El barista decide dónde cortar.</p>
+
+    <h2>El dripper como reactor</h2>
+
+    <h3>V60: flujo pistón</h3>
+    <p>En el V60, el agua atraviesa la cama de café de arriba hacia abajo. Cada capa horizontal entra en contacto con agua de diferente concentración — la parte superior con agua limpia y alta fuerza motriz, la inferior con una solución cada vez más saturada. Esto produce una extracción eficiente con un perfil limpio y definido, pero extremadamente sensible a la técnica de vertido.</p>
+
+    <h3>Kalita Wave: tanque mezclado</h3>
+    <p>El fondo plano y los tres orificios pequeños crean una piscina de agua sobre la cama de café, funcionando como un sistema de mezcla completa. Esto amortigua las variaciones de técnica y produce un sabor más uniforme y redondo, aunque con menor eficiencia de extracción que el V60.</p>
+
+    <h3>Prensa francesa: reactor batch</h3>
+    <p>En un sistema cerrado donde el agua y el café alcanzan equilibrio, la única variable es el tiempo. La concentración sigue una curva exponencial que se aplana al acercarse al equilibrio. Máxima reproducibilidad, pero mayor riesgo de sobre-extracción en tiempos largos.</p>
+
+    <div class="article-sep"></div>
+
+    <h2>El caso especial del espresso</h2>
+    <p>El espresso invierte todas las proporciones: 25 segundos en lugar de 3 minutos, 30 ml en lugar de 250 ml, pero con un objetivo de TDS del 8–12% frente al 1,3% del filtrado. Esta restricción extrema fuerza la molienda a 200 μm.</p>
+
+    <div class="chain">
+      <div class="chain-step"><span class="sv">25 seg</span><span class="sl">LÍMITE</span></div>
+      <span class="chain-sep">→</span>
+      <div class="chain-step"><span class="sv">200 μm</span><span class="sl">MOLIENDA</span></div>
+      <span class="chain-sep">→</span>
+      <div class="chain-step"><span class="sv">ΔP × 9</span><span class="sl">RESISTENCIA</span></div>
+      <span class="chain-sep">→</span>
+      <div class="chain-step"><span class="sv">9 bar</span><span class="sl">PRESIÓN</span></div>
+      <span class="chain-sep">→</span>
+      <div class="chain-step"><span class="sv">Crema</span><span class="sl">EMULSIÓN</span></div>
+    </div>
+
+    <p>La molienda fina crea una resistencia de lecho tan alta que solo la presión de 9 atmósferas puede empujar el agua a través. Y esa misma combinación de presión y partículas finas produce algo que el filtrado nunca puede: una emulsión coloidal de tres fases — gas (CO₂), solución acuosa y microgotas lipídicas — que define la textura, la crema y el cuerpo únicos del espresso.</p>
+
+    <p>No es una elección estilística. Es la única solución que satisface las ecuaciones.</p>
+  </div>
+
+  <!-- KO Content -->
+  <div class="lang-content" data-lang="ko" style="display:none;">
+    <h2>분쇄도: 표면적과 확산</h2>
+    <p>커피 추출의 본질은 <strong>고체-액체 추출</strong> 공정입니다. 이를 지배하는 두 가지 물리적 요인은 입자의 <strong>비표면적</strong>과 원두 내부에서 물까지 성분이 이동해야 하는 <strong>확산 거리</strong>입니다.</p>
+    <p>입자 크기를 줄이면 두 요인 모두 유리하게 작용합니다. 200μm 입자는 1,000μm 입자에 비해 5배 넓은 접촉 면적을 제공하고, 확산 거리는 직경의 절반으로 줄어듭니다.</p>
+
+    <div class="callout">
+      <div class="callout-label">FICK의 제2법칙</div>
+      <div class="formula"><em>t</em> ∝ <em>r</em>² / <em>D</em></div>
+      <p>추출 시간(t)은 입자 반경(r)의 제곱에 비례하고 유효확산계수(D)에 반비례합니다. 입자 크기를 절반으로 줄이면 이론적 추출 시간은 1/4로 단축됩니다.</p>
+    </div>
+
+    <p>이는 실무적으로 직접적인 결과를 가져옵니다. 미분에서는 저분자 유기산과 향기 성분이 빠르게 추출되지만, 동시에 고분자 폴리페놀과 탄닌도 과잉 추출될 수 있어 시간 제어가 핵심이 됩니다.</p>
+
+    <h2>시간이 만드는 맛의 층위</h2>
+    <p>추출은 단일 사건이 아닌 순차적 과정입니다. 분자량 순서에 따라 먼저 가벼운 산미와 향, 이어서 당류와 아미노산, 마지막으로 무거운 탄닌이 녹아 나옵니다. 이 자연스러운 순서가 <strong>분별추출</strong>의 기반입니다.</p>
+
+    <div class="compare-block">
+      <div class="compare-item">
+        <span class="val">0–30초</span>
+        <span class="lbl">첫 번째 물결</span>
+        <span class="sub">유기산, 꽃향기, 과일향. 밝은 산미가 피어납니다.</span>
+      </div>
+      <div class="compare-item">
+        <span class="val">30–90초</span>
+        <span class="lbl">두 번째 물결</span>
+        <span class="sub">당류, 아미노산, 카페인. 단맛과 풍성한 바디가 채워집니다.</span>
+      </div>
+    </div>
+
+    <p>90초를 넘기면 고분자 폴리페놀이 추출되기 시작합니다. 적절히 통제하면 깊이를, 과하면 텁텁한 쓴맛과 수렴미를 만듭니다. 어디서 멈출지가 바리스타의 기술입니다.</p>
+
+    <h2>드리퍼는 반응기다</h2>
+
+    <h3>V60: 관류 반응기(Plug Flow)</h3>
+    <p>V60에서 물은 커피 베드를 위에서 아래로 통과합니다. 각 수평 층은 서로 다른 농도의 물과 만나며, 상부는 깨끗한 물(높은 구동력), 하부는 포화에 가까운 용액(낮은 구동력)과 접촉합니다. 맑고 선명한 추출이 가능하지만, 주수 기술에 극히 민감합니다.</p>
+
+    <h3>Kalita Wave: 완전혼합 반응기(CSTR)</h3>
+    <p>평평한 바닥과 3개의 작은 배수구가 커피 베드 위에 물을 체류시켜 완전혼합 영역을 만듭니다. 기술 편차를 완충하여 균일하고 둥근 맛을 만들지만, V60 대비 추출 효율은 다소 낮습니다.</p>
+
+    <h3>프렌치프레스: 회분식 반응기(Batch)</h3>
+    <p>닫힌 계에서 물과 커피가 평형에 도달하며, 유일한 변수는 시간입니다. 농도는 지수 감소 곡선을 따라 평형에 수렴합니다. 최고의 재현성을 제공하지만, 긴 시간에서는 과잉 추출의 위험이 있습니다.</p>
+
+    <div class="article-sep"></div>
+
+    <h2>에스프레소라는 특수한 경우</h2>
+    <p>에스프레소는 모든 비율을 뒤집습니다. 3분 대신 25초, 250ml 대신 30ml, 하지만 TDS 목표는 드립의 1.3% 대비 8–12%. 이 극한의 제약이 분쇄도를 200μm으로 강제합니다.</p>
+
+    <div class="chain">
+      <div class="chain-step"><span class="sv">25초</span><span class="sl">시간 제약</span></div>
+      <span class="chain-sep">→</span>
+      <div class="chain-step"><span class="sv">200 μm</span><span class="sl">미분 분쇄</span></div>
+      <span class="chain-sep">→</span>
+      <div class="chain-step"><span class="sv">ΔP × 9</span><span class="sl">베드 저항</span></div>
+      <span class="chain-sep">→</span>
+      <div class="chain-step"><span class="sv">9 bar</span><span class="sl">펌프 압력</span></div>
+      <span class="chain-sep">→</span>
+      <div class="chain-step"><span class="sv">크레마</span><span class="sl">에멀젼</span></div>
+    </div>
+
+    <p>미분이 만드는 높은 베드 저항은 9기압의 압력 없이는 물이 통과할 수 없게 만듭니다. 그리고 바로 그 미분 + 고압 조합이 드립에서는 절대 불가능한 것을 만들어냅니다 — 기체(CO₂), 수용액, 지질 미세액적이 공존하는 3상 콜로이드 시스템. 이것이 에스프레소만의 질감, 크레마, 바디감의 정체입니다.</p>
+
+    <p>스타일의 선택이 아닙니다. 방정식이 허용하는 유일한 해입니다.</p>
+  </div>
+
+  <!-- EN Content -->
+  <div class="lang-content" data-lang="en" style="display:none;">
+    <h2>Grind size: surface area and diffusion</h2>
+    <p>Coffee extraction is fundamentally a <strong>solid-liquid extraction</strong> process. Two physical factors govern it: the <strong>specific surface area</strong> of the particles and the <strong>diffusion distance</strong> that flavor compounds must travel from the bean's interior to the water.</p>
+    <p>When we reduce particle size, both factors work in our favor. A 200 μm particle offers five times more contact surface than a 1,000 μm particle, and the diffusion path shrinks to half the diameter.</p>
+
+    <div class="callout">
+      <div class="callout-label">FICK'S SECOND LAW</div>
+      <div class="formula"><em>t</em> ∝ <em>r</em>² / <em>D</em></div>
+      <p>Extraction time (t) is proportional to the square of the radius (r) divided by the effective diffusion coefficient (D). Halving the particle size theoretically reduces extraction time to 1/4.</p>
+    </div>
+
+    <p>This has immediate practical consequences: with fine grinding, low-molecular-weight organic acids extract rapidly alongside aromatic volatiles. But simultaneously, high-molecular-weight polyphenols and tannins also extract faster, leading to bitterness and astringency if time isn't controlled.</p>
+
+    <h2>Time creates layers of flavor</h2>
+    <p>Extraction isn't a single event — it's a sequence. Compounds dissolve in order of molecular weight: first the light acids and aromas, then sugars and amino acids, and finally the heavy tannins. This natural sequence is the foundation of <strong>fractional extraction</strong>.</p>
+
+    <div class="compare-block">
+      <div class="compare-item">
+        <span class="val">0–30s</span>
+        <span class="lbl">First wave</span>
+        <span class="sub">Organic acids, floral and fruity notes. Bright, vibrant acidity.</span>
+      </div>
+      <div class="compare-item">
+        <span class="val">30–90s</span>
+        <span class="lbl">Second wave</span>
+        <span class="sub">Sugars, amino acids, caffeine. Sweetness and full body.</span>
+      </div>
+    </div>
+
+    <p>Beyond 90 seconds, high-molecular-weight polyphenols begin to extract. With precision, they add depth; in excess, they create harshness and astringency. Knowing when to stop is the barista's art.</p>
+
+    <h2>The dripper as a reactor</h2>
+
+    <h3>V60: plug flow reactor</h3>
+    <p>In the V60, water passes through the coffee bed top-to-bottom. Each horizontal layer contacts water of different concentration — the top meets fresh water with high driving force, the bottom meets increasingly saturated solution. This yields an efficient, clean extraction but one extremely sensitive to pouring technique.</p>
+
+    <h3>Kalita Wave: mixed tank</h3>
+    <p>The flat bottom and three small drain holes pool water above the coffee bed, creating a completely mixed zone. This buffers technique variations and produces a more uniform, rounded flavor, though with lower extraction efficiency than the V60.</p>
+
+    <h3>French press: batch reactor</h3>
+    <p>In a closed system where water and coffee reach equilibrium, time is the only variable. Concentration follows an exponential decay curve that flattens as it approaches equilibrium. Maximum reproducibility, but increased risk of over-extraction at longer contact times.</p>
+
+    <div class="article-sep"></div>
+
+    <h2>The special case of espresso</h2>
+    <p>Espresso inverts every proportion: 25 seconds instead of 3 minutes, 30 ml instead of 250 ml, but targeting 8–12% TDS versus filtered coffee's 1.3%. This extreme constraint forces the grind to 200 μm.</p>
+
+    <div class="chain">
+      <div class="chain-step"><span class="sv">25 sec</span><span class="sl">TIME LIMIT</span></div>
+      <span class="chain-sep">→</span>
+      <div class="chain-step"><span class="sv">200 μm</span><span class="sl">FINE GRIND</span></div>
+      <span class="chain-sep">→</span>
+      <div class="chain-step"><span class="sv">ΔP × 9</span><span class="sl">RESISTANCE</span></div>
+      <span class="chain-sep">→</span>
+      <div class="chain-step"><span class="sv">9 bar</span><span class="sl">PRESSURE</span></div>
+      <span class="chain-sep">→</span>
+      <div class="chain-step"><span class="sv">Crema</span><span class="sl">EMULSION</span></div>
+    </div>
+
+    <p>The high bed resistance created by fine particles makes it impossible for water to pass without 9 atmospheres of pressure. And that very combination of pressure and fine particles produces what filtered coffee never can: a three-phase colloidal system of gas (CO₂), aqueous solution, and lipid microdroplets — defining espresso's unique texture, crema, and body.</p>
+
+    <p>It's not a stylistic choice. It's the only solution the equations allow.</p>
+  </div>
+</article>
+
+<!-- AUTHOR -->
+<div class="author-card">
+  <div class="author-avatar"><span>H</span></div>
+  <div class="author-info">
+    <h4>HARA Coffee Lab</h4>
+    <p data-i18n="author-bio">Ciencia, precisión y pasión por el café de especialidad. Desde Salta, Argentina.</p>
+  </div>
+</div>
+
+<!-- RELATED -->
+<div class="related-section">
+  <div class="related-inner">
+    <div class="related-label" data-i18n="related-label">SEGUIR LEYENDO</div>
+    <div class="related-grid">
+      <a class="related-card" href="#">
+        <span class="rc-badge rc-science" data-i18n="r1-badge">CIENCIA</span>
+        <h4 data-i18n="r1-title">Cold brew: la difusión lenta que transforma el sabor</h4>
+        <p data-i18n="r1-excerpt">A baja temperatura, el coeficiente de difusión cae un 40–50%. Exploramos cómo esta limitación produce un perfil único.</p>
+      </a>
+      <a class="related-card" href="#">
+        <span class="rc-badge rc-science" data-i18n="r2-badge">CIENCIA</span>
+        <h4 data-i18n="r2-title">¿Por qué el espresso exige molienda fina?</h4>
+        <p data-i18n="r2-excerpt">La ecuación de Darcy y la termodinámica del CO₂ explican por qué 200 μm y 9 bar son una necesidad.</p>
+      </a>
+      <a class="related-card" href="#">
+        <span class="rc-badge rc-story" data-i18n="r3-badge">HISTORIA</span>
+        <h4 data-i18n="r3-title">De Corea a Salta: cómo nació HARA Coffee Lab</h4>
+        <p data-i18n="r3-excerpt">La historia de cómo la precisión coreana se encontró con la calidez sudamericana.</p>
+      </a>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-brand">© 2026 HARA COFFEE LAB · SALTA, ARGENTINA</div>
+</footer>
+
+<script>
+// i18n for post page UI elements
+const ui18n = {
+  es: {
+    'back-blog': 'Blog',
+    'badge': 'CIENCIA',
+    'read-time': '12 min lectura',
+    'title': 'La ciencia de la extracción: molienda, flujo y geometría del <em>dripper</em>',
+    'subtitle': 'Desde la ley de Fick hasta la dinámica de fluidos en un V60 — la ingeniería química detrás de tu café matutino.',
+    'author-bio': 'Ciencia, precisión y pasión por el café de especialidad. Desde Salta, Argentina.',
+    'related-label': 'SEGUIR LEYENDO',
+    'r1-badge': 'CIENCIA', 'r1-title': 'Cold brew: la difusión lenta que transforma el sabor', 'r1-excerpt': 'A baja temperatura, el coeficiente de difusión cae un 40–50%. Exploramos cómo esta limitación produce un perfil único.',
+    'r2-badge': 'CIENCIA', 'r2-title': '¿Por qué el espresso exige molienda fina?', 'r2-excerpt': 'La ecuación de Darcy y la termodinámica del CO₂ explican por qué 200 μm y 9 bar son una necesidad.',
+    'r3-badge': 'HISTORIA', 'r3-title': 'De Corea a Salta: cómo nació HARA Coffee Lab', 'r3-excerpt': 'La historia de cómo la precisión coreana se encontró con la calidez sudamericana.',
+  },
+  ko: {
+    'back-blog': '블로그',
+    'badge': '과학',
+    'read-time': '12분 소요',
+    'title': '추출의 과학: 분쇄도, 유속, 드리퍼 형상의 <em>화학공학</em>',
+    'subtitle': 'Fick의 법칙에서 V60의 유체역학까지 — 아침 커피 한 잔 뒤에 숨겨진 공학의 세계.',
+    'author-bio': '과학, 정밀함, 그리고 스페셜티 커피에 대한 열정. 아르헨티나 살타에서.',
+    'related-label': '더 읽기',
+    'r1-badge': '과학', 'r1-title': '콜드브루: 느린 확산이 만드는 맛의 변환', 'r1-excerpt': '저온에서 확산계수는 40–50% 감소합니다. 이 열역학적 제약이 어떻게 독특한 맛을 만드는지.',
+    'r2-badge': '과학', 'r2-title': '에스프레소는 왜 미분이어야 하는가', 'r2-excerpt': 'Darcy 방정식과 CO₂ 열역학이 밝히는 200μm과 9기압의 필연성.',
+    'r3-badge': '스토리', 'r3-title': '한국에서 살타까지: HARA Coffee Lab의 탄생', 'r3-excerpt': '한국의 정밀함과 남미의 따뜻함이 만나 커피 철학이 탄생한 이야기.',
+  },
+  en: {
+    'back-blog': 'Blog',
+    'badge': 'SCIENCE',
+    'read-time': '12 min read',
+    'title': 'The science of extraction: grind size, flow rate, and <em>dripper</em> geometry',
+    'subtitle': 'From Fick\'s law to fluid dynamics inside a V60 — the chemical engineering behind your morning coffee.',
+    'author-bio': 'Science, precision, and passion for specialty coffee. From Salta, Argentina.',
+    'related-label': 'KEEP READING',
+    'r1-badge': 'SCIENCE', 'r1-title': 'Cold brew: the slow diffusion that transforms flavor', 'r1-excerpt': 'At low temperatures, the diffusion coefficient drops 40–50%. How this constraint produces a unique profile.',
+    'r2-badge': 'SCIENCE', 'r2-title': 'Why espresso demands fine grinding', 'r2-excerpt': 'Darcy\'s equation and CO₂ thermodynamics reveal why 200 μm and 9 bar are a necessity.',
+    'r3-badge': 'STORY', 'r3-title': 'From Korea to Salta: how HARA Coffee Lab was born', 'r3-excerpt': 'The story of Korean precision meeting South American warmth.',
+  }
+};
+
+let currentLang = 'es';
+
+function switchLang(lang) {
+  currentLang = lang;
+  document.documentElement.lang = lang === 'ko' ? 'ko' : lang === 'en' ? 'en' : 'es';
+
+  // Switch UI
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.dataset.i18n;
+    if (ui18n[lang][key]) el.innerHTML = ui18n[lang][key];
+  });
+
+  // Switch article body
+  document.querySelectorAll('.lang-content').forEach(el => {
+    el.style.display = el.dataset.lang === lang ? 'block' : 'none';
+  });
+
+  document.querySelectorAll('.lang-btn').forEach(b => b.classList.toggle('active', b.dataset.lang === lang));
+}
+
+document.querySelectorAll('.lang-btn').forEach(btn => {
+  btn.addEventListener('click', () => switchLang(btn.dataset.lang));
+});
+
+// Progress bar
+window.addEventListener('scroll', () => {
+  const doc = document.documentElement;
+  const scrollTop = doc.scrollTop;
+  const scrollHeight = doc.scrollHeight - doc.clientHeight;
+  const progress = (scrollTop / scrollHeight) * 100;
+  document.getElementById('progressBar').style.width = progress + '%';
+
+  document.getElementById('mainNav').classList.toggle('scrolled', scrollTop > 60);
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,1450 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HARA Blog — Terroir: el lenguaje compartido del café y el vino</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Noto+Sans+KR:wght@200;300;400;500;600&family=Noto+Sans:wght@200;300;400;500;600&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --espresso: #1a1210;
+  --crema: #d4a574;
+  --cream: #f5efe6;
+  --warm-white: #faf8f4;
+  --roast-dark: #2c1f1a;
+  --roast-mid: #6b4226;
+  --copper: #b87333;
+  --sage: #8a9a7b;
+  --water-blue: #7ba0b8;
+  --wine: #8b3a4a;
+  --wine-light: #c47a82;
+  --vine-green: #6b7e56;
+  --earth: #8c7b6b;
+  --text-primary: #1a1210;
+  --text-secondary: #6b5b50;
+  --text-light: #a09080;
+  --border-light: rgba(212, 165, 116, 0.15);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; font-size: 16px; }
+
+body {
+  background: var(--warm-white);
+  color: var(--text-primary);
+  font-family: 'Noto Sans', 'Noto Sans KR', sans-serif;
+  font-weight: 300;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: var(--warm-white); }
+::-webkit-scrollbar-thumb { background: var(--crema); border-radius: 3px; }
+
+/* ─── NAV ─── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+  padding: 1.2rem 3rem;
+  display: flex; justify-content: space-between; align-items: center;
+  transition: all 0.5s ease;
+}
+nav.scrolled {
+  background: rgba(250,248,244,0.92);
+  backdrop-filter: blur(24px);
+  padding: 0.9rem 3rem;
+  box-shadow: 0 1px 0 rgba(26,18,16,0.06);
+}
+.nav-left { display: flex; align-items: center; gap: 2.5rem; }
+.nav-logo {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 500; letter-spacing: 0.15em;
+  color: var(--text-primary); text-decoration: none;
+  font-size: 1.3rem; line-height: 1;
+}
+.nav-logo small {
+  display: block; font-weight: 300; font-size: 0.55rem;
+  letter-spacing: 0.3em; color: var(--text-secondary); margin-top: 2px;
+}
+.nav-back {
+  font-size: 0.72rem; font-weight: 400; letter-spacing: 0.08em;
+  color: var(--text-secondary); text-decoration: none;
+  display: flex; align-items: center; gap: 0.4rem; transition: color 0.3s;
+}
+.nav-back:hover { color: var(--espresso); }
+.lang-switcher {
+  display: flex; border: 1px solid var(--border-light);
+  border-radius: 6px; overflow: hidden;
+}
+.lang-btn {
+  font-family: 'JetBrains Mono', monospace; font-size: 0.6rem;
+  letter-spacing: 0.1em; padding: 0.4rem 0.65rem;
+  border: none; background: transparent; color: var(--text-light);
+  cursor: pointer; transition: all 0.3s;
+}
+.lang-btn:not(:last-child) { border-right: 1px solid var(--border-light); }
+.lang-btn.active { background: var(--espresso); color: var(--cream); }
+.lang-btn:hover:not(.active) { background: rgba(212,165,116,0.08); color: var(--roast-mid); }
+
+/* ─── PROGRESS ─── */
+.progress-bar {
+  position: fixed; top: 0; left: 0;
+  height: 2px; z-index: 300; width: 0%;
+  background: linear-gradient(to right, var(--wine), var(--crema), var(--vine-green));
+  transition: width 0.1s linear;
+}
+
+/* ─── HERO ─── */
+.post-hero {
+  padding: 0; margin: 0;
+  height: 85vh; min-height: 550px;
+  position: relative; overflow: hidden;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--espresso);
+}
+.post-hero::before {
+  content: '';
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse at 25% 60%, rgba(139,58,74,0.15), transparent 55%),
+    radial-gradient(ellipse at 75% 40%, rgba(107,126,86,0.12), transparent 55%),
+    radial-gradient(ellipse at 50% 80%, rgba(212,165,116,0.08), transparent 50%);
+}
+
+/* Latitude lines decoration */
+.hero-lines {
+  position: absolute; inset: 0; overflow: hidden; opacity: 0.08;
+}
+.hero-lines .line {
+  position: absolute; left: 0; right: 0;
+  height: 1px; background: white;
+}
+
+.hero-content {
+  position: relative; z-index: 2;
+  text-align: center; padding: 2rem;
+  max-width: 800px;
+}
+
+.hero-overline {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.6rem; letter-spacing: 0.5em;
+  color: var(--crema); margin-bottom: 2rem;
+  opacity: 0; animation: fadeUp 0.8s ease 0.3s forwards;
+}
+
+.hero-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(2.5rem, 6vw, 5rem);
+  font-weight: 300; line-height: 1.1;
+  color: var(--cream); margin-bottom: 1.5rem;
+  opacity: 0; animation: fadeUp 1s ease 0.5s forwards;
+}
+.hero-title .wine-accent { color: var(--wine-light); font-style: italic; }
+.hero-title .coffee-accent { color: var(--crema); font-style: italic; }
+
+.hero-sub {
+  font-size: 1rem; line-height: 1.8;
+  color: rgba(245,239,230,0.55); max-width: 520px;
+  margin: 0 auto;
+  opacity: 0; animation: fadeUp 0.8s ease 0.8s forwards;
+}
+
+.hero-meta {
+  margin-top: 2.5rem;
+  display: flex; justify-content: center; align-items: center; gap: 1.5rem;
+  opacity: 0; animation: fadeUp 0.8s ease 1s forwards;
+}
+.hero-badge {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.55rem; letter-spacing: 0.2em;
+  padding: 0.35rem 0.8rem; border-radius: 4px;
+  background: rgba(123,160,184,0.15); color: var(--water-blue);
+}
+.hero-date, .hero-read {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.6rem; color: rgba(245,239,230,0.35);
+  letter-spacing: 0.1em;
+}
+
+/* Dual symbol */
+.hero-symbols {
+  position: absolute; bottom: 4rem; left: 50%;
+  transform: translateX(-50%);
+  display: flex; align-items: center; gap: 2rem;
+  opacity: 0; animation: fadeUp 0.8s ease 1.2s forwards;
+}
+.hero-sym {
+  width: 40px; height: 40px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.9rem;
+}
+.sym-coffee {
+  border: 1px solid rgba(212,165,116,0.3);
+  color: var(--crema);
+}
+.sym-wine {
+  border: 1px solid rgba(196,122,130,0.3);
+  color: var(--wine-light);
+}
+.sym-x {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 0.9rem; font-style: italic;
+  color: rgba(245,239,230,0.2);
+}
+
+/* ─── ARTICLE ─── */
+.article-body {
+  max-width: 720px; margin: 0 auto;
+  padding: 5rem 2rem 4rem;
+}
+
+.article-body h2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.9rem; font-weight: 400;
+  color: var(--espresso); margin: 4rem 0 1.2rem;
+  line-height: 1.25;
+}
+.article-body h2:first-child { margin-top: 0; }
+
+.article-body h3 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.3rem; font-weight: 500;
+  color: var(--roast-mid); margin: 2.5rem 0 0.8rem;
+}
+
+.article-body p {
+  font-size: 0.92rem; line-height: 2.05;
+  color: var(--text-secondary); margin-bottom: 1.3rem;
+}
+.article-body p strong { color: var(--text-primary); font-weight: 500; }
+.article-body p em.term {
+  font-style: italic; color: var(--copper);
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.02em;
+}
+
+/* Separator */
+.sep {
+  width: 50px; height: 1px;
+  background: linear-gradient(to right, var(--wine-light), var(--crema), var(--vine-green));
+  margin: 3.5rem auto;
+  opacity: 0.5;
+}
+
+/* ─── BELT VISUAL ─── */
+.belt-visual {
+  margin: 3rem -2rem;
+  padding: 3rem 2.5rem;
+  background: var(--espresso);
+  border-radius: 20px;
+  position: relative;
+  overflow: hidden;
+  color: var(--cream);
+}
+.belt-visual::before {
+  content: '';
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse at 20% 80%, rgba(139,58,74,0.1), transparent 50%),
+    radial-gradient(ellipse at 80% 20%, rgba(107,126,86,0.08), transparent 50%);
+}
+.belt-visual .bv-inner { position: relative; z-index: 1; }
+
+.belt-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.55rem; letter-spacing: 0.3em;
+  color: var(--crema); margin-bottom: 1.5rem;
+}
+
+.belt-diagram {
+  display: flex; flex-direction: column; gap: 0;
+  margin: 1.5rem 0;
+}
+
+.belt-row {
+  display: grid;
+  grid-template-columns: 80px 1fr 80px;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.8rem 0;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+.belt-row:last-child { border-bottom: none; }
+
+.belt-lat {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.65rem; color: rgba(245,239,230,0.35);
+  text-align: right;
+}
+
+.belt-bar-wrap {
+  position: relative; height: 28px;
+  border-radius: 4px; overflow: hidden;
+  background: rgba(255,255,255,0.03);
+}
+
+.belt-bar {
+  position: absolute; top: 0; height: 100%;
+  border-radius: 4px;
+  display: flex; align-items: center;
+  padding: 0 0.8rem;
+  font-size: 0.6rem; font-weight: 400;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+}
+
+.bar-coffee {
+  background: rgba(212,165,116,0.2);
+  border: 1px solid rgba(212,165,116,0.3);
+  color: var(--crema);
+}
+.bar-wine-s {
+  background: rgba(139,58,74,0.2);
+  border: 1px solid rgba(139,58,74,0.3);
+  color: var(--wine-light);
+}
+.bar-wine-n {
+  background: rgba(139,58,74,0.2);
+  border: 1px solid rgba(139,58,74,0.3);
+  color: var(--wine-light);
+}
+.bar-overlap {
+  background: linear-gradient(90deg, rgba(139,58,74,0.15), rgba(212,165,116,0.15));
+  border: 1px solid rgba(200,150,100,0.2);
+  color: var(--earth);
+}
+
+.belt-zone {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.55rem; color: rgba(245,239,230,0.3);
+  letter-spacing: 0.08em;
+}
+
+.belt-note {
+  font-size: 0.72rem;
+  color: rgba(245,239,230,0.4);
+  line-height: 1.7; margin-top: 1.5rem;
+}
+
+/* ─── HADLEY VISUAL ─── */
+.hadley-card {
+  margin: 3rem -2rem;
+  padding: 2.5rem;
+  background: white;
+  border: 1px solid var(--border-light);
+  border-radius: 20px;
+}
+.hadley-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.55rem; letter-spacing: 0.3em;
+  color: var(--crema); margin-bottom: 1.5rem;
+}
+
+.hadley-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+
+.hadley-cell {
+  text-align: center;
+  padding: 1.5rem 1rem;
+  border-radius: 12px;
+  border: 1px solid var(--border-light);
+}
+
+.hc-icon {
+  font-size: 1.8rem;
+  margin-bottom: 0.8rem;
+  opacity: 0.7;
+}
+
+.hc-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.1rem; font-weight: 500;
+  margin-bottom: 0.2rem;
+}
+.hc-range {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.6rem; color: var(--copper);
+  letter-spacing: 0.1em; margin-bottom: 0.6rem;
+}
+.hc-desc {
+  font-size: 0.75rem; color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+/* ─── ALTITUDE VISUAL ─── */
+.altitude-visual {
+  margin: 3rem -2rem;
+  padding: 3rem 2.5rem;
+  background: var(--espresso);
+  border-radius: 20px;
+  color: var(--cream);
+  position: relative;
+  overflow: hidden;
+}
+.altitude-visual::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse at 50% 100%, rgba(140,123,107,0.1), transparent 60%);
+}
+
+.alt-inner { position: relative; z-index: 1; }
+
+.alt-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.55rem; letter-spacing: 0.3em;
+  color: var(--crema); margin-bottom: 2rem;
+}
+
+.alt-stack {
+  display: flex; flex-direction: column; gap: 0.8rem;
+}
+
+.alt-tier {
+  display: grid;
+  grid-template-columns: 90px 1fr;
+  align-items: center;
+  gap: 1.2rem;
+  padding: 1rem 1.5rem;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.06);
+  background: rgba(255,255,255,0.02);
+  transition: background 0.3s;
+}
+.alt-tier:hover {
+  background: rgba(255,255,255,0.04);
+}
+
+.alt-height {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.85rem; color: var(--crema);
+  text-align: center;
+}
+.alt-height small {
+  display: block; font-size: 0.5rem;
+  color: rgba(245,239,230,0.3);
+  letter-spacing: 0.1em; margin-top: 0.15rem;
+}
+
+.alt-info h4 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.05rem; font-weight: 400;
+  margin-bottom: 0.3rem;
+}
+.alt-info p {
+  font-size: 0.75rem;
+  color: rgba(245,239,230,0.45);
+  line-height: 1.6; margin-bottom: 0;
+}
+
+.alt-tags {
+  display: flex; gap: 0.4rem; margin-top: 0.5rem; flex-wrap: wrap;
+}
+.alt-tag {
+  font-size: 0.55rem; letter-spacing: 0.05em;
+  padding: 0.2rem 0.5rem; border-radius: 3px;
+}
+.tag-coffee { background: rgba(212,165,116,0.15); color: var(--crema); }
+.tag-wine { background: rgba(139,58,74,0.15); color: var(--wine-light); }
+
+/* ─── SOIL VISUAL ─── */
+.soil-visual {
+  margin: 3rem -2rem;
+  padding: 2.5rem;
+  background: white;
+  border: 1px solid var(--border-light);
+  border-radius: 20px;
+}
+
+.soil-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.55rem; letter-spacing: 0.3em;
+  color: var(--crema); margin-bottom: 1.5rem;
+}
+
+.soil-layers {
+  display: flex; flex-direction: column; gap: 0;
+}
+
+.soil-layer {
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  gap: 1.5rem;
+  padding: 1.5rem 0;
+  border-bottom: 1px solid var(--border-light);
+  align-items: start;
+}
+.soil-layer:last-child { border-bottom: none; }
+
+.sl-depth {
+  display: flex; flex-direction: column; align-items: center;
+  text-align: center;
+}
+.sl-depth-bar {
+  width: 6px; border-radius: 3px; margin-bottom: 0.5rem;
+}
+.sl-depth-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.6rem; color: var(--text-light);
+  letter-spacing: 0.08em;
+}
+
+.sl-content h4 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.15rem; font-weight: 500;
+  margin-bottom: 0.4rem; color: var(--text-primary);
+}
+.sl-content p {
+  font-size: 0.8rem; line-height: 1.75;
+  color: var(--text-secondary); margin-bottom: 0;
+}
+
+/* ─── MOLECULE PAIRS ─── */
+.molecule-grid {
+  margin: 3rem -2rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+.mol-card {
+  padding: 2rem;
+  border-radius: 16px;
+  border: 1px solid var(--border-light);
+  background: white;
+}
+
+.mol-card .mc-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.5rem; letter-spacing: 0.2em;
+  padding: 0.2rem 0.5rem; border-radius: 3px;
+  display: inline-block; margin-bottom: 0.8rem;
+}
+.mc-coffee-label { background: rgba(212,165,116,0.1); color: var(--copper); }
+.mc-wine-label { background: rgba(139,58,74,0.1); color: var(--wine); }
+
+.mol-card h4 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.15rem; font-weight: 500;
+  margin-bottom: 0.3rem;
+}
+.mol-card .mc-compound {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.6rem; color: var(--text-light);
+  letter-spacing: 0.1em; margin-bottom: 0.6rem;
+}
+.mol-card p {
+  font-size: 0.78rem; line-height: 1.7;
+  color: var(--text-secondary); margin-bottom: 0;
+}
+
+/* ─── CALLOUT ─── */
+.callout {
+  background: var(--espresso); color: var(--cream);
+  border-radius: 16px; padding: 2.5rem;
+  margin: 2.5rem -2rem; position: relative; overflow: hidden;
+}
+.callout::before {
+  content: '';
+  position: absolute; top: -40%; right: -20%;
+  width: 200px; height: 200px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(212,165,116,0.08), transparent);
+}
+.callout .callout-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.55rem; letter-spacing: 0.3em;
+  color: var(--crema); margin-bottom: 1rem;
+}
+.callout p {
+  font-size: 0.85rem; line-height: 1.9;
+  color: rgba(245,239,230,0.6); margin-bottom: 0;
+}
+.callout p strong { color: var(--crema); }
+
+/* ─── AUTHOR ─── */
+.author-card {
+  max-width: 720px; margin: 0 auto 4rem;
+  padding: 2rem 2rem 0;
+  display: flex; align-items: center; gap: 1.5rem;
+  border-top: 1px solid var(--border-light);
+}
+.author-avatar {
+  width: 56px; height: 56px; border-radius: 50%;
+  background: var(--espresso);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.author-avatar span {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.2rem; color: var(--crema); font-weight: 500;
+}
+.author-info h4 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.1rem; font-weight: 500; margin-bottom: 0.15rem;
+}
+.author-info p {
+  font-size: 0.78rem; color: var(--text-secondary); line-height: 1.5;
+}
+
+/* ─── FOOTER ─── */
+footer {
+  padding: 3rem 2rem; text-align: center;
+}
+.footer-brand {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.58rem; letter-spacing: 0.25em;
+  color: var(--text-light);
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 768px) {
+  nav { padding: 1rem 1.5rem; }
+  .post-hero { height: 75vh; min-height: 480px; }
+  .hero-symbols { bottom: 2.5rem; }
+  .article-body { padding: 3.5rem 1.5rem 3rem; }
+  .belt-visual, .hadley-card, .altitude-visual, .soil-visual, .callout {
+    margin-left: -0.5rem; margin-right: -0.5rem;
+    padding: 2rem 1.5rem;
+  }
+  .belt-row { grid-template-columns: 55px 1fr 55px; }
+  .hadley-grid { grid-template-columns: 1fr; }
+  .molecule-grid { grid-template-columns: 1fr; margin-left: -0.5rem; margin-right: -0.5rem; }
+  .alt-tier { grid-template-columns: 70px 1fr; }
+  .soil-layer { grid-template-columns: 80px 1fr; gap: 1rem; }
+  .author-card { flex-direction: column; text-align: center; padding: 1.5rem; }
+}
+</style>
+</head>
+<body>
+
+<div class="progress-bar" id="progressBar"></div>
+
+<nav id="mainNav">
+  <div class="nav-left">
+    <a href="/" class="nav-logo">HARA<small>COFFEE LAB</small></a>
+    <a href="blog-index.html" class="nav-back"><span>←</span> Blog</a>
+  </div>
+  <div class="lang-switcher">
+    <button class="lang-btn active" data-lang="es">ES</button>
+    <button class="lang-btn" data-lang="ko">KO</button>
+    <button class="lang-btn" data-lang="en">EN</button>
+  </div>
+</nav>
+
+<!-- ═══ HERO ═══ -->
+<div class="post-hero">
+  <div class="hero-lines">
+    <div class="line" style="top:15%"></div>
+    <div class="line" style="top:28%"></div>
+    <div class="line" style="top:42%; background: linear-gradient(to right, transparent, rgba(212,165,116,0.3), transparent);"></div>
+    <div class="line" style="top:50%; opacity:0.15;"></div>
+    <div class="line" style="top:58%; background: linear-gradient(to right, transparent, rgba(212,165,116,0.3), transparent);"></div>
+    <div class="line" style="top:72%"></div>
+    <div class="line" style="top:85%"></div>
+  </div>
+
+  <div class="hero-content">
+    <div class="hero-overline" data-i18n="hero-overline">CIENCIA × TERROIR</div>
+    <h1 class="hero-title" data-i18n="hero-title">
+      <span class="coffee-accent">Café</span> y <span class="wine-accent">Vino</span><br>
+      el lenguaje de la tierra
+    </h1>
+    <p class="hero-sub" data-i18n="hero-sub">Latitud, circulación atmosférica, altitud y suelo — cómo la misma tierra habla a través de dos frutos extraordinarios.</p>
+    <div class="hero-meta">
+      <span class="hero-badge" data-i18n="hero-badge">CIENCIA</span>
+      <span class="hero-date">16 FEB 2026</span>
+      <span class="hero-read" data-i18n="hero-read">15 min lectura</span>
+    </div>
+  </div>
+
+  <div class="hero-symbols">
+    <div class="hero-sym sym-coffee">☕</div>
+    <span class="sym-x">×</span>
+    <div class="hero-sym sym-wine">🍷</div>
+  </div>
+</div>
+
+<!-- ═══ ARTICLE ═══ -->
+<article class="article-body" id="articleBody">
+
+<!-- ══ SPANISH ══ -->
+<div class="lang-content" data-lang="es">
+
+<h2>Terroir: una palabra, dos frutos</h2>
+
+<p>En el mundo del vino, <em class="term">terroir</em> es un concepto sagrado. Significa que el suelo, el clima, la topografía y la mano humana se inscriben en cada baya, y que ningún viñedo del planeta puede producir exactamente el mismo vino que otro. Lo que pocas personas saben es que el café obedece a las mismas leyes con la misma precisión.</p>
+
+<p>Un grano de Geisha cultivado en Boquete, Panamá, a 1.700 metros, no sabe igual que el mismo cultivar en Huila, Colombia, a 1.900 metros. Así como un Pinot Noir de Borgoña es irreproducible en Oregón pese a usar el mismo clon. La razón es la misma: <strong>la tierra habla, y cada fruto es su idioma</strong>.</p>
+
+<p>Para entender por qué, necesitamos mirar desde arriba — literalmente, desde la atmósfera — y luego descender centímetro a centímetro hasta las raíces.</p>
+
+<div class="sep"></div>
+
+<h2>Los cinturones del planeta</h2>
+
+<p>Existe una coincidencia geográfica que no es casual. El café crece dentro del <strong>Cinturón del Café</strong>, una franja entre los trópicos de Cáncer y Capricornio (23.5°N – 23.5°S). El vino, en cambio, prospera en dos franjas simétricas: los <strong>Cinturones del Vino</strong>, entre los 30° y 50° de latitud en ambos hemisferios. Pero hay una zona de superposición — entre los 23° y 30° — donde ambos mundos se encuentran.</p>
+
+<div class="belt-visual">
+  <div class="bv-inner">
+    <div class="belt-label">DISTRIBUCIÓN LATITUDINAL</div>
+    <div class="belt-diagram">
+      <div class="belt-row">
+        <div class="belt-lat">50°N</div>
+        <div class="belt-bar-wrap">
+          <div class="belt-bar bar-wine-n" style="left:10%; width:35%;">Vino Norte</div>
+        </div>
+        <div class="belt-zone">FRÍO</div>
+      </div>
+      <div class="belt-row">
+        <div class="belt-lat">30°N</div>
+        <div class="belt-bar-wrap">
+          <div class="belt-bar bar-wine-n" style="left:5%; width:25%;">Vino</div>
+          <div class="belt-bar bar-overlap" style="left:30%; width:20%;">Overlap</div>
+        </div>
+        <div class="belt-zone">TEMP.</div>
+      </div>
+      <div class="belt-row">
+        <div class="belt-lat">0°</div>
+        <div class="belt-bar-wrap">
+          <div class="belt-bar bar-coffee" style="left:15%; width:70%;">☕ Cinturón del Café</div>
+        </div>
+        <div class="belt-zone">TROP.</div>
+      </div>
+      <div class="belt-row">
+        <div class="belt-lat">30°S</div>
+        <div class="belt-bar-wrap">
+          <div class="belt-bar bar-overlap" style="left:25%; width:20%;">Overlap</div>
+          <div class="belt-bar bar-wine-s" style="left:45%; width:30%;">Vino Sur</div>
+        </div>
+        <div class="belt-zone">TEMP.</div>
+      </div>
+      <div class="belt-row">
+        <div class="belt-lat">50°S</div>
+        <div class="belt-bar-wrap">
+          <div class="belt-bar bar-wine-s" style="left:30%; width:25%;">Vino Sur</div>
+        </div>
+        <div class="belt-zone">FRÍO</div>
+      </div>
+    </div>
+    <div class="belt-note">La zona de superposición (23–30°) alberga regiones como Yunnan (China), Oaxaca (México), São Paulo (Brasil) y el norte argentino, donde café y viñedos conviven o se alternan en altitud.</div>
+  </div>
+</div>
+
+<p>Esta distribución no es arbitraria. Está dictada por la <strong>circulación general de la atmósfera</strong> — el sistema planetario de células convectivas que redistribuye calor y humedad desde el ecuador hacia los polos.</p>
+
+<h2>La máquina atmosférica</h2>
+
+<p>La Tierra funciona como un gigantesco motor térmico. El sol calienta el ecuador con mayor intensidad; ese aire caliente asciende, se enfría, pierde humedad en forma de lluvia tropical, y luego desciende en los subtrópicos (~30°). Este circuito es la <strong>célula de Hadley</strong>, y es la razón por la que los trópicos son húmedos y los subtrópicos tienden a ser áridos.</p>
+
+<div class="hadley-card">
+  <div class="hadley-label">CÉLULAS DE CIRCULACIÓN ATMOSFÉRICA</div>
+  <div class="hadley-grid">
+    <div class="hadley-cell">
+      <div class="hc-icon">↑↓</div>
+      <div class="hc-name">Célula de Hadley</div>
+      <div class="hc-range">0° – 30°</div>
+      <div class="hc-desc">Ascenso ecuatorial, descenso subtropical. Genera lluvias tropicales intensas y vientos alisios. Dominio del café.</div>
+    </div>
+    <div class="hadley-cell">
+      <div class="hc-icon">↔</div>
+      <div class="hc-name">Célula de Ferrel</div>
+      <div class="hc-range">30° – 60°</div>
+      <div class="hc-desc">Circulación intermedia con vientos del oeste. Climas templados con estaciones marcadas. Dominio del vino.</div>
+    </div>
+    <div class="hadley-cell">
+      <div class="hc-icon">↓↑</div>
+      <div class="hc-name">Célula Polar</div>
+      <div class="hc-range">60° – 90°</div>
+      <div class="hc-desc">Aire frío descendente polar. Demasiado frío para ambos cultivos. Límite de la agricultura.</div>
+    </div>
+  </div>
+</div>
+
+<p>Para el café, la célula de Hadley crea las condiciones ideales: temperaturas estables entre 18–24°C, precipitaciones anuales de 1.500–2.000 mm, y una alternancia suave entre estaciones húmeda y seca que sincroniza la floración y la maduración del fruto. El cafeto (<em class="term">Coffea arabica</em>) evolucionó en las tierras altas de Etiopía, dentro de este régimen climático, y su bioquímica está afinada a estas condiciones.</p>
+
+<p>Para la vid (<em class="term">Vitis vinifera</em>), la célula de Ferrel ofrece algo diferente pero igualmente crucial: <strong>estacionalidad marcada</strong>. La vid necesita un invierno frío para entrar en dormancia y resetear su ciclo, seguido de una primavera que active la brotación, un verano largo para la maduración, y un otoño seco para concentrar azúcares en la baya. Los vientos del oeste de la célula de Ferrel moderan las temperaturas costeras y transportan humedad oceánica tierra adentro.</p>
+
+<p>Aquí aparece un principio compartido de importancia capital: <strong>el estrés moderado produce complejidad</strong>. Tanto el cafeto como la vid desarrollan su mayor riqueza aromática cuando enfrentan cierto grado de dificultad — no la abundancia, sino la tensión controlada entre lo suficiente y lo escaso.</p>
+
+<div class="sep"></div>
+
+<h2>La altitud: un segundo clima dentro del clima</h2>
+
+<p>Si la latitud establece el marco climático general, la altitud lo reescribe localmente. Por cada 100 metros de ascenso, la temperatura desciende aproximadamente 0.65°C (gradiente adiabático medio). Esto significa que dentro del trópico, la altitud puede recrear las condiciones térmicas de una latitud templada — y con ellas, una bioquímica completamente diferente.</p>
+
+<div class="altitude-visual">
+  <div class="alt-inner">
+    <div class="alt-label">ALTITUD Y EXPRESIÓN DEL TERROIR</div>
+    <div class="alt-stack">
+      <div class="alt-tier">
+        <div class="alt-height">2.000+<small>M.S.N.M.</small></div>
+        <div class="alt-info">
+          <h4>Alta montaña — Acidez cristalina</h4>
+          <p>La maduración lenta permite acumular ácidos orgánicos complejos (málico, cítrico, fosfórico). Las notas florales y cítricas se intensifican. La amplitud térmica día/noche fuerza al fruto a sintetizar azúcares como defensa osmótica.</p>
+          <div class="alt-tags">
+            <span class="alt-tag tag-coffee">Geisha · Etiopía Yirgacheffe</span>
+          </div>
+        </div>
+      </div>
+      <div class="alt-tier">
+        <div class="alt-height">1.200<small>M.S.N.M.</small></div>
+        <div class="alt-info">
+          <h4>Media montaña — Equilibrio</h4>
+          <p>Balance entre acidez y dulzura. Tiempo suficiente para desarrollar compuestos aromáticos sin perder estructura. Para el vino, altitudes similares (800–1.500 m en latitudes templadas) producen taninos finos y acidez vivaz.</p>
+          <div class="alt-tags">
+            <span class="alt-tag tag-coffee">Colombia Huila · Costa Rica Tarrazú</span>
+            <span class="alt-tag tag-wine">Mendoza · Cafayate · Etna</span>
+          </div>
+        </div>
+      </div>
+      <div class="alt-tier">
+        <div class="alt-height">600<small>M.S.N.M.</small></div>
+        <div class="alt-info">
+          <h4>Baja altitud — Cuerpo y dulzura</h4>
+          <p>Maduración rápida que favorece azúcares sobre ácidos. El café tiende a perfiles achocolatados y de nuez. El vino de tierras bajas y cálidas produce bayas concentradas, alta graduación alcohólica y taninos suaves.</p>
+          <div class="alt-tags">
+            <span class="alt-tag tag-coffee">Brasil Cerrado · Hawái Kona</span>
+            <span class="alt-tag tag-wine">Barossa Valley · Châteauneuf-du-Pape</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<p>El mecanismo bioquímico es análogo en ambos frutos. A mayor altitud, la <strong>amplitud térmica diurna</strong> — la diferencia entre la temperatura máxima del día y la mínima de la noche — puede superar los 15–20°C. Durante el día, la fotosíntesis produce azúcares; durante la noche fría, la respiración celular se ralentiza y esos azúcares no se consumen, sino que se acumulan y se convierten en precursores de compuestos aromáticos complejos.</p>
+
+<p>En Cafayate, Salta — a 1.660 metros y a 26°S de latitud — esta amplitud térmica es una de las más extremas del mundo vinícola, y produce Torrontés y Malbec con una tensión aromática que no se encuentra en ningún otro lugar. Y aquí, en esta misma latitud, donde la zona del café y la zona del vino se superponen, HARA busca expresar esa misma tensión en cada taza.</p>
+
+<div class="sep"></div>
+
+<h2>Bajo la superficie: la bioquímica del suelo</h2>
+
+<p>Hasta aquí hemos mirado el cielo. Ahora descendemos a la tierra — literalmente, a los primeros metros de suelo donde las raíces transforman minerales inertes en sabor.</p>
+
+<p>El suelo no es un medio pasivo. Es un <strong>ecosistema bioquímico vivo</strong> donde la roca madre, los minerales disueltos, la materia orgánica y billones de microorganismos interactúan para crear lo que las raíces absorben. Y lo que las raíces absorben determina lo que el fruto expresa.</p>
+
+<div class="soil-visual">
+  <div class="soil-label">CAPAS DE INTERACCIÓN BIOQUÍMICA</div>
+  <div class="soil-layers">
+    <div class="soil-layer">
+      <div class="sl-depth">
+        <div class="sl-depth-bar" style="height:40px; background: linear-gradient(to bottom, var(--vine-green), var(--sage));"></div>
+        <div class="sl-depth-label">0–30 cm</div>
+      </div>
+      <div class="sl-content">
+        <h4>Horizonte orgánico — El microbioma</h4>
+        <p>Hongos micorrízicos colonizan las raíces tanto del cafeto como de la vid, extendiendo su red de absorción hasta 100 veces. Esta simbiosis permite capturar fósforo, zinc y cobre que la raíz sola no alcanzaría. Las bacterias del suelo (Pseudomonas, Bacillus) solubilizan minerales de la roca y los hacen biodisponibles. El pH del suelo — ácido en suelos volcánicos, alcalino en suelos calcáreos — determina qué minerales están disponibles y cuáles quedan bloqueados.</p>
+      </div>
+    </div>
+    <div class="soil-layer">
+      <div class="sl-depth">
+        <div class="sl-depth-bar" style="height:50px; background: linear-gradient(to bottom, var(--earth), var(--roast-mid));"></div>
+        <div class="sl-depth-label">30–100 cm</div>
+      </div>
+      <div class="sl-content">
+        <h4>Horizonte mineral — La firma del suelo</h4>
+        <p>La composición mineral del subsuelo se expresa directamente en el perfil sensorial. Los suelos volcánicos (andisoles), ricos en potasio y micronutrientes, producen cafés con acidez vibrante y complejidad mineral — y vinos con esa cualidad que los catadores llaman <em class="term">mineralidad</em>. Los suelos calcáreos favorecen la acumulación de calcio y magnesio, produciendo estructura, fineza y longevidad tanto en el vino como en el café.</p>
+      </div>
+    </div>
+    <div class="soil-layer">
+      <div class="sl-depth">
+        <div class="sl-depth-bar" style="height:60px; background: linear-gradient(to bottom, var(--roast-mid), var(--espresso));"></div>
+        <div class="sl-depth-label">100+ cm</div>
+      </div>
+      <div class="sl-content">
+        <h4>Roca madre — El origen</h4>
+        <p>Basalto, granito, caliza, pizarra, esquisto — la roca madre define el carácter mineral ancestral del terroir. Su descomposición a lo largo de milenios crea la matriz mineral que alimenta todo lo que crece encima. En el Valle de Lerma (Salta), los sedimentos fluviales andinos y los suelos aluviales crean un perfil mineral único que HARA busca expresar en cada extracción.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<h3>Del mineral a la molécula: rutas compartidas</h3>
+
+<p>Lo extraordinario es que las rutas bioquímicas por las cuales el suelo se convierte en aroma son sorprendentemente similares en el café y el vino. Ambos frutos comparten familias enteras de compuestos aromáticos, generados por los mismos precursores minerales y las mismas rutas enzimáticas.</p>
+
+<div class="molecule-grid">
+  <div class="mol-card">
+    <div class="mc-label mc-coffee-label">CAFÉ</div>
+    <h4>Ácidos clorogénicos</h4>
+    <div class="mc-compound">C₁₆H₁₈O₉</div>
+    <p>Familia de ésteres del ácido cafeico. Representan hasta el 8% del peso seco del grano verde. El potasio del suelo modula su síntesis. Durante el tueste, se degradan en ácido quínico (amargor noble) y lactonas (cuerpo).</p>
+  </div>
+  <div class="mol-card">
+    <div class="mc-label mc-wine-label">VINO</div>
+    <h4>Ácidos hidroxicinámicos</h4>
+    <div class="mc-compound">C₉H₈O₄ (ÁCIDO CAFEICO)</div>
+    <p>La misma familia base. En la uva, el ácido cafeico y el ácido coutárico son precursores de color y astringencia. El mismo potasio del suelo gobierna su acumulación. Son el puente molecular entre café y vino.</p>
+  </div>
+  <div class="mol-card">
+    <div class="mc-label mc-coffee-label">CAFÉ</div>
+    <h4>Terpenos y furanos</h4>
+    <div class="mc-compound">LINALOL · GERANIOL · FURFURAL</div>
+    <p>Responsables de las notas florales, cítricas y frutales. Su síntesis depende del zinc y el manganeso del suelo. El estrés hídrico moderado en altitud intensifica su producción como mecanismo de defensa.</p>
+  </div>
+  <div class="mol-card">
+    <div class="mc-label mc-wine-label">VINO</div>
+    <h4>Terpenos y norisoprenoides</h4>
+    <div class="mc-compound">LINALOL · GERANIOL · β-DAMASCENONA</div>
+    <p>Los mismos terpenos (linalol, geraniol) definen el aroma de Moscatel, Gewürztraminer y Torrontés. La β-damascenona aporta notas de rosa y fruta madura. Idéntica dependencia del zinc y el estrés hídrico.</p>
+  </div>
+</div>
+
+<p>El linalol — esa molécula que huele a lavanda y bergamota — aparece tanto en un café Geisha de alta montaña como en un Torrontés de Cafayate. No es una coincidencia poética: es la misma ruta biosintética del ácido mevalónico, activada por las mismas condiciones de altitud, amplitud térmica y disponibilidad de zinc en el suelo. La tierra habla un solo idioma químico; son los frutos los que lo traducen a dialectos diferentes.</p>
+
+<div class="callout">
+  <div class="callout-label">EL PRINCIPIO COMPARTIDO</div>
+  <p>Tanto en el café como en el vino, la complejidad aromática no proviene de la abundancia sino de la <strong>tensión</strong>. Estrés hídrico moderado, amplitud térmica extrema, suelos pobres pero mineralmente complejos — las condiciones que desafían a la planta son exactamente las que la obligan a sintetizar los compuestos que nosotros percibimos como calidad, profundidad y carácter. El terroir no es un lujo; es una cicatriz hermosa.</p>
+</div>
+
+<h2>Salta: donde ambos mundos convergen</h2>
+
+<p>Existe un lugar en el planeta donde la zona del café y la zona del vino se superponen de una manera única. A 26° de latitud sur, entre 1.200 y 1.700 metros de altitud, con suelos aluviales andinos, amplitud térmica de 20°C y una aridez que obliga a las raíces a descender metros en busca de agua — ese lugar es el noroeste argentino, es Salta, y es donde HARA eligió hacer su café.</p>
+
+<p>Cuando extraemos un espresso o preparamos un cold brew en HARA Coffee Lab, no estamos simplemente pasando agua por café molido. Estamos disolviendo en esa agua la historia geológica del Valle de Lerma, la circulación de Hadley que trajo la lluvia que alimentó el suelo que nutrió la planta que creció bajo la misma amplitud térmica que da al Torrontés de Cafayate su tensión aromática inconfundible.</p>
+
+<p>Cada gota cuenta — porque cada gota lleva disuelto un terroir.</p>
+
+</div>
+
+<!-- ══ KOREAN ══ -->
+<div class="lang-content" data-lang="ko" style="display:none;">
+
+<h2>테루아: 하나의 언어, 두 가지 열매</h2>
+
+<p>와인의 세계에서 <em class="term">테루아(terroir)</em>는 신성한 개념입니다. 토양, 기후, 지형, 그리고 인간의 손길이 모든 포도알에 새겨진다는 뜻이며, 지구상 어떤 포도원도 다른 곳과 정확히 같은 와인을 만들 수 없다는 의미입니다. 많은 사람이 모르는 사실은, 커피도 동일한 법칙에 동일한 정밀도로 복종한다는 것입니다.</p>
+
+<p>파나마 보케테 해발 1,700m에서 재배한 게이샤 품종은 콜롬비아 우일라 1,900m의 같은 품종과 다른 맛을 냅니다. 부르고뉴의 피노 누아가 같은 클론을 써도 오리건에서 재현 불가능한 것과 같은 이치입니다. 이유는 같습니다: <strong>대지가 말하고, 각 열매는 그 언어입니다</strong>.</p>
+
+<p>이것을 이해하려면 위에서 — 문자 그대로 대기권에서 — 내려다본 뒤, 센티미터 단위로 뿌리까지 내려가야 합니다.</p>
+
+<div class="sep"></div>
+
+<h2>행성의 벨트</h2>
+
+<p>우연이 아닌 지리적 일치가 존재합니다. 커피는 <strong>커피 벨트</strong> 안에서 자랍니다 — 북회귀선과 남회귀선 사이(23.5°N–23.5°S)의 띠입니다. 와인은 양 반구의 위도 30°에서 50° 사이, 두 개의 대칭적인 <strong>와인 벨트</strong>에서 번성합니다. 그런데 위도 23°에서 30° 사이에 두 세계가 겹치는 구간이 있습니다.</p>
+
+<div class="belt-visual">
+  <div class="bv-inner">
+    <div class="belt-label">위도별 분포</div>
+    <div class="belt-diagram">
+      <div class="belt-row">
+        <div class="belt-lat">50°N</div>
+        <div class="belt-bar-wrap">
+          <div class="belt-bar bar-wine-n" style="left:10%; width:35%;">북반구 와인</div>
+        </div>
+        <div class="belt-zone">한랭</div>
+      </div>
+      <div class="belt-row">
+        <div class="belt-lat">30°N</div>
+        <div class="belt-bar-wrap">
+          <div class="belt-bar bar-wine-n" style="left:5%; width:25%;">와인</div>
+          <div class="belt-bar bar-overlap" style="left:30%; width:20%;">중첩</div>
+        </div>
+        <div class="belt-zone">온대</div>
+      </div>
+      <div class="belt-row">
+        <div class="belt-lat">0°</div>
+        <div class="belt-bar-wrap">
+          <div class="belt-bar bar-coffee" style="left:15%; width:70%;">☕ 커피 벨트</div>
+        </div>
+        <div class="belt-zone">열대</div>
+      </div>
+      <div class="belt-row">
+        <div class="belt-lat">30°S</div>
+        <div class="belt-bar-wrap">
+          <div class="belt-bar bar-overlap" style="left:25%; width:20%;">중첩</div>
+          <div class="belt-bar bar-wine-s" style="left:45%; width:30%;">남반구 와인</div>
+        </div>
+        <div class="belt-zone">온대</div>
+      </div>
+      <div class="belt-row">
+        <div class="belt-lat">50°S</div>
+        <div class="belt-bar-wrap">
+          <div class="belt-bar bar-wine-s" style="left:30%; width:25%;">남반구 와인</div>
+        </div>
+        <div class="belt-zone">한랭</div>
+      </div>
+    </div>
+    <div class="belt-note">중첩 지대(23–30°)에는 윈난(중국), 오아하카(멕시코), 상파울루(브라질), 아르헨티나 북부가 위치하며, 커피와 포도밭이 공존하거나 고도에 따라 교대합니다.</div>
+  </div>
+</div>
+
+<p>이 분포는 자의적이지 않습니다. <strong>대기대순환</strong> — 적도에서 극지방으로 열과 수분을 재분배하는 행성 규모의 대류 셀 시스템 — 에 의해 결정됩니다.</p>
+
+<h2>대기라는 엔진</h2>
+
+<p>지구는 거대한 열엔진으로 작동합니다. 태양이 적도를 가장 강하게 가열하면, 뜨거운 공기가 상승하고, 냉각되면서 열대성 강우로 수분을 잃은 뒤, 아열대(~30°) 지역에서 하강합니다. 이 순환이 <strong>해들리 셀(Hadley Cell)</strong>이며, 열대가 습하고 아열대가 건조한 이유입니다.</p>
+
+<div class="hadley-card">
+  <div class="hadley-label">대기순환 셀</div>
+  <div class="hadley-grid">
+    <div class="hadley-cell">
+      <div class="hc-icon">↑↓</div>
+      <div class="hc-name">해들리 셀</div>
+      <div class="hc-range">0° – 30°</div>
+      <div class="hc-desc">적도 상승, 아열대 하강. 열대성 강우와 무역풍 생성. 커피의 영역.</div>
+    </div>
+    <div class="hadley-cell">
+      <div class="hc-icon">↔</div>
+      <div class="hc-name">페렐 셀</div>
+      <div class="hc-range">30° – 60°</div>
+      <div class="hc-desc">중위도 순환, 편서풍. 뚜렷한 사계절의 온대 기후. 와인의 영역.</div>
+    </div>
+    <div class="hadley-cell">
+      <div class="hc-icon">↓↑</div>
+      <div class="hc-name">극순환 셀</div>
+      <div class="hc-range">60° – 90°</div>
+      <div class="hc-desc">극지방 하강 한랭기류. 두 작물 모두에게 너무 추운 농업의 한계.</div>
+    </div>
+  </div>
+</div>
+
+<p>커피에게 해들리 셀은 이상적인 조건을 만듭니다: 18–24°C의 안정적 기온, 연간 1,500–2,000mm 강수량, 그리고 개화와 결실을 동기화하는 건기-우기의 완만한 교대. 커피나무(<em class="term">Coffea arabica</em>)는 에티오피아 고원지대, 바로 이 기후 체제 안에서 진화했으며, 그 생화학은 이 조건에 정밀하게 튜닝되어 있습니다.</p>
+
+<p>포도나무(<em class="term">Vitis vinifera</em>)에게 페렐 셀은 다르지만 똑같이 결정적인 것을 제공합니다: <strong>뚜렷한 계절성</strong>. 포도나무는 휴면에 들어가 주기를 리셋하는 추운 겨울, 발아를 촉발하는 봄, 성숙을 위한 긴 여름, 포도알에 당분을 농축시키는 건조한 가을이 필요합니다.</p>
+
+<p>여기서 결정적으로 중요한 공유 원리가 등장합니다: <strong>적절한 스트레스가 복잡성을 만든다</strong>. 커피나무와 포도나무 모두 일정 정도의 어려움에 직면할 때 가장 풍부한 향미를 발현합니다 — 풍요가 아니라, 충분함과 부족함 사이의 통제된 긴장이 핵심입니다.</p>
+
+<div class="sep"></div>
+
+<h2>고도: 기후 속의 또 다른 기후</h2>
+
+<p>위도가 전체 기후의 틀을 설정한다면, 고도는 그것을 국지적으로 다시 씁니다. 100m 상승할 때마다 기온은 약 0.65°C 하강합니다(평균 단열감률). 이는 열대 내에서도 고도가 온대의 기온 조건을 — 그리고 그에 따른 완전히 다른 생화학을 — 재현할 수 있다는 의미입니다.</p>
+
+<div class="altitude-visual">
+  <div class="alt-inner">
+    <div class="alt-label">고도와 테루아 발현</div>
+    <div class="alt-stack">
+      <div class="alt-tier">
+        <div class="alt-height">2,000+<small>M.A.S.L.</small></div>
+        <div class="alt-info">
+          <h4>고산 — 결정 같은 산미</h4>
+          <p>느린 숙성이 복합 유기산(말산, 시트르산, 인산)의 축적을 가능하게 합니다. 꽃향과 시트러스 노트가 강화됩니다. 큰 일교차가 삼투압 방어 기제로서 당분 합성을 촉진합니다.</p>
+          <div class="alt-tags">
+            <span class="alt-tag tag-coffee">게이샤 · 에티오피아 이르가체페</span>
+          </div>
+        </div>
+      </div>
+      <div class="alt-tier">
+        <div class="alt-height">1,200<small>M.A.S.L.</small></div>
+        <div class="alt-info">
+          <h4>중산간 — 균형</h4>
+          <p>산미와 단맛의 밸런스. 구조를 잃지 않으면서 향기 화합물을 발전시킬 충분한 시간. 와인에서도 유사한 고도(온대 위도 800–1,500m)가 섬세한 탄닌과 생동적 산미를 만듭니다.</p>
+          <div class="alt-tags">
+            <span class="alt-tag tag-coffee">콜롬비아 우일라 · 코스타리카 타라주</span>
+            <span class="alt-tag tag-wine">멘도사 · 카파야테 · 에트나</span>
+          </div>
+        </div>
+      </div>
+      <div class="alt-tier">
+        <div class="alt-height">600<small>M.A.S.L.</small></div>
+        <div class="alt-info">
+          <h4>저지대 — 바디와 단맛</h4>
+          <p>빠른 숙성이 산보다 당을 우선합니다. 커피는 초콜릿·견과류 프로파일을, 와인은 농축된 과일, 높은 알코올, 부드러운 탄닌을 생산합니다.</p>
+          <div class="alt-tags">
+            <span class="alt-tag tag-coffee">브라질 세하도 · 하와이 코나</span>
+            <span class="alt-tag tag-wine">바로사 밸리 · 샤토뇌프뒤파프</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<p>생화학적 메커니즘은 두 열매에서 유사합니다. 고도가 높을수록 <strong>일교차(주간 최고와 야간 최저 기온의 차이)</strong>가 15–20°C를 넘을 수 있습니다. 낮에는 광합성이 당분을 생산하고, 추운 밤에는 세포 호흡이 둔화되어 그 당분이 소모되지 않고 축적됩니다. 이 축적된 당이 복합 향기 화합물의 전구체로 전환됩니다.</p>
+
+<p>살타의 카파야테 — 해발 1,660m, 남위 26° — 는 와인 세계에서 가장 극단적인 일교차를 가진 곳 중 하나이며, 다른 어디에서도 찾을 수 없는 향기적 긴장감을 가진 토론테스와 말벡을 만듭니다. 그리고 바로 이 위도에서, 커피 존과 와인 존이 겹치는 이곳에서, HARA는 매 잔마다 그 같은 긴장을 표현하고자 합니다.</p>
+
+<div class="sep"></div>
+
+<h2>지표면 아래: 토양의 생화학</h2>
+
+<p>여기까지 우리는 하늘을 올려다보았습니다. 이제 땅으로 내려갑니다 — 문자 그대로, 뿌리가 비활성 광물을 맛으로 변환하는 토양 최초 수 미터로.</p>
+
+<p>토양은 수동적 배지가 아닙니다. 모암, 용해된 광물, 유기물, 수조 개의 미생물이 상호작용하여 뿌리가 흡수하는 것을 만드는 <strong>살아있는 생화학적 생태계</strong>입니다. 그리고 뿌리가 흡수하는 것이 열매가 표현하는 것을 결정합니다.</p>
+
+<div class="soil-visual">
+  <div class="soil-label">생화학적 상호작용 층위</div>
+  <div class="soil-layers">
+    <div class="soil-layer">
+      <div class="sl-depth">
+        <div class="sl-depth-bar" style="height:40px; background: linear-gradient(to bottom, var(--vine-green), var(--sage));"></div>
+        <div class="sl-depth-label">0–30 cm</div>
+      </div>
+      <div class="sl-content">
+        <h4>유기층 — 마이크로바이옴</h4>
+        <p>균근(mycorrhiza)이 커피나무와 포도나무 모두의 뿌리에 공생하며, 흡수 네트워크를 100배까지 확장합니다. 이 공생으로 뿌리만으로는 도달할 수 없는 인, 아연, 구리를 포획합니다. 토양 세균(Pseudomonas, Bacillus)은 암석의 광물을 용해시켜 생체이용 가능하게 만듭니다. 토양 pH — 화산토는 산성, 석회질토는 알칼리성 — 가 어떤 광물이 이용 가능하고 어떤 것이 차단되는지를 결정합니다.</p>
+      </div>
+    </div>
+    <div class="soil-layer">
+      <div class="sl-depth">
+        <div class="sl-depth-bar" style="height:50px; background: linear-gradient(to bottom, var(--earth), var(--roast-mid));"></div>
+        <div class="sl-depth-label">30–100 cm</div>
+      </div>
+      <div class="sl-content">
+        <h4>광물층 — 토양의 서명</h4>
+        <p>하부토양의 광물 조성은 관능적 프로파일에 직접 표현됩니다. 화산토(안디솔)는 칼륨과 미량원소가 풍부하여 생동적 산미와 미네랄 복합성을 가진 커피를 — 그리고 시음가들이 <em class="term">미네랄리티</em>라 부르는 특질을 가진 와인을 만듭니다. 석회질 토양은 칼슘과 마그네슘의 축적을 촉진하여, 와인과 커피 모두에서 구조감, 섬세함, 장기 숙성력을 부여합니다.</p>
+      </div>
+    </div>
+    <div class="soil-layer">
+      <div class="sl-depth">
+        <div class="sl-depth-bar" style="height:60px; background: linear-gradient(to bottom, var(--roast-mid), var(--espresso));"></div>
+        <div class="sl-depth-label">100+ cm</div>
+      </div>
+      <div class="sl-content">
+        <h4>모암 — 기원</h4>
+        <p>현무암, 화강암, 석회암, 점판암, 편암 — 모암은 테루아의 근원적 미네랄 성격을 정의합니다. 수천 년에 걸친 풍화가 위에서 자라는 모든 것을 먹이는 광물 매트릭스를 만듭니다. 살타의 레르마 계곡에서는 안데스 충적 퇴적물과 충적토가 HARA가 모든 추출에서 표현하고자 하는 독특한 미네랄 프로파일을 만듭니다.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<h3>광물에서 분자로: 공유된 경로</h3>
+
+<p>놀라운 것은 토양이 향으로 변환되는 생화학적 경로가 커피와 와인에서 놀랍도록 유사하다는 점입니다. 두 열매는 같은 광물 전구체와 같은 효소 경로로 생성되는 방향족 화합물 군 전체를 공유합니다.</p>
+
+<div class="molecule-grid">
+  <div class="mol-card">
+    <div class="mc-label mc-coffee-label">커피</div>
+    <h4>클로로겐산</h4>
+    <div class="mc-compound">C₁₆H₁₈O₉</div>
+    <p>카페인산의 에스터 계열. 생두 건조중량의 최대 8%. 토양의 칼륨이 합성을 조절합니다. 로스팅 중 퀸산(고귀한 쓴맛)과 락톤(바디)으로 분해됩니다.</p>
+  </div>
+  <div class="mol-card">
+    <div class="mc-label mc-wine-label">와인</div>
+    <h4>하이드록시신남산</h4>
+    <div class="mc-compound">C₉H₈O₄ (카페인산)</div>
+    <p>동일한 기본 화합물군. 포도에서 카페인산과 쿠타르산은 색상과 수렴미의 전구체입니다. 같은 토양 칼륨이 축적을 지배합니다. 커피와 와인을 잇는 분자적 다리.</p>
+  </div>
+  <div class="mol-card">
+    <div class="mc-label mc-coffee-label">커피</div>
+    <h4>테르펜 & 퓨란</h4>
+    <div class="mc-compound">리날룰 · 게라니올 · 퍼퓨랄</div>
+    <p>꽃향, 시트러스, 과일 노트의 주역. 합성은 토양의 아연과 망간에 의존합니다. 고도에서의 적절한 수분 스트레스가 방어 기제로서 생산을 강화합니다.</p>
+  </div>
+  <div class="mol-card">
+    <div class="mc-label mc-wine-label">와인</div>
+    <h4>테르펜 & 노리소프레노이드</h4>
+    <div class="mc-compound">리날룰 · 게라니올 · β-다마세논</div>
+    <p>동일한 테르펜(리날룰, 게라니올)이 모스카텔, 게뷔르츠트라미너, 토론테스의 향을 정의합니다. β-다마세논은 장미와 익은 과일 노트. 아연과 수분 스트레스에 대한 의존성도 동일합니다.</p>
+  </div>
+</div>
+
+<p>리날룰 — 라벤더와 베르가못 향이 나는 그 분자 — 은 고산지 게이샤 커피에서도, 카파야테 토론테스에서도 나타납니다. 시적인 우연이 아닙니다: 메발론산 경로라는 동일한 생합성 경로가 고도, 일교차, 토양 아연 가용성이라는 동일한 조건에 의해 활성화된 결과입니다. 대지는 하나의 화학적 언어를 말하고, 열매들이 그것을 서로 다른 방언으로 번역하는 것입니다.</p>
+
+<div class="callout">
+  <div class="callout-label">공유된 원리</div>
+  <p>커피와 와인 모두에서, 향미의 복잡성은 풍요가 아닌 <strong>긴장</strong>에서 비롯됩니다. 적절한 수분 스트레스, 극단적 일교차, 척박하지만 광물적으로 복잡한 토양 — 식물에 도전하는 조건이 바로 우리가 품질, 깊이, 개성으로 인지하는 화합물을 합성하도록 강제하는 조건입니다. 테루아는 사치가 아닙니다; 아름다운 흉터입니다.</p>
+</div>
+
+<h2>살타: 두 세계가 수렴하는 곳</h2>
+
+<p>지구상에 커피 존과 와인 존이 독특한 방식으로 겹치는 곳이 있습니다. 남위 26°, 해발 1,200~1,700m, 안데스 충적토, 일교차 20°C, 뿌리를 수 미터 아래로 내리게 만드는 건조함 — 그곳이 아르헨티나 북서부, 살타이며, HARA가 커피를 만들기로 선택한 곳입니다.</p>
+
+<p>HARA Coffee Lab에서 에스프레소를 추출하거나 콜드브루를 준비할 때, 우리는 단순히 분쇄 커피에 물을 통과시키는 것이 아닙니다. 레르마 계곡의 지질학적 역사를, 토양에 비를 가져다준 해들리 순환을, 카파야테의 토론테스에 비견할 향기적 긴장감을 만드는 바로 그 일교차 아래에서 자란 식물이 간직한 모든 것을 물에 녹여내는 것입니다.</p>
+
+<p>매 한 방울이 의미를 갖습니다 — 모든 방울에 테루아가 녹아 있기 때문입니다.</p>
+
+</div>
+
+<!-- ══ ENGLISH ══ -->
+<div class="lang-content" data-lang="en" style="display:none;">
+
+<h2>Terroir: one word, two fruits</h2>
+
+<p>In the wine world, <em class="term">terroir</em> is a sacred concept. It means that soil, climate, topography, and human touch are inscribed in every berry, and that no vineyard on Earth can produce exactly the same wine as another. What few people realize is that coffee obeys the same laws with the same precision.</p>
+
+<p>A Geisha cultivar grown in Boquete, Panama at 1,700 meters doesn't taste the same as the identical cultivar in Huila, Colombia at 1,900 meters. Just as a Burgundy Pinot Noir is irreproducible in Oregon despite using the same clone. The reason is the same: <strong>the earth speaks, and each fruit is its language</strong>.</p>
+
+<p>To understand why, we need to look from above — literally, from the atmosphere — and then descend centimeter by centimeter to the roots.</p>
+
+<div class="sep"></div>
+
+<h2>The planet's belts</h2>
+
+<p>There is a geographic coincidence that is anything but coincidental. Coffee grows within the <strong>Coffee Belt</strong>, a band between the Tropics of Cancer and Capricorn (23.5°N–23.5°S). Wine thrives in two symmetrical strips: the <strong>Wine Belts</strong>, between 30° and 50° latitude in both hemispheres. But there is an overlap zone — between 23° and 30° — where both worlds meet.</p>
+
+<div class="belt-visual">
+  <div class="bv-inner">
+    <div class="belt-label">LATITUDINAL DISTRIBUTION</div>
+    <div class="belt-diagram">
+      <div class="belt-row">
+        <div class="belt-lat">50°N</div>
+        <div class="belt-bar-wrap">
+          <div class="belt-bar bar-wine-n" style="left:10%; width:35%;">Northern Wine</div>
+        </div>
+        <div class="belt-zone">COLD</div>
+      </div>
+      <div class="belt-row">
+        <div class="belt-lat">30°N</div>
+        <div class="belt-bar-wrap">
+          <div class="belt-bar bar-wine-n" style="left:5%; width:25%;">Wine</div>
+          <div class="belt-bar bar-overlap" style="left:30%; width:20%;">Overlap</div>
+        </div>
+        <div class="belt-zone">TEMP.</div>
+      </div>
+      <div class="belt-row">
+        <div class="belt-lat">0°</div>
+        <div class="belt-bar-wrap">
+          <div class="belt-bar bar-coffee" style="left:15%; width:70%;">☕ Coffee Belt</div>
+        </div>
+        <div class="belt-zone">TROP.</div>
+      </div>
+      <div class="belt-row">
+        <div class="belt-lat">30°S</div>
+        <div class="belt-bar-wrap">
+          <div class="belt-bar bar-overlap" style="left:25%; width:20%;">Overlap</div>
+          <div class="belt-bar bar-wine-s" style="left:45%; width:30%;">Southern Wine</div>
+        </div>
+        <div class="belt-zone">TEMP.</div>
+      </div>
+      <div class="belt-row">
+        <div class="belt-lat">50°S</div>
+        <div class="belt-bar-wrap">
+          <div class="belt-bar bar-wine-s" style="left:30%; width:25%;">Southern Wine</div>
+        </div>
+        <div class="belt-zone">COLD</div>
+      </div>
+    </div>
+    <div class="belt-note">The overlap zone (23–30°) hosts regions like Yunnan (China), Oaxaca (Mexico), São Paulo (Brazil), and northern Argentina, where coffee and vineyards coexist or alternate by altitude.</div>
+  </div>
+</div>
+
+<p>This distribution is not arbitrary. It is dictated by the <strong>general circulation of the atmosphere</strong> — the planetary system of convective cells that redistributes heat and moisture from the equator toward the poles.</p>
+
+<h2>The atmospheric engine</h2>
+
+<p>Earth operates as a giant thermal engine. The sun heats the equator most intensely; that hot air rises, cools, sheds moisture as tropical rain, then descends in the subtropics (~30°). This circuit is the <strong>Hadley cell</strong>, and it explains why the tropics are wet and the subtropics tend toward aridity.</p>
+
+<div class="hadley-card">
+  <div class="hadley-label">ATMOSPHERIC CIRCULATION CELLS</div>
+  <div class="hadley-grid">
+    <div class="hadley-cell">
+      <div class="hc-icon">↑↓</div>
+      <div class="hc-name">Hadley Cell</div>
+      <div class="hc-range">0° – 30°</div>
+      <div class="hc-desc">Equatorial rising, subtropical descent. Generates intense tropical rainfall and trade winds. Coffee's domain.</div>
+    </div>
+    <div class="hadley-cell">
+      <div class="hc-icon">↔</div>
+      <div class="hc-name">Ferrel Cell</div>
+      <div class="hc-range">30° – 60°</div>
+      <div class="hc-desc">Mid-latitude circulation with westerlies. Temperate climates with marked seasons. Wine's domain.</div>
+    </div>
+    <div class="hadley-cell">
+      <div class="hc-icon">↓↑</div>
+      <div class="hc-name">Polar Cell</div>
+      <div class="hc-range">60° – 90°</div>
+      <div class="hc-desc">Cold polar descending air. Too cold for both crops. The limit of agriculture.</div>
+    </div>
+  </div>
+</div>
+
+<p>For coffee, the Hadley cell creates ideal conditions: stable temperatures between 18–24°C, annual rainfall of 1,500–2,000 mm, and a gentle alternation between wet and dry seasons that synchronizes flowering and fruit ripening. The coffee plant (<em class="term">Coffea arabica</em>) evolved in the Ethiopian highlands within this climate regime, and its biochemistry is tuned to these conditions.</p>
+
+<p>For the vine (<em class="term">Vitis vinifera</em>), the Ferrel cell provides something different but equally crucial: <strong>pronounced seasonality</strong>. The vine needs a cold winter for dormancy, a spring to trigger budbreak, a long summer for ripening, and a dry autumn to concentrate sugars in the berry.</p>
+
+<p>Here a shared principle of capital importance emerges: <strong>moderate stress produces complexity</strong>. Both the coffee plant and the vine develop their greatest aromatic richness when facing a degree of difficulty — not abundance, but the controlled tension between enough and scarce.</p>
+
+<div class="sep"></div>
+
+<h2>Altitude: a second climate within the climate</h2>
+
+<p>If latitude sets the general climatic framework, altitude rewrites it locally. For every 100 meters of elevation gain, temperature drops approximately 0.65°C (mean adiabatic lapse rate). This means that within the tropics, altitude can recreate the thermal conditions of a temperate latitude — and with them, an entirely different biochemistry.</p>
+
+<div class="altitude-visual">
+  <div class="alt-inner">
+    <div class="alt-label">ALTITUDE AND TERROIR EXPRESSION</div>
+    <div class="alt-stack">
+      <div class="alt-tier">
+        <div class="alt-height">2,000+<small>M.A.S.L.</small></div>
+        <div class="alt-info">
+          <h4>High mountain — Crystalline acidity</h4>
+          <p>Slow ripening enables accumulation of complex organic acids (malic, citric, phosphoric). Floral and citrus notes intensify. Extreme diurnal temperature swings force the fruit to synthesize sugars as osmotic defense.</p>
+          <div class="alt-tags">
+            <span class="alt-tag tag-coffee">Geisha · Ethiopia Yirgacheffe</span>
+          </div>
+        </div>
+      </div>
+      <div class="alt-tier">
+        <div class="alt-height">1,200<small>M.A.S.L.</small></div>
+        <div class="alt-info">
+          <h4>Mid-altitude — Balance</h4>
+          <p>Equilibrium between acidity and sweetness. Enough time to develop aromatic compounds without losing structure. For wine, similar altitudes (800–1,500 m at temperate latitudes) yield fine tannins and vibrant acidity.</p>
+          <div class="alt-tags">
+            <span class="alt-tag tag-coffee">Colombia Huila · Costa Rica Tarrazú</span>
+            <span class="alt-tag tag-wine">Mendoza · Cafayate · Etna</span>
+          </div>
+        </div>
+      </div>
+      <div class="alt-tier">
+        <div class="alt-height">600<small>M.A.S.L.</small></div>
+        <div class="alt-info">
+          <h4>Low altitude — Body and sweetness</h4>
+          <p>Rapid ripening favors sugars over acids. Coffee tends toward chocolate and nutty profiles. Low-altitude, warm-climate wine produces concentrated berries, high alcohol, and soft tannins.</p>
+          <div class="alt-tags">
+            <span class="alt-tag tag-coffee">Brazil Cerrado · Hawai'i Kona</span>
+            <span class="alt-tag tag-wine">Barossa Valley · Châteauneuf-du-Pape</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<p>The biochemical mechanism is analogous in both fruits. At higher altitudes, <strong>diurnal temperature amplitude</strong> — the difference between daytime maximum and nighttime minimum — can exceed 15–20°C. During the day, photosynthesis produces sugars; during the cold night, cellular respiration slows and those sugars aren't consumed but accumulate, converting into precursors of complex aromatic compounds.</p>
+
+<p>In Cafayate, Salta — at 1,660 meters and 26°S latitude — this thermal amplitude is among the most extreme in the wine world, producing Torrontés and Malbec with an aromatic tension found nowhere else. And here, at this very latitude where the coffee zone and wine zone overlap, HARA seeks to express that same tension in every cup.</p>
+
+<div class="sep"></div>
+
+<h2>Below the surface: the biochemistry of soil</h2>
+
+<p>Until now we've looked at the sky. Now we descend to the earth — literally, to the first meters of soil where roots transform inert minerals into flavor.</p>
+
+<p>Soil is not a passive medium. It is a <strong>living biochemical ecosystem</strong> where bedrock, dissolved minerals, organic matter, and trillions of microorganisms interact to create what the roots absorb. And what the roots absorb determines what the fruit expresses.</p>
+
+<div class="soil-visual">
+  <div class="soil-label">LAYERS OF BIOCHEMICAL INTERACTION</div>
+  <div class="soil-layers">
+    <div class="soil-layer">
+      <div class="sl-depth">
+        <div class="sl-depth-bar" style="height:40px; background: linear-gradient(to bottom, var(--vine-green), var(--sage));"></div>
+        <div class="sl-depth-label">0–30 cm</div>
+      </div>
+      <div class="sl-content">
+        <h4>Organic horizon — The microbiome</h4>
+        <p>Mycorrhizal fungi colonize the roots of both coffee and vine, extending the absorption network up to 100-fold. This symbiosis captures phosphorus, zinc, and copper that the root alone cannot reach. Soil bacteria (Pseudomonas, Bacillus) solubilize minerals from rock, making them bioavailable. Soil pH — acidic in volcanic soils, alkaline in calcareous — determines which minerals are available and which remain locked.</p>
+      </div>
+    </div>
+    <div class="soil-layer">
+      <div class="sl-depth">
+        <div class="sl-depth-bar" style="height:50px; background: linear-gradient(to bottom, var(--earth), var(--roast-mid));"></div>
+        <div class="sl-depth-label">30–100 cm</div>
+      </div>
+      <div class="sl-content">
+        <h4>Mineral horizon — The soil's signature</h4>
+        <p>Subsoil mineral composition expresses directly in the sensory profile. Volcanic soils (andisols), rich in potassium and micronutrients, produce coffees with vibrant acidity and mineral complexity — and wines with the quality tasters call <em class="term">minerality</em>. Calcareous soils favor calcium and magnesium accumulation, lending structure, finesse, and longevity to both wine and coffee.</p>
+      </div>
+    </div>
+    <div class="soil-layer">
+      <div class="sl-depth">
+        <div class="sl-depth-bar" style="height:60px; background: linear-gradient(to bottom, var(--roast-mid), var(--espresso));"></div>
+        <div class="sl-depth-label">100+ cm</div>
+      </div>
+      <div class="sl-content">
+        <h4>Bedrock — The origin</h4>
+        <p>Basalt, granite, limestone, slate, schist — bedrock defines the ancestral mineral character of terroir. Its decomposition over millennia creates the mineral matrix feeding everything above. In Salta's Lerma Valley, Andean fluvial sediments and alluvial soils create a unique mineral profile that HARA seeks to express in every extraction.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<h3>From mineral to molecule: shared pathways</h3>
+
+<p>What's extraordinary is that the biochemical pathways through which soil becomes aroma are remarkably similar in coffee and wine. Both fruits share entire families of aromatic compounds, generated by the same mineral precursors and the same enzymatic routes.</p>
+
+<div class="molecule-grid">
+  <div class="mol-card">
+    <div class="mc-label mc-coffee-label">COFFEE</div>
+    <h4>Chlorogenic acids</h4>
+    <div class="mc-compound">C₁₆H₁₈O₉</div>
+    <p>A family of caffeic acid esters. Up to 8% of green bean dry weight. Soil potassium modulates their synthesis. During roasting, they degrade into quinic acid (noble bitterness) and lactones (body).</p>
+  </div>
+  <div class="mol-card">
+    <div class="mc-label mc-wine-label">WINE</div>
+    <h4>Hydroxycinnamic acids</h4>
+    <div class="mc-compound">C₉H₈O₄ (CAFFEIC ACID)</div>
+    <p>The same base family. In grape, caffeic acid and coutaric acid are precursors of color and astringency. The same soil potassium governs their accumulation. They are the molecular bridge between coffee and wine.</p>
+  </div>
+  <div class="mol-card">
+    <div class="mc-label mc-coffee-label">COFFEE</div>
+    <h4>Terpenes & furans</h4>
+    <div class="mc-compound">LINALOOL · GERANIOL · FURFURAL</div>
+    <p>Responsible for floral, citrus, and fruity notes. Their synthesis depends on soil zinc and manganese. Moderate water stress at altitude intensifies their production as a defense mechanism.</p>
+  </div>
+  <div class="mol-card">
+    <div class="mc-label mc-wine-label">WINE</div>
+    <h4>Terpenes & norisoprenoids</h4>
+    <div class="mc-compound">LINALOOL · GERANIOL · β-DAMASCENONE</div>
+    <p>The same terpenes (linalool, geraniol) define the aroma of Muscat, Gewürztraminer, and Torrontés. β-damascenone contributes rose and ripe fruit notes. Identical dependence on zinc and water stress.</p>
+  </div>
+</div>
+
+<p>Linalool — that molecule smelling of lavender and bergamot — appears in both a high-altitude Geisha coffee and a Cafayate Torrontés. This is not poetic coincidence: it is the same mevalonic acid biosynthetic pathway, activated by the same conditions of altitude, thermal amplitude, and soil zinc availability. The earth speaks a single chemical language; it is the fruits that translate it into different dialects.</p>
+
+<div class="callout">
+  <div class="callout-label">THE SHARED PRINCIPLE</div>
+  <p>In both coffee and wine, aromatic complexity comes not from abundance but from <strong>tension</strong>. Moderate water stress, extreme thermal amplitude, poor but minerally complex soils — the conditions that challenge the plant are precisely the ones that force it to synthesize the compounds we perceive as quality, depth, and character. Terroir is not a luxury; it is a beautiful scar.</p>
+</div>
+
+<h2>Salta: where both worlds converge</h2>
+
+<p>There is a place on Earth where the coffee zone and wine zone overlap in a unique way. At 26° south latitude, between 1,200 and 1,700 meters of altitude, with Andean alluvial soils, thermal amplitude of 20°C, and an aridity that forces roots to descend meters in search of water — that place is northwestern Argentina, it is Salta, and it is where HARA chose to make its coffee.</p>
+
+<p>When we pull an espresso or brew a cold brew at HARA Coffee Lab, we are not simply passing water through ground coffee. We are dissolving in that water the geological history of the Lerma Valley, the Hadley circulation that brought the rain that fed the soil that nourished the plant that grew under the same thermal amplitude that gives Cafayate's Torrontés its unmistakable aromatic tension.</p>
+
+<p>Every drop counts — because every drop carries a terroir dissolved within.</p>
+
+</div>
+
+</article>
+
+<!-- AUTHOR -->
+<div class="author-card">
+  <div class="author-avatar"><span>H</span></div>
+  <div class="author-info">
+    <h4>HARA Coffee Lab</h4>
+    <p data-i18n="author-bio">Ciencia, precisión y pasión por el café de especialidad. Salta, Argentina.</p>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-brand">© 2026 HARA COFFEE LAB · SALTA, ARGENTINA · CADA GOTA CUENTA</div>
+</footer>
+
+<script>
+let currentLang = 'es';
+
+const ui = {
+  es: { 'hero-overline': 'CIENCIA × TERROIR', 'hero-title': '<span class="coffee-accent">Café</span> y <span class="wine-accent">Vino</span><br>el lenguaje de la tierra', 'hero-sub': 'Latitud, circulación atmosférica, altitud y suelo — cómo la misma tierra habla a través de dos frutos extraordinarios.', 'hero-badge': 'CIENCIA', 'hero-read': '15 min lectura', 'author-bio': 'Ciencia, precisión y pasión por el café de especialidad. Salta, Argentina.' },
+  ko: { 'hero-overline': '과학 × 테루아', 'hero-title': '<span class="coffee-accent">커피</span>와 <span class="wine-accent">와인</span><br>대지의 언어', 'hero-sub': '위도, 대기대순환, 해발고도, 토양 — 같은 대지가 두 가지 비범한 열매를 통해 말하는 방식.', 'hero-badge': '과학', 'hero-read': '15분 소요', 'author-bio': '과학, 정밀함, 그리고 스페셜티 커피에 대한 열정. 아르헨티나 살타.' },
+  en: { 'hero-overline': 'SCIENCE × TERROIR', 'hero-title': '<span class="coffee-accent">Coffee</span> and <span class="wine-accent">Wine</span><br>the language of the earth', 'hero-sub': 'Latitude, atmospheric circulation, altitude, and soil — how the same earth speaks through two extraordinary fruits.', 'hero-badge': 'SCIENCE', 'hero-read': '15 min read', 'author-bio': 'Science, precision, and passion for specialty coffee. Salta, Argentina.' }
+};
+
+function switchLang(lang) {
+  currentLang = lang;
+  document.documentElement.lang = lang === 'ko' ? 'ko' : lang === 'en' ? 'en' : 'es';
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.dataset.i18n;
+    if (ui[lang][key]) el.innerHTML = ui[lang][key];
+  });
+  document.querySelectorAll('.lang-content').forEach(el => {
+    el.style.display = el.dataset.lang === lang ? 'block' : 'none';
+  });
+  document.querySelectorAll('.lang-btn').forEach(b => b.classList.toggle('active', b.dataset.lang === lang));
+}
+
+document.querySelectorAll('.lang-btn').forEach(btn => {
+  btn.addEventListener('click', () => switchLang(btn.dataset.lang));
+});
+
+window.addEventListener('scroll', () => {
+  const doc = document.documentElement;
+  const progress = (doc.scrollTop / (doc.scrollHeight - doc.clientHeight)) * 100;
+  document.getElementById('progressBar').style.width = progress + '%';
+  document.getElementById('mainNav').classList.toggle('scrolled', doc.scrollTop > 60);
+});
+</script>
+
+</body>
+</html>

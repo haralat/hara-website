@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HARA Blog — ¿Qué decide el sabor de tu café?</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Noto+Sans+KR:wght@200;300;400;500;600&family=Noto+Sans:wght@200;300;400;500;600&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+:root{--espresso:#1a1210;--crema:#d4a574;--cream:#f5efe6;--warm-white:#faf8f4;--roast-mid:#6b4226;--copper:#b87333;--amber:#c9a84c;--green-bean:#7a9a5b;--roast-color:#a0522d;--extract-blue:#5b8aaa;--fresh-gray:#8a8a7a;--text-primary:#1a1210;--text-secondary:#6b5b50;--text-light:#a09080;--border-light:rgba(212,165,116,.15)}
+*{margin:0;padding:0;box-sizing:border-box}html{scroll-behavior:smooth;font-size:16px}
+body{background:var(--warm-white);color:var(--text-primary);font-family:'Noto Sans','Noto Sans KR',sans-serif;font-weight:300;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:var(--warm-white)}::-webkit-scrollbar-thumb{background:var(--crema);border-radius:3px}
+nav{position:fixed;top:0;left:0;right:0;z-index:200;padding:1.2rem 3rem;display:flex;justify-content:space-between;align-items:center;transition:all .5s}
+nav.scrolled{background:rgba(250,248,244,.92);backdrop-filter:blur(24px);padding:.9rem 3rem;box-shadow:0 1px 0 rgba(26,18,16,.06)}
+.nav-left{display:flex;align-items:center;gap:2.5rem}
+.nav-logo{font-family:'Cormorant Garamond',serif;font-weight:500;letter-spacing:.15em;color:var(--text-primary);text-decoration:none;font-size:1.3rem;line-height:1}
+.nav-logo small{display:block;font-weight:300;font-size:.55rem;letter-spacing:.3em;color:var(--text-secondary);margin-top:2px}
+.nav-back{font-size:.72rem;font-weight:400;letter-spacing:.08em;color:var(--text-secondary);text-decoration:none;display:flex;align-items:center;gap:.4rem;transition:color .3s}
+.nav-back:hover{color:var(--espresso)}
+.lang-switcher{display:flex;border:1px solid var(--border-light);border-radius:6px;overflow:hidden}
+.lang-btn{font-family:'JetBrains Mono',monospace;font-size:.6rem;letter-spacing:.1em;padding:.4rem .65rem;border:none;background:transparent;color:var(--text-light);cursor:pointer;transition:all .3s}
+.lang-btn:not(:last-child){border-right:1px solid var(--border-light)}
+.lang-btn.active{background:var(--espresso);color:var(--cream)}
+.lang-btn:hover:not(.active){background:rgba(212,165,116,.08);color:var(--roast-mid)}
+.progress-bar{position:fixed;top:0;left:0;height:2px;z-index:300;width:0%;background:linear-gradient(to right,var(--green-bean),var(--roast-color),var(--extract-blue));transition:width .1s linear}
+
+.post-hero{height:80vh;min-height:500px;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;background:var(--espresso)}
+.post-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 60%,rgba(212,165,116,.08),transparent 55%)}
+.hero-content{position:relative;z-index:2;text-align:center;padding:2rem;max-width:700px}
+.hero-overline{font-family:'JetBrains Mono',monospace;font-size:.55rem;letter-spacing:.5em;color:rgba(245,239,230,.25);margin-bottom:2rem;opacity:0;animation:fadeUp .8s ease .3s forwards}
+.hero-title{font-family:'Cormorant Garamond',serif;font-size:clamp(2.2rem,5vw,3.8rem);font-weight:300;line-height:1.15;color:var(--cream);margin-bottom:1.5rem;opacity:0;animation:fadeUp 1s ease .5s forwards}
+.hero-sub{font-size:1rem;line-height:1.8;color:rgba(245,239,230,.5);max-width:480px;margin:0 auto;opacity:0;animation:fadeUp .8s ease .8s forwards}
+.hero-meta{margin-top:2.5rem;display:flex;justify-content:center;gap:1.5rem;opacity:0;animation:fadeUp .8s ease 1s forwards}
+.hero-badge{font-family:'JetBrains Mono',monospace;font-size:.55rem;letter-spacing:.2em;padding:.35rem .8rem;border-radius:4px;background:rgba(212,165,116,.12);color:var(--crema)}
+.hero-date,.hero-read{font-family:'JetBrains Mono',monospace;font-size:.6rem;color:rgba(245,239,230,.25);letter-spacing:.1em}
+
+.article-body{max-width:680px;margin:0 auto;padding:5rem 2rem 4rem}
+.article-body h2{font-family:'Cormorant Garamond',serif;font-size:1.75rem;font-weight:400;color:var(--espresso);margin:3.5rem 0 1rem;line-height:1.3}
+.article-body h2:first-child{margin-top:0}
+.article-body p{font-size:.95rem;line-height:2.1;color:var(--text-secondary);margin-bottom:1.4rem}
+.article-body p strong{color:var(--text-primary);font-weight:500}
+.article-body p em.t{font-style:italic;color:var(--copper);font-family:'Cormorant Garamond',serif;font-size:1.05em}
+.sep{width:40px;height:1px;background:var(--crema);margin:3rem auto;opacity:.4}
+
+/* ANALOGY */
+.analogy{margin:2.5rem -1rem;padding:2rem 2.5rem;border-radius:20px;border:1px solid var(--border-light);background:white;position:relative}
+.analogy::before{content:'🍳';position:absolute;top:-12px;left:24px;font-size:1.2rem;background:var(--warm-white);padding:0 .5rem}
+.analogy p{font-size:.88rem;line-height:1.9;color:var(--text-secondary);margin-bottom:.6rem}
+.analogy p:last-child{margin-bottom:0}
+.analogy p strong{color:var(--text-primary)}
+
+/* BIG BARS */
+.big-bars{margin:2.5rem -1rem;padding:2.5rem;background:var(--espresso);border-radius:20px;color:var(--cream)}
+.bb-label{font-family:'JetBrains Mono',monospace;font-size:.55rem;letter-spacing:.3em;color:var(--crema);margin-bottom:2rem}
+.bb-item{margin-bottom:1.5rem}
+.bb-item:last-child{margin-bottom:0}
+.bb-header{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:.4rem}
+.bb-name{display:flex;align-items:center;gap:.6rem}
+.bb-icon{font-size:1.1rem}
+.bb-title{font-family:'Cormorant Garamond',serif;font-size:1.05rem;font-weight:400}
+.bb-pct{font-family:'JetBrains Mono',monospace;font-size:1.1rem;color:var(--crema)}
+.bb-track{width:100%;height:20px;background:rgba(255,255,255,.04);border-radius:4px;overflow:hidden}
+.bb-fill{height:100%;border-radius:4px;display:flex;align-items:center;padding-left:.8rem;font-family:'JetBrains Mono',monospace;font-size:.55rem;letter-spacing:.08em;color:rgba(255,255,255,.7);transition:width 1.5s ease}
+.fill-bean{background:linear-gradient(to right,rgba(122,154,91,.5),rgba(122,154,91,.25))}
+.fill-roast{background:linear-gradient(to right,rgba(160,82,45,.5),rgba(160,82,45,.25))}
+.fill-extract{background:linear-gradient(to right,rgba(91,138,170,.5),rgba(91,138,170,.25))}
+.fill-fresh{background:linear-gradient(to right,rgba(138,138,122,.4),rgba(138,138,122,.2))}
+.bb-sub{font-size:.7rem;color:rgba(245,239,230,.3);margin-top:.3rem;line-height:1.5}
+
+/* FACTOR CARDS */
+.factor-cards{margin:2.5rem -1rem;display:grid;grid-template-columns:1fr 1fr;gap:1.2rem}
+.fc{padding:2rem;border-radius:16px;border:1px solid var(--border-light);background:white;position:relative;overflow:hidden}
+.fc::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+.fc-bean::before{background:var(--green-bean)}.fc-roast::before{background:var(--roast-color)}.fc-extract::before{background:var(--extract-blue)}.fc-fresh::before{background:var(--fresh-gray)}
+.fc-icon{font-size:1.5rem;margin-bottom:.6rem}
+.fc h4{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:500;margin-bottom:.1rem}
+.fc .fc-pct{font-family:'JetBrains Mono',monospace;font-size:.6rem;letter-spacing:.1em;margin-bottom:.6rem}
+.fc-bean .fc-pct{color:var(--green-bean)}.fc-roast .fc-pct{color:var(--roast-color)}.fc-extract .fc-pct{color:var(--extract-blue)}.fc-fresh .fc-pct{color:var(--fresh-gray)}
+.fc p{font-size:.82rem;line-height:1.8;color:var(--text-secondary);margin-bottom:0}
+.fc-subs{margin-top:.8rem;display:flex;flex-wrap:wrap;gap:.3rem}
+.fc-tag{font-size:.6rem;padding:.2rem .5rem;border-radius:12px;border:1px solid var(--border-light);color:var(--text-light)}
+
+/* MULTIPLY CARD */
+.multiply-card{margin:2.5rem -1rem;padding:2.5rem;background:var(--espresso);border-radius:20px;color:var(--cream);text-align:center}
+.mc-label{font-family:'JetBrains Mono',monospace;font-size:.55rem;letter-spacing:.3em;color:var(--crema);margin-bottom:1.5rem}
+.mc-eq{font-family:'Cormorant Garamond',serif;font-size:clamp(1.2rem,3vw,1.8rem);font-weight:300;line-height:1.6;margin-bottom:1.5rem}
+.mc-eq .op{color:var(--crema);margin:0 .3rem}
+.mc-scenarios{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-top:1.5rem;text-align:left}
+.mc-sc{padding:1.2rem;border-radius:12px;border:1px solid rgba(255,255,255,.06);background:rgba(255,255,255,.02)}
+.mc-sc-label{font-family:'JetBrains Mono',monospace;font-size:.5rem;letter-spacing:.15em;margin-bottom:.5rem}
+.mc-sc-good .mc-sc-label{color:var(--green-bean)}
+.mc-sc-bad .mc-sc-label{color:var(--roast-color)}
+.mc-sc p{font-size:.78rem;line-height:1.7;color:rgba(245,239,230,.45);margin-bottom:0}
+.mc-sc p strong{color:rgba(245,239,230,.7)}
+.mc-note{font-size:.75rem;color:rgba(245,239,230,.3);margin-top:1.5rem;line-height:1.7}
+
+/* CALLOUT */
+.callout{background:var(--espresso);color:var(--cream);border-radius:16px;padding:2.5rem;margin:2.5rem -1rem;position:relative;overflow:hidden}
+.callout::before{content:'';position:absolute;top:-40%;right:-20%;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,rgba(212,165,116,.06),transparent)}
+.callout .callout-label{font-family:'JetBrains Mono',monospace;font-size:.55rem;letter-spacing:.3em;color:var(--crema);margin-bottom:1rem}
+.callout p{font-size:.88rem;line-height:1.95;color:rgba(245,239,230,.55);margin-bottom:0}
+.callout p strong{color:var(--crema)}
+
+/* CTA */
+.cta-block{margin:3rem -1rem;padding:2.5rem;background:rgba(212,165,116,.04);border:1px solid var(--border-light);border-radius:20px;text-align:center}
+.cta-label{font-family:'JetBrains Mono',monospace;font-size:.5rem;letter-spacing:.3em;color:var(--copper);margin-bottom:1rem}
+.cta-title{font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:400;color:var(--espresso);margin-bottom:.5rem}
+.cta-desc{font-size:.85rem;color:var(--text-secondary);line-height:1.6;max-width:450px;margin:0 auto 1.5rem}
+.cta-link{font-size:.72rem;padding:.5rem 1rem;border-radius:8px;border:1px solid var(--border-light);color:var(--text-secondary);text-decoration:none;transition:all .3s;display:inline-block}
+.cta-link:hover{border-color:var(--crema);color:var(--espresso);background:rgba(212,165,116,.04)}
+
+.author-card{max-width:680px;margin:0 auto 4rem;padding:2rem 2rem 0;display:flex;align-items:center;gap:1.5rem;border-top:1px solid var(--border-light)}
+.author-avatar{width:56px;height:56px;border-radius:50%;background:var(--espresso);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.author-avatar span{font-family:'Cormorant Garamond',serif;font-size:1.2rem;color:var(--crema);font-weight:500}
+.author-info h4{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:500;margin-bottom:.15rem}
+.author-info p{font-size:.78rem;color:var(--text-secondary);line-height:1.5}
+footer{padding:3rem 2rem;text-align:center}
+.footer-brand{font-family:'JetBrains Mono',monospace;font-size:.58rem;letter-spacing:.25em;color:var(--text-light)}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@media(max-width:768px){nav{padding:1rem 1.5rem}.post-hero{height:70vh;min-height:450px}.article-body{padding:3.5rem 1.5rem 3rem}.big-bars,.factor-cards,.multiply-card,.analogy,.callout,.cta-block{margin-left:-.5rem;margin-right:-.5rem}.factor-cards,.mc-scenarios{grid-template-columns:1fr}.big-bars,.multiply-card,.callout{padding:2rem 1.5rem}.author-card{flex-direction:column;text-align:center;padding:1.5rem}}
+</style>
+</head>
+<body>
+<div class="progress-bar" id="progressBar"></div>
+<nav id="mainNav"><div class="nav-left"><a href="/" class="nav-logo">HARA<small>COFFEE LAB</small></a><a href="blog-index.html" class="nav-back"><span>←</span> Blog</a></div><div class="lang-switcher"><button class="lang-btn active" data-lang="es">ES</button><button class="lang-btn" data-lang="ko">KO</button><button class="lang-btn" data-lang="en">EN</button></div></nav>
+
+<div class="post-hero">
+  <div class="hero-content">
+    <div class="hero-overline" data-i18n="ho">HARA COFFEE LAB</div>
+    <h1 class="hero-title" data-i18n="ht">¿Qué decide el sabor<br>de tu café?</h1>
+    <p class="hero-sub" data-i18n="hs">No es solo el grano. No es solo la máquina. El sabor de tu café es el resultado de una cadena de decisiones — y cada eslabón pesa diferente.</p>
+    <div class="hero-meta"><span class="hero-badge" data-i18n="hb">PARA TODOS</span><span class="hero-date">18 FEB 2026</span><span class="hero-read" data-i18n="hr">6 min lectura</span></div>
+  </div>
+</div>
+
+<article class="article-body" id="articleBody">
+
+<!-- ══ SPANISH ══ -->
+<div class="lang-content" data-lang="es">
+
+<h2>La metáfora de la cocina</h2>
+
+<p>Pensá en preparar un bife de lomo perfecto. El resultado final depende de una cadena de decisiones: <strong>la calidad de la carne</strong> (raza, alimentación, corte, maduración), <strong>cómo lo cocinás</strong> (la temperatura, el tiempo, la sartén, la técnica), <strong>cómo lo servís</strong> (el punto exacto, el descanso, la sal final) y <strong>cuánto tardó en llegar a tu plato</strong> (si se enfrió o no). Cada paso importa, pero no todos pesan igual.</p>
+
+<div class="analogy">
+  <p><strong>El café funciona exactamente igual.</strong> El sabor que sentís en la taza es el resultado de una cadena con cuatro eslabones. Y al igual que con el bife, <strong>la materia prima es lo que más pesa</strong> — pero ningún eslabón puede fallar sin arruinar el resultado.</p>
+</div>
+
+<div class="sep"></div>
+
+<h2>Los cuatro eslabones del sabor</h2>
+
+<p>Si tuviéramos que asignar un porcentaje a cuánto influye cada etapa en el sabor final de tu café, la distribución se ve así:</p>
+
+<div class="big-bars">
+  <div class="bb-label" data-i18n="bbl">INFLUENCIA EN EL SABOR FINAL</div>
+
+  <div class="bb-item">
+    <div class="bb-header"><div class="bb-name"><span class="bb-icon">🌱</span><span class="bb-title" data-i18n="b1n">Grano verde</span></div><span class="bb-pct">~40%</span></div>
+    <div class="bb-track"><div class="bb-fill fill-bean" style="width:40%"></div></div>
+    <div class="bb-sub" data-i18n="b1s">Variedad, origen, altitud, suelo, clima, procesamiento, grado, selección</div>
+  </div>
+
+  <div class="bb-item">
+    <div class="bb-header"><div class="bb-name"><span class="bb-icon">🔥</span><span class="bb-title" data-i18n="b2n">Tueste</span></div><span class="bb-pct">~25%</span></div>
+    <div class="bb-track"><div class="bb-fill fill-roast" style="width:25%"></div></div>
+    <div class="bb-sub" data-i18n="b2s">Nivel de tueste, curva de perfil, equipo, degasificación</div>
+  </div>
+
+  <div class="bb-item">
+    <div class="bb-header"><div class="bb-name"><span class="bb-icon">💧</span><span class="bb-title" data-i18n="b3n">Extracción</span></div><span class="bb-pct">~30%</span></div>
+    <div class="bb-track"><div class="bb-fill fill-extract" style="width:30%"></div></div>
+    <div class="bb-sub" data-i18n="b3s">Método, molienda, agua, temperatura, tiempo, proporción</div>
+  </div>
+
+  <div class="bb-item">
+    <div class="bb-header"><div class="bb-name"><span class="bb-icon">📦</span><span class="bb-title" data-i18n="b4n">Frescura</span></div><span class="bb-pct">~5%</span></div>
+    <div class="bb-track"><div class="bb-fill fill-fresh" style="width:5%"></div></div>
+    <div class="bb-sub" data-i18n="b4s">Almacenamiento del grano verde y tostado, tiempo desde la molienda</div>
+  </div>
+</div>
+
+<p>Estos porcentajes no son una ciencia exacta — son el consenso aproximado de la industria del café de especialidad. Pero la tendencia es clara: <strong>el grano verde es el factor dominante</strong>. No podés hacer un café excepcional con un grano mediocre, igual que no podés hacer un plato excepcional con ingredientes malos.</p>
+
+<div class="sep"></div>
+
+<h2>¿Qué hace cada eslabón?</h2>
+
+<div class="factor-cards">
+  <div class="fc fc-bean">
+    <div class="fc-icon">🌱</div>
+    <h4 data-i18n="f1h">Grano verde · 40%</h4>
+    <div class="fc-pct" data-i18n="f1p">EL INGREDIENTE</div>
+    <p data-i18n="f1t">Es el techo del sabor. Define el potencial máximo. Un grano Geisha de altura tiene compuestos aromáticos que un grano comercial simplemente no posee — no importa lo que hagas después. Dentro de este 40%, las variables más importantes son la variedad botánica (la genética del café), la altitud y el clima del origen, y el método de procesamiento (lavado, natural, honey) que determina el perfil de fermentación.</p>
+    <div class="fc-subs"><span class="fc-tag" data-i18n="t1a">Variedad</span><span class="fc-tag" data-i18n="t1b">Origen/Altitud</span><span class="fc-tag" data-i18n="t1c">Procesamiento</span><span class="fc-tag" data-i18n="t1d">Grado/Selección</span></div>
+  </div>
+  <div class="fc fc-roast">
+    <div class="fc-icon">🔥</div>
+    <h4 data-i18n="f2h">Tueste · 25%</h4>
+    <div class="fc-pct" data-i18n="f2p">LA COCCIÓN</div>
+    <p data-i18n="f2t">Transforma el potencial del grano en sabor accesible. Un tueste claro preserva el carácter de origen — ácidos frutales, florales delicados. Un tueste oscuro lo reemplaza con notas de caramelización — chocolate, nuez, humo. El mismo grano puede saber completamente diferente según cómo se tueste. Es la decisión creativa más importante después de elegir el grano.</p>
+    <div class="fc-subs"><span class="fc-tag" data-i18n="t2a">Nivel de tueste</span><span class="fc-tag" data-i18n="t2b">Curva de perfil</span><span class="fc-tag" data-i18n="t2c">Equipo</span><span class="fc-tag" data-i18n="t2d">Degasificación</span></div>
+  </div>
+  <div class="fc fc-extract">
+    <div class="fc-icon">💧</div>
+    <h4 data-i18n="f3h">Extracción · 30%</h4>
+    <div class="fc-pct" data-i18n="f3p">EL EMPLATADO</div>
+    <p data-i18n="f3t">Es la última oportunidad de arruinar o perfeccionar. Incluye cuatro variables principales: el método (espresso, filtrado, cold brew), la molienda (tamaño e uniformidad), el agua (minerales y pH) y los parámetros (proporción, temperatura, tiempo). Podés tener el mejor grano del mundo, perfectamente tostado, y arruinarlo con una molienda incorrecta o agua inadecuada.</p>
+    <div class="fc-subs"><span class="fc-tag" data-i18n="t3a">Método</span><span class="fc-tag" data-i18n="t3b">Molienda</span><span class="fc-tag" data-i18n="t3c">Agua</span><span class="fc-tag" data-i18n="t3d">Parámetros</span></div>
+  </div>
+  <div class="fc fc-fresh">
+    <div class="fc-icon">📦</div>
+    <h4 data-i18n="f4h">Frescura · 5%</h4>
+    <div class="fc-pct" data-i18n="f4p">LA CONSERVACIÓN</div>
+    <p data-i18n="f4t">El eslabón silencioso. No agrega sabor, pero puede destruirlo. Un café mal almacenado pierde sus compuestos volátiles en días. El café molido pierde hasta un 30% de su aroma en los primeros 15 minutos. Es el guardián de todo el trabajo anterior — su trabajo es no perder lo que los otros tres eslabones construyeron.</p>
+    <div class="fc-subs"><span class="fc-tag" data-i18n="t4a">Almacenamiento verde</span><span class="fc-tag" data-i18n="t4b">Almacenamiento tostado</span><span class="fc-tag" data-i18n="t4c">Post-molienda</span></div>
+  </div>
+</div>
+
+<div class="sep"></div>
+
+<h2>El dato más importante de este artículo</h2>
+
+<p>Los porcentajes de arriba sugieren que el sabor es una <strong>suma</strong>: 40 + 25 + 30 + 5 = 100. Pero en la práctica, el sabor del café funciona más como una <strong>multiplicación</strong>.</p>
+
+<div class="multiply-card">
+  <div class="mc-label" data-i18n="mcl">ASÍ FUNCIONA EN REALIDAD</div>
+  <div class="mc-eq">Sabor <span class="op">=</span> Grano <span class="op">×</span> Tueste <span class="op">×</span> Extracción <span class="op">×</span> Frescura</div>
+  <div class="mc-scenarios">
+    <div class="mc-sc mc-sc-good">
+      <div class="mc-sc-label" data-i18n="mcg">CUANDO TODO FUNCIONA</div>
+      <p data-i18n="mcgt">Un grano excepcional (95 pts), perfectamente tostado, extraído con precisión y fresco. <strong>Resultado: café extraordinario.</strong> Cada eslabón amplifica al anterior. 0.95 × 0.95 × 0.95 × 0.95 = 0.81. Conservás el 81% del potencial máximo.</p>
+    </div>
+    <div class="mc-sc mc-sc-bad">
+      <div class="mc-sc-label" data-i18n="mcb">CUANDO UNO FALLA</div>
+      <p data-i18n="mcbt">El mismo grano excepcional, mismo tueste, pero la molienda fue gruesa demás y el agua tenía cloro. <strong>Resultado: café mediocre.</strong> 0.95 × 0.95 × 0.40 × 0.95 = 0.34. Perdiste dos tercios del potencial. Un solo eslabón roto destruyó todo.</p>
+    </div>
+  </div>
+  <div class="mc-note" data-i18n="mcn">Es como una cadena real: se rompe por el eslabón más débil. Por eso el 5% de "frescura" puede pesar tanto como el 40% de "grano" — si falla, multiplica todo por cero.</div>
+</div>
+
+<p>Esta es la razón por la que en el café de especialidad se obsesionan con <strong>cada</strong> detalle. No es perfeccionismo estético — es matemática. Si cualquier eslabón cae, arrastra a todos los demás.</p>
+
+<div class="callout">
+  <div class="callout-label" data-i18n="cl">EN RESUMEN</div>
+  <p data-i18n="ct">El sabor de tu café depende de cuatro cosas: el grano (40%), el tueste (25%), la extracción (30%) y la frescura (5%). Pero estos porcentajes son engañosos — en la práctica se multiplican, no se suman. <strong>Un solo eslabón débil puede arruinar toda la cadena.</strong> Por eso en HARA controlamos cada variable: elegimos granos de especialidad con trazabilidad de origen, tostamos con perfiles controlados, extraemos por goteo lento en frío, y mantenemos la cadena de frío hasta el momento en que el café llega a tu paladar. Cada eslabón cuenta. <em>Cada gota cuenta.</em></p>
+</div>
+
+<div class="cta-block">
+  <div class="cta-label" data-i18n="ctal">¿QUERÉS MÁS DETALLE?</div>
+  <div class="cta-title" data-i18n="ctat">La versión profunda</div>
+  <div class="cta-desc" data-i18n="ctad">Si te interesa explorar cada subfactor con datos específicos — qué minerales necesita el agua, por qué importa el tipo de molino, cómo la altitud cambia la química del grano — tenemos la versión expandida de este artículo.</div>
+  <a class="cta-link" href="blog-post-flavor-factors-deep.html" data-i18n="ctab">Leer la versión profunda →</a>
+</div>
+
+</div>
+
+<!-- ══ KOREAN ══ -->
+<div class="lang-content" data-lang="ko" style="display:none;">
+
+<h2>요리의 비유</h2>
+
+<p>완벽한 등심 스테이크를 굽는다고 생각해보세요. 최종 결과는 일련의 결정에 달려 있습니다: <strong>고기의 품질</strong>(품종, 사육, 부위, 숙성), <strong>어떻게 굽느냐</strong>(온도, 시간, 팬, 테크닉), <strong>어떻게 서빙하느냐</strong>(정확한 굽기, 레스팅, 마지막 소금), 그리고 <strong>접시에 도착하기까지 얼마나 걸렸느냐</strong>(식었는지 아닌지). 모든 단계가 중요하지만, 같은 무게는 아닙니다.</p>
+
+<div class="analogy">
+  <p><strong>커피도 정확히 같습니다.</strong> 잔에서 느끼는 맛은 네 개의 고리를 가진 사슬의 결과입니다. 스테이크와 마찬가지로 <strong>원재료가 가장 무겁지만</strong> — 어떤 고리도 실패하면 결과가 망가집니다.</p>
+</div>
+
+<div class="sep"></div>
+
+<h2>맛의 네 고리</h2>
+
+<p>각 단계가 최종 맛에 얼마나 영향을 미치는지 비율로 표현하면 이렇습니다:</p>
+
+<div class="big-bars">
+  <div class="bb-label">최종 맛에 대한 영향도</div>
+
+  <div class="bb-item">
+    <div class="bb-header"><div class="bb-name"><span class="bb-icon">🌱</span><span class="bb-title">생두</span></div><span class="bb-pct">~40%</span></div>
+    <div class="bb-track"><div class="bb-fill fill-bean" style="width:40%"></div></div>
+    <div class="bb-sub">품종, 산지, 고도, 토양, 기후, 가공방식, 등급, 선별</div>
+  </div>
+
+  <div class="bb-item">
+    <div class="bb-header"><div class="bb-name"><span class="bb-icon">🔥</span><span class="bb-title">로스팅</span></div><span class="bb-pct">~25%</span></div>
+    <div class="bb-track"><div class="bb-fill fill-roast" style="width:25%"></div></div>
+    <div class="bb-sub">로스팅 레벨, 프로파일 곡선, 장비, 디개싱</div>
+  </div>
+
+  <div class="bb-item">
+    <div class="bb-header"><div class="bb-name"><span class="bb-icon">💧</span><span class="bb-title">추출</span></div><span class="bb-pct">~30%</span></div>
+    <div class="bb-track"><div class="bb-fill fill-extract" style="width:30%"></div></div>
+    <div class="bb-sub">방법, 분쇄, 물, 온도, 시간, 비율</div>
+  </div>
+
+  <div class="bb-item">
+    <div class="bb-header"><div class="bb-name"><span class="bb-icon">📦</span><span class="bb-title">신선도</span></div><span class="bb-pct">~5%</span></div>
+    <div class="bb-track"><div class="bb-fill fill-fresh" style="width:5%"></div></div>
+    <div class="bb-sub">생두·원두 보관, 분쇄 후 경과 시간</div>
+  </div>
+</div>
+
+<p>이 비율은 정밀한 과학은 아니지만 스페셜티 커피 업계의 대략적 합의입니다. 경향은 분명합니다: <strong>생두가 지배적 요소</strong>입니다. 평범한 원두로 뛰어난 커피를 만들 수 없습니다. 나쁜 재료로 뛰어난 요리를 만들 수 없는 것처럼.</p>
+
+<div class="sep"></div>
+
+<h2>각 고리의 역할</h2>
+
+<div class="factor-cards">
+  <div class="fc fc-bean">
+    <div class="fc-icon">🌱</div>
+    <h4>생두 · 40%</h4>
+    <div class="fc-pct">재료</div>
+    <p>맛의 천장을 정합니다. 최대 잠재력을 규정합니다. 고산지 게이샤 품종은 상업 등급 원두에는 단순히 존재하지 않는 향기 화합물을 가지고 있습니다 — 그 이후에 무엇을 하든 상관없이. 이 40% 안에서 가장 중요한 변수는 품종(유전적 잠재력), 고도와 기후, 그리고 가공방식(워시드/내추럴/허니)으로 결정되는 발효 프로파일입니다.</p>
+    <div class="fc-subs"><span class="fc-tag">품종</span><span class="fc-tag">산지/고도</span><span class="fc-tag">가공방식</span><span class="fc-tag">등급/선별</span></div>
+  </div>
+  <div class="fc fc-roast">
+    <div class="fc-icon">🔥</div>
+    <h4>로스팅 · 25%</h4>
+    <div class="fc-pct">조리</div>
+    <p>원두의 잠재력을 접근 가능한 맛으로 변환합니다. 라이트 로스트는 원산지 캐릭터를 보존 — 과일산, 섬세한 꽃향. 다크 로스트는 캐러멜화 노트로 대체 — 초콜릿, 견과류, 연기. 같은 원두가 로스팅 방식에 따라 완전히 다른 맛을 낼 수 있습니다.</p>
+    <div class="fc-subs"><span class="fc-tag">로스팅 레벨</span><span class="fc-tag">프로파일 곡선</span><span class="fc-tag">장비</span><span class="fc-tag">디개싱</span></div>
+  </div>
+  <div class="fc fc-extract">
+    <div class="fc-icon">💧</div>
+    <h4>추출 · 30%</h4>
+    <div class="fc-pct">플레이팅</div>
+    <p>망치거나 완성할 마지막 기회. 네 가지 주요 변수: 방법(에스프레소, 핸드드립, 콜드브루), 분쇄(입도와 균일도), 물(미네랄과 pH), 파라미터(비율, 온도, 시간). 세계 최고의 원두를 완벽하게 로스팅해도 잘못된 분쇄나 부적절한 물로 망칠 수 있습니다.</p>
+    <div class="fc-subs"><span class="fc-tag">방법</span><span class="fc-tag">분쇄</span><span class="fc-tag">물</span><span class="fc-tag">파라미터</span></div>
+  </div>
+  <div class="fc fc-fresh">
+    <div class="fc-icon">📦</div>
+    <h4>신선도 · 5%</h4>
+    <div class="fc-pct">보존</div>
+    <p>조용한 고리. 맛을 더하지는 않지만 파괴할 수 있습니다. 잘못 보관된 커피는 며칠 만에 휘발성 화합물을 잃습니다. 분쇄 커피는 첫 15분 안에 향미의 30%를 잃습니다. 앞의 세 고리가 구축한 것을 지키는 수문장입니다.</p>
+    <div class="fc-subs"><span class="fc-tag">생두 보관</span><span class="fc-tag">원두 보관</span><span class="fc-tag">분쇄 후</span></div>
+  </div>
+</div>
+
+<div class="sep"></div>
+
+<h2>이 글에서 가장 중요한 사실</h2>
+
+<p>위의 비율은 맛이 <strong>덧셈</strong>이라고 제시합니다: 40 + 25 + 30 + 5 = 100. 하지만 실제로 커피의 맛은 <strong>곱셈</strong>에 더 가깝습니다.</p>
+
+<div class="multiply-card">
+  <div class="mc-label">실제로는 이렇게 작동합니다</div>
+  <div class="mc-eq">맛 <span class="op">=</span> 생두 <span class="op">×</span> 로스팅 <span class="op">×</span> 추출 <span class="op">×</span> 신선도</div>
+  <div class="mc-scenarios">
+    <div class="mc-sc mc-sc-good">
+      <div class="mc-sc-label">모든 것이 작동할 때</div>
+      <p>뛰어난 원두(95점), 완벽한 로스팅, 정밀한 추출, 신선한 상태. <strong>결과: 비범한 커피.</strong> 각 고리가 이전 고리를 증폭. 0.95 × 0.95 × 0.95 × 0.95 = 0.81. 최대 잠재력의 81% 보존.</p>
+    </div>
+    <div class="mc-sc mc-sc-bad">
+      <div class="mc-sc-label">하나가 실패할 때</div>
+      <p>같은 뛰어난 원두, 같은 로스팅, 하지만 분쇄가 너무 굵고 물에 염소가 있었음. <strong>결과: 평범한 커피.</strong> 0.95 × 0.95 × 0.40 × 0.95 = 0.34. 잠재력의 2/3를 잃음. 하나의 약한 고리가 모든 것을 파괴.</p>
+    </div>
+  </div>
+  <div class="mc-note">진짜 사슬처럼: 가장 약한 고리에서 끊어집니다. 그래서 5%의 "신선도"가 40%의 "생두"만큼 무거울 수 있습니다 — 실패하면 모든 것에 0을 곱하니까요.</div>
+</div>
+
+<div class="callout">
+  <div class="callout-label">요약</div>
+  <p>커피의 맛은 네 가지에 달려 있습니다: 생두(40%), 로스팅(25%), 추출(30%), 신선도(5%). 하지만 이 비율은 속임수입니다 — 실제로는 더하는 게 아니라 곱합니다. <strong>하나의 약한 고리가 전체 사슬을 망칠 수 있습니다.</strong> 그래서 HARA에서는 모든 변수를 통제합니다: 원산지 추적 가능한 스페셜티 원두 선별, 통제된 프로파일 로스팅, 냉점적 추출, 그리고 커피가 미각에 도달하는 순간까지 콜드체인 유지. 모든 고리가 중요합니다. <em>Cada Gota Cuenta.</em></p>
+</div>
+
+<div class="cta-block">
+  <div class="cta-label">더 깊이 알고 싶으세요?</div>
+  <div class="cta-title">심화 버전</div>
+  <div class="cta-desc">각 세부 요소를 구체적 데이터와 함께 탐구 — 물에 어떤 미네랄이 필요한지, 그라인더 타입이 왜 중요한지, 고도가 원두 화학을 어떻게 바꾸는지.</div>
+  <a class="cta-link" href="blog-post-flavor-factors-deep.html">심화 버전 읽기 →</a>
+</div>
+
+</div>
+
+<!-- ══ ENGLISH ══ -->
+<div class="lang-content" data-lang="en" style="display:none;">
+
+<h2>The cooking metaphor</h2>
+
+<p>Think about cooking a perfect steak. The final result depends on a chain of decisions: <strong>the quality of the meat</strong> (breed, feed, cut, aging), <strong>how you cook it</strong> (temperature, time, pan, technique), <strong>how you serve it</strong> (exact doneness, resting, finishing salt), and <strong>how long it took to reach your plate</strong> (whether it cooled down or not). Every step matters, but they don't all weigh the same.</p>
+
+<div class="analogy">
+  <p><strong>Coffee works exactly the same way.</strong> The flavor you taste is the result of a chain with four links. And just like the steak, <strong>the raw ingredient weighs the most</strong> — but no link can fail without ruining the result.</p>
+</div>
+
+<div class="sep"></div>
+
+<h2>The four links of flavor</h2>
+
+<div class="big-bars">
+  <div class="bb-label">INFLUENCE ON FINAL FLAVOR</div>
+
+  <div class="bb-item">
+    <div class="bb-header"><div class="bb-name"><span class="bb-icon">🌱</span><span class="bb-title">Green bean</span></div><span class="bb-pct">~40%</span></div>
+    <div class="bb-track"><div class="bb-fill fill-bean" style="width:40%"></div></div>
+    <div class="bb-sub">Variety, origin, altitude, soil, climate, processing, grade, selection</div>
+  </div>
+
+  <div class="bb-item">
+    <div class="bb-header"><div class="bb-name"><span class="bb-icon">🔥</span><span class="bb-title">Roasting</span></div><span class="bb-pct">~25%</span></div>
+    <div class="bb-track"><div class="bb-fill fill-roast" style="width:25%"></div></div>
+    <div class="bb-sub">Roast level, profile curve, equipment, degassing</div>
+  </div>
+
+  <div class="bb-item">
+    <div class="bb-header"><div class="bb-name"><span class="bb-icon">💧</span><span class="bb-title">Extraction</span></div><span class="bb-pct">~30%</span></div>
+    <div class="bb-track"><div class="bb-fill fill-extract" style="width:30%"></div></div>
+    <div class="bb-sub">Method, grind, water, temperature, time, ratio</div>
+  </div>
+
+  <div class="bb-item">
+    <div class="bb-header"><div class="bb-name"><span class="bb-icon">📦</span><span class="bb-title">Freshness</span></div><span class="bb-pct">~5%</span></div>
+    <div class="bb-track"><div class="bb-fill fill-fresh" style="width:5%"></div></div>
+    <div class="bb-sub">Green and roasted storage, time since grinding</div>
+  </div>
+</div>
+
+<div class="sep"></div>
+
+<h2>What each link does</h2>
+
+<div class="factor-cards">
+  <div class="fc fc-bean">
+    <div class="fc-icon">🌱</div>
+    <h4>Green bean · 40%</h4>
+    <div class="fc-pct">THE INGREDIENT</div>
+    <p>Sets the ceiling. Defines maximum potential. A high-altitude Geisha has aromatic compounds a commercial bean simply doesn't possess. Within this 40%, the most important variables are botanical variety, altitude/climate, and processing method (washed/natural/honey).</p>
+    <div class="fc-subs"><span class="fc-tag">Variety</span><span class="fc-tag">Origin/Altitude</span><span class="fc-tag">Processing</span><span class="fc-tag">Grade</span></div>
+  </div>
+  <div class="fc fc-roast">
+    <div class="fc-icon">🔥</div>
+    <h4>Roasting · 25%</h4>
+    <div class="fc-pct">THE COOKING</div>
+    <p>Transforms potential into accessible flavor. Light roast preserves origin character — fruit acids, delicate florals. Dark roast replaces it with caramelization — chocolate, nut, smoke. The same bean can taste completely different based on how it's roasted.</p>
+    <div class="fc-subs"><span class="fc-tag">Roast level</span><span class="fc-tag">Profile curve</span><span class="fc-tag">Equipment</span><span class="fc-tag">Degassing</span></div>
+  </div>
+  <div class="fc fc-extract">
+    <div class="fc-icon">💧</div>
+    <h4>Extraction · 30%</h4>
+    <div class="fc-pct">THE PLATING</div>
+    <p>Last chance to ruin or perfect. Four main variables: method (espresso, drip, cold brew), grind (size and uniformity), water (minerals and pH), and parameters (ratio, temperature, time). You can have the world's best bean, perfectly roasted, and ruin it with wrong grind or bad water.</p>
+    <div class="fc-subs"><span class="fc-tag">Method</span><span class="fc-tag">Grind</span><span class="fc-tag">Water</span><span class="fc-tag">Parameters</span></div>
+  </div>
+  <div class="fc fc-fresh">
+    <div class="fc-icon">📦</div>
+    <h4>Freshness · 5%</h4>
+    <div class="fc-pct">THE PRESERVATION</div>
+    <p>The silent link. Doesn't add flavor but can destroy it. Poorly stored coffee loses volatiles in days. Ground coffee loses 30% of aroma in 15 minutes. Its job is to not lose what the other three links built.</p>
+    <div class="fc-subs"><span class="fc-tag">Green storage</span><span class="fc-tag">Roasted storage</span><span class="fc-tag">Post-grind</span></div>
+  </div>
+</div>
+
+<div class="sep"></div>
+
+<h2>The most important fact in this article</h2>
+
+<div class="multiply-card">
+  <div class="mc-label">HOW IT ACTUALLY WORKS</div>
+  <div class="mc-eq">Flavor <span class="op">=</span> Bean <span class="op">×</span> Roast <span class="op">×</span> Extraction <span class="op">×</span> Freshness</div>
+  <div class="mc-scenarios">
+    <div class="mc-sc mc-sc-good">
+      <div class="mc-sc-label">WHEN EVERYTHING WORKS</div>
+      <p>Exceptional bean (95 pts), perfectly roasted, precisely extracted, fresh. <strong>Result: extraordinary coffee.</strong> Each link amplifies the last. 0.95 × 0.95 × 0.95 × 0.95 = 0.81. You preserve 81% of maximum potential.</p>
+    </div>
+    <div class="mc-sc mc-sc-bad">
+      <div class="mc-sc-label">WHEN ONE FAILS</div>
+      <p>Same exceptional bean, same roast, but grind was too coarse and water had chlorine. <strong>Result: mediocre coffee.</strong> 0.95 × 0.95 × 0.40 × 0.95 = 0.34. Two-thirds of potential lost. One weak link destroyed everything.</p>
+    </div>
+  </div>
+  <div class="mc-note">Like a real chain: it breaks at the weakest link. That's why 5% "freshness" can weigh as much as 40% "bean" — if it fails, it multiplies everything by zero.</div>
+</div>
+
+<div class="callout">
+  <div class="callout-label">IN SUMMARY</div>
+  <p>Coffee flavor depends on four things: bean (40%), roast (25%), extraction (30%), and freshness (5%). But these percentages are misleading — in practice they multiply, not add. <strong>One weak link can ruin the entire chain.</strong> That's why at HARA we control every variable. Every link counts. <em>Cada Gota Cuenta.</em></p>
+</div>
+
+<div class="cta-block">
+  <div class="cta-label">WANT MORE DETAIL?</div>
+  <div class="cta-title">The deep version</div>
+  <div class="cta-desc">Explore each sub-factor with specific data — what minerals water needs, why grinder type matters, how altitude changes bean chemistry.</div>
+  <a class="cta-link" href="blog-post-flavor-factors-deep.html">Read the deep version →</a>
+</div>
+
+</div>
+
+</article>
+<div class="author-card"><div class="author-avatar"><span>H</span></div><div class="author-info"><h4>HARA Coffee Lab</h4><p data-i18n="ab">Ciencia, precisión y pasión por el café de especialidad. Salta, Argentina.</p></div></div>
+<footer><div class="footer-brand">© 2026 HARA COFFEE LAB · SALTA, ARGENTINA · CADA GOTA CUENTA</div></footer>
+<script>
+let currentLang='es';
+const ui={es:{ho:'HARA COFFEE LAB',ht:'¿Qué decide el sabor<br>de tu café?',hs:'No es solo el grano. No es solo la máquina. El sabor de tu café es el resultado de una cadena de decisiones — y cada eslabón pesa diferente.',hb:'PARA TODOS',hr:'6 min lectura',ab:'Ciencia, precisión y pasión por el café de especialidad. Salta, Argentina.'},ko:{ho:'HARA COFFEE LAB',ht:'커피 맛을 결정하는 것은<br>무엇일까?',hs:'원두만이 아닙니다. 머신만이 아닙니다. 커피의 맛은 결정의 사슬이며 — 각 고리의 무게가 다릅니다.',hb:'누구나',hr:'6분 소요',ab:'과학, 정밀함, 그리고 스페셜티 커피에 대한 열정. 아르헨티나 살타.'},en:{ho:'HARA COFFEE LAB',ht:'What decides the flavor<br>of your coffee?',hs:'Not just the bean. Not just the machine. Your coffee\'s flavor is the result of a chain of decisions — and each link weighs differently.',hb:'FOR EVERYONE',hr:'6 min read',ab:'Science, precision, and passion for specialty coffee. Salta, Argentina.'}};
+function switchLang(l){currentLang=l;document.documentElement.lang=l==='ko'?'ko':l==='en'?'en':'es';document.querySelectorAll('[data-i18n]').forEach(e=>{const k=e.dataset.i18n;if(ui[l]&&ui[l][k])e.innerHTML=ui[l][k]});document.querySelectorAll('.lang-content').forEach(e=>{e.style.display=e.dataset.lang===l?'block':'none'});document.querySelectorAll('.lang-btn').forEach(b=>b.classList.toggle('active',b.dataset.lang===l))}
+document.querySelectorAll('.lang-btn').forEach(b=>{b.addEventListener('click',()=>switchLang(b.dataset.lang))});
+window.addEventListener('scroll',()=>{const d=document.documentElement;document.getElementById('progressBar').style.width=(d.scrollTop/(d.scrollHeight-d.clientHeight))*100+'%';document.getElementById('mainNav').classList.toggle('scrolled',d.scrollTop>60)});
+</script>
+</body>
+</html>

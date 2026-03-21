@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HARA — Cold Universe Thesis</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Noto+Sans+KR:wght@200;300;400;500;600&family=Noto+Sans:wght@200;300;400;500;600&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+@page{size:A4;margin:0}
+:root{--espresso:#1a1210;--crema:#d4a574;--cream:#f5efe6;--warm-white:#faf8f4;--copper:#b87333;--ice:#a0c8e0;--ice-deep:#5a8aa0;--text-primary:#1a1210;--text-secondary:#6b5b50;--text-light:#a09080;--border-light:rgba(212,165,116,.15)}
+*{margin:0;padding:0;box-sizing:border-box}
+html{font-size:15px}
+body{background:var(--warm-white);color:var(--text-primary);font-family:'Noto Sans','Noto Sans KR',sans-serif;font-weight:300;-webkit-font-smoothing:antialiased}
+
+/* PAGE */
+.page{max-width:800px;margin:0 auto;padding:3.5rem 3.5rem 2.5rem}
+
+/* HEADER */
+.header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:2.5rem;padding-bottom:1.5rem;border-bottom:1px solid var(--border-light)}
+.h-left .h-logo{font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-weight:500;letter-spacing:.15em;color:var(--espresso)}
+.h-left .h-tagline{font-family:'JetBrains Mono',monospace;font-size:.5rem;letter-spacing:.25em;color:var(--ice-deep);margin-top:2px}
+.h-right{text-align:right}
+.h-right .h-doc{font-family:'JetBrains Mono',monospace;font-size:.5rem;letter-spacing:.2em;color:var(--text-light)}
+.h-right .h-date{font-family:'JetBrains Mono',monospace;font-size:.5rem;color:var(--text-light);margin-top:2px}
+.h-right .h-conf{font-family:'JetBrains Mono',monospace;font-size:.42rem;letter-spacing:.15em;color:var(--copper);margin-top:4px;padding:2px 6px;border:1px solid rgba(184,115,51,.2);border-radius:3px;display:inline-block}
+
+/* TITLE BLOCK */
+.title-block{text-align:center;margin-bottom:2.5rem}
+.title-block h1{font-family:'Cormorant Garamond',serif;font-size:2.4rem;font-weight:300;color:var(--espresso);line-height:1.2;margin-bottom:.5rem}
+.title-block h1 em{font-style:italic;color:var(--ice-deep)}
+.title-block .subtitle{font-size:.8rem;color:var(--text-secondary);line-height:1.7;max-width:550px;margin:0 auto}
+
+/* THESIS STATEMENT */
+.thesis{background:var(--espresso);color:var(--cream);padding:1.8rem 2.2rem;border-radius:14px;margin-bottom:2rem;position:relative;overflow:hidden}
+.thesis::before{content:'';position:absolute;top:-30%;right:-10%;width:180px;height:180px;border-radius:50%;background:radial-gradient(circle,rgba(160,200,224,.06),transparent)}
+.thesis-label{font-family:'JetBrains Mono',monospace;font-size:.42rem;letter-spacing:.3em;color:var(--ice);margin-bottom:.8rem}
+.thesis p{font-size:.85rem;line-height:1.9;color:rgba(245,239,230,.6)}
+.thesis p strong{color:var(--crema)}
+.thesis p em{color:var(--ice);font-style:italic}
+
+/* SECTION */
+.section{margin-bottom:1.8rem}
+.section-header{display:flex;align-items:center;gap:.6rem;margin-bottom:.8rem}
+.section-num{font-family:'JetBrains Mono',monospace;font-size:.5rem;letter-spacing:.1em;color:var(--ice-deep);background:rgba(90,138,160,.08);padding:3px 8px;border-radius:4px}
+.section-title{font-family:'Cormorant Garamond',serif;font-size:1.15rem;font-weight:500;color:var(--espresso)}
+
+/* THREE TRENDS */
+.trends{display:grid;grid-template-columns:repeat(3,1fr);gap:.8rem;margin-bottom:.8rem}
+.trend{padding:1rem;border-radius:10px;border:1px solid var(--border-light);background:white}
+.trend-icon{font-size:1.2rem;margin-bottom:.3rem}
+.trend h4{font-family:'Cormorant Garamond',serif;font-size:.85rem;font-weight:500;margin-bottom:.2rem;line-height:1.3}
+.trend p{font-size:.65rem;color:var(--text-secondary);line-height:1.65}
+.trend .trend-data{font-family:'JetBrains Mono',monospace;font-size:.55rem;color:var(--ice-deep);margin-top:.3rem}
+
+/* GAP VISUAL */
+.gap-visual{display:flex;align-items:center;gap:.5rem;padding:1rem 1.2rem;background:rgba(90,138,160,.04);border-radius:10px;border:1px solid rgba(90,138,160,.1);margin-bottom:.5rem}
+.gap-arrow{font-size:.8rem;color:var(--ice-deep);flex-shrink:0}
+.gap-text{font-size:.7rem;color:var(--text-secondary);line-height:1.6}
+.gap-text strong{color:var(--espresso)}
+
+/* WHY COLD */
+.why-cold{display:grid;grid-template-columns:auto 1fr;gap:.4rem .8rem;margin-bottom:.5rem}
+.wc-label{font-family:'JetBrains Mono',monospace;font-size:.5rem;letter-spacing:.08em;color:var(--ice-deep);padding-top:2px;text-align:right}
+.wc-text{font-size:.7rem;color:var(--text-secondary);line-height:1.65;padding-bottom:.4rem;border-bottom:1px solid var(--border-light)}
+.wc-text:last-child{border-bottom:none}
+.wc-text strong{color:var(--text-primary)}
+
+/* THREE LAYERS */
+.layers{display:grid;grid-template-columns:repeat(3,1fr);gap:.8rem;margin-bottom:.5rem}
+.layer{padding:1.2rem;border-radius:10px;position:relative;overflow:hidden}
+.layer::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+.l1{background:rgba(90,138,160,.04);border:1px solid rgba(90,138,160,.12)}
+.l1::before{background:var(--ice)}
+.l2{background:rgba(212,165,116,.04);border:1px solid rgba(212,165,116,.12)}
+.l2::before{background:var(--crema)}
+.l3{background:rgba(26,18,16,.02);border:1px solid rgba(26,18,16,.08)}
+.l3::before{background:var(--espresso)}
+.layer .l-phase{font-family:'JetBrains Mono',monospace;font-size:.42rem;letter-spacing:.15em;color:var(--text-light);margin-bottom:.4rem}
+.layer h4{font-family:'Cormorant Garamond',serif;font-size:.9rem;font-weight:500;margin-bottom:.2rem;line-height:1.3}
+.layer .l-what{font-size:.65rem;color:var(--text-secondary);line-height:1.6;margin-bottom:.3rem}
+.layer .l-where{font-family:'JetBrains Mono',monospace;font-size:.48rem;color:var(--text-light)}
+.layer .l-revenue{font-family:'JetBrains Mono',monospace;font-size:.48rem;color:var(--copper);margin-top:.2rem}
+
+/* MOAT */
+.moat{display:grid;grid-template-columns:repeat(4,1fr);gap:.6rem;margin-bottom:.5rem}
+.moat-item{text-align:center;padding:.8rem .5rem;border-radius:8px;border:1px solid var(--border-light);background:white}
+.moat-item .mi-icon{font-size:1rem;margin-bottom:.2rem}
+.moat-item h5{font-family:'Cormorant Garamond',serif;font-size:.75rem;font-weight:500;margin-bottom:.15rem}
+.moat-item p{font-size:.55rem;color:var(--text-secondary);line-height:1.5}
+
+/* MARKET SIZE */
+.market{display:flex;gap:.8rem;margin-bottom:.5rem}
+.market-box{flex:1;padding:.8rem 1rem;border-radius:8px;text-align:center;border:1px solid var(--border-light);background:white}
+.market-box .mb-num{font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:300;color:var(--ice-deep);line-height:1}
+.market-box .mb-label{font-size:.5rem;color:var(--text-secondary);margin-top:.2rem;line-height:1.4}
+
+/* BOTTOM LINE */
+.bottom-line{background:var(--espresso);color:var(--cream);padding:1.5rem 2rem;border-radius:14px;text-align:center;margin-top:2rem;position:relative;overflow:hidden}
+.bottom-line::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 50%,rgba(160,200,224,.04),transparent 50%)}
+.bottom-line .bl-text{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:300;line-height:1.6;position:relative;z-index:1;max-width:550px;margin:0 auto}
+.bottom-line .bl-text em{color:var(--ice);font-style:italic}
+.bottom-line .bl-text strong{color:var(--crema)}
+
+/* FOOTER */
+.footer{display:flex;justify-content:space-between;align-items:center;margin-top:1.5rem;padding-top:1rem;border-top:1px solid var(--border-light)}
+.footer-left{font-family:'JetBrains Mono',monospace;font-size:.42rem;color:var(--text-light);letter-spacing:.1em}
+.footer-right{font-family:'JetBrains Mono',monospace;font-size:.42rem;color:var(--text-light)}
+
+/* SMALL NOTE */
+.note{font-size:.6rem;color:var(--text-light);line-height:1.6;margin-top:.3rem;font-style:italic}
+
+@media print{
+  body{background:white}
+  .page{padding:2.5rem;max-width:none}
+}
+@media(max-width:768px){
+  .page{padding:2rem 1.5rem}
+  .trends,.layers{grid-template-columns:1fr}
+  .moat{grid-template-columns:1fr 1fr}
+  .market{flex-direction:column}
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+<!-- HEADER -->
+<div class="header">
+  <div class="h-left">
+    <div class="h-logo">H A R A</div>
+    <div class="h-tagline">COLD UNIVERSE</div>
+  </div>
+  <div class="h-right">
+    <div class="h-doc">BUSINESS THESIS v1.0</div>
+    <div class="h-date">FEBRUARY 2026</div>
+    <div class="h-conf">CONFIDENTIAL</div>
+  </div>
+</div>
+
+<!-- TITLE -->
+<div class="title-block">
+  <h1>The <em>Cold</em> Thesis</h1>
+  <div class="subtitle">커피벨트의 미개척 냉음료 시장에서, "차가움"을 중심으로<br>제품 · 시스템 · 플랫폼을 구축하는 글로벌 커피 브랜드</div>
+</div>
+
+<!-- THESIS STATEMENT -->
+<div class="thesis">
+  <div class="thesis-label">CORE THESIS</div>
+  <p>세계 커피 생산의 중심인 <em>커피벨트</em>(남북위 25° 이내)는 최고의 원두를 생산하지만, <strong>냉음료 문화가 아직 열리지 않았다.</strong> 스페셜티 커피의 성장(연 12%), 기후변화로 인한 기온 상승, 그리고 아이스커피에 대한 문화적 수용이 동시에 가속되고 있다. HARA는 <em>"차가움"</em>을 핵심 역량으로, 이 구조적 빈 칸에 <strong>제품 → 시스템 → 플랫폼</strong>의 세 단계로 진입한다.</p>
+</div>
+
+<!-- SECTION 1: THREE MEGATRENDS -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-num">01</span>
+    <span class="section-title">세 가지 메가트렌드의 교차점</span>
+  </div>
+
+  <div class="trends">
+    <div class="trend">
+      <div class="trend-icon">☕</div>
+      <h4>생산국의 소비 문화 격차</h4>
+      <p>커피벨트 국가들은 세계 최고의 원두를 생산하지만, 국내 소비는 commodity 커피 중심. 스페셜티 문화는 소비국(한국, 일본, 호주, 북유럽)에서 먼저 성숙.</p>
+      <div class="trend-data">커피벨트 인구: ~30억 명</div>
+    </div>
+    <div class="trend">
+      <div class="trend-icon">🧊</div>
+      <h4>미개척 냉음료 시장</h4>
+      <p>열대·아열대 기후임에도 아이스커피 문화가 약함. "커피 = 뜨거운 것"이라는 고정관념, 냉음료 인프라 부족, 스페셜티 냉음료 기술 미보급.</p>
+      <div class="trend-data">글로벌 콜드브루 시장 CAGR: ~25%</div>
+    </div>
+    <div class="trend">
+      <div class="trend-icon">🌡️</div>
+      <h4>기후변화 = 구조적 가속기</h4>
+      <p>커피벨트 평균 기온이 상승 중. 냉음료 수요는 선택이 아닌 필연. 한국의 사례: 아이스 아메리카노가 겨울에도 팔림. 습관은 한번 형성되면 비가역적.</p>
+      <div class="trend-data">커피벨트 기온 상승: +1.5°C/50년</div>
+    </div>
+  </div>
+
+  <div class="gap-visual">
+    <span class="gap-arrow">→</span>
+    <div class="gap-text"><strong>구조적 빈 칸:</strong> 최고의 원료(커피벨트) + 미성숙한 냉음료 문화 + 가속되는 수요(기후) = 아직 아무도 체계적으로 점유하지 않은 거대 시장</div>
+  </div>
+</div>
+
+<!-- SECTION 2: WHY COLD -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-num">02</span>
+    <span class="section-title">왜 "차가움"이 심장인가</span>
+  </div>
+
+  <div class="why-cold">
+    <div class="wc-label">과학</div>
+    <div class="wc-text"><strong>열은 파괴하고, 차가움은 보존한다.</strong> 냉점적(CdGF)은 열 없이 추출하여 휘발성 향미 화합물을 온전히 보존. 같은 원두에서 열 추출 대비 더 달고, 더 향기롭고, 덜 쓴 커피를 만든다.</div>
+    <div class="wc-label">제품</div>
+    <div class="wc-text"><strong>CdGF 커피(4°C) → 젤라또 베이스(4°C) → 서빙(–12°C).</strong> 전체 과정에서 열 노출 제로. 유일한 열원은 소비자의 입(37°C). 이 콜드체인이 HARA의 모든 제품을 관통하는 물리적 원리.</div>
+    <div class="wc-label">시장</div>
+    <div class="wc-text"><strong>커피벨트의 냉음료 전환은 시작 단계.</strong> 이 전환을 이끄는 브랜드가 카테고리를 정의한다. "차가움"은 HARA의 마케팅 테마가 아니라, 비즈니스가 존재하는 물리적·시장적 이유.</div>
+    <div class="wc-label">방어</div>
+    <div class="wc-text"><strong>콜드체인 오퍼레이션은 복제가 어렵다.</strong> 원두 로스팅은 누구나 시작할 수 있지만, 냉점적 + 콜드체인 + 젤라또를 일관된 품질로 운영하는 시스템은 축적된 노하우와 매뉴얼이 필요.</div>
+  </div>
+</div>
+
+<!-- SECTION 3: THREE LAYERS -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-num">03</span>
+    <span class="section-title">세 개의 레이어</span>
+  </div>
+
+  <div class="layers">
+    <div class="layer l1">
+      <div class="l-phase">LAYER 1 — NOW</div>
+      <h4>제품</h4>
+      <div class="l-what">CdGF 스페셜티 콜드브루 + 아르티잔 젤라또. 콜드체인의 물리적 증명. 모든 것이 시작되는 원점.</div>
+      <div class="l-where">📍 Salta, Argentina</div>
+      <div class="l-revenue">수익: 직영 매장 매출</div>
+    </div>
+    <div class="layer l2">
+      <div class="l-phase">LAYER 2 — NEXT</div>
+      <h4>시스템</h4>
+      <div class="l-what">오퍼레이션 매뉴얼 + 교육 + 콜드체인 셋업을 패키지화. 커피벨트 파트너에게 "Cold Universe"를 이식. HARA가 파는 것은 커피가 아니라 시스템.</div>
+      <div class="l-where">📍 커피벨트 주요 도시</div>
+      <div class="l-revenue">수익: 라이선스 + 교육</div>
+    </div>
+    <div class="layer l3">
+      <div class="l-phase">LAYER 3 — FUTURE</div>
+      <h4>플랫폼</h4>
+      <div class="l-what">cafena — 커피 경험의 기록·공유·발견 플랫폼. Cold Universe의 디지털 레이어. 물리적 제품이 닿지 않는 곳까지 브랜드 도달.</div>
+      <div class="l-where">📍 글로벌</div>
+      <div class="l-revenue">수익: 구독 + 데이터</div>
+    </div>
+  </div>
+  <div class="note">각 레이어는 이전 레이어가 증명된 후 확장. Layer 1의 매장 운영이 Layer 2의 매뉴얼 신뢰성을, Layer 2의 커뮤니티가 Layer 3의 사용자 기반을 만든다.</div>
+</div>
+
+<!-- SECTION 4: MOAT -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-num">04</span>
+    <span class="section-title">방어벽 (Moat)</span>
+  </div>
+
+  <div class="moat">
+    <div class="moat-item">
+      <div class="mi-icon">📖</div>
+      <h5>콘텐츠 선점</h5>
+      <p>삼개국어 과학 블로그로 "냉점적 커피 젤라또" 카테고리 오너십 확립. 용어(CdGF, CdGF1%)를 정의한 사람이 카테고리를 소유.</p>
+    </div>
+    <div class="moat-item">
+      <div class="mi-icon">📋</div>
+      <h5>오퍼레이션 시스템</h5>
+      <p>매뉴얼화된 콜드체인 운영 노하우. 레시피가 아닌 시스템 전체가 영업비밀. 복제하려면 수년의 시행착오 필요.</p>
+    </div>
+    <div class="moat-item">
+      <div class="mi-icon">🌐</div>
+      <h5>교차 문화 포지션</h5>
+      <p>한국(냉음료 선진) + 아르헨티나(젤라또 전통) + 커피벨트(원료 접근). 이 교차점에 있는 브랜드는 HARA뿐.</p>
+    </div>
+    <div class="moat-item">
+      <div class="mi-icon">❄️</div>
+      <h5>Cold Universe 세계관</h5>
+      <p>브랜드 VI, 블로그 시리즈, 철학 프레임이 만든 지적 생태계. 제품은 복제 가능하나 세계관은 복제 불가.</p>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 5: MARKET -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-num">05</span>
+    <span class="section-title">시장 규모</span>
+  </div>
+
+  <div class="market">
+    <div class="market-box">
+      <div class="mb-num">$470B</div>
+      <div class="mb-label">글로벌 커피 시장<br>(2025)</div>
+    </div>
+    <div class="market-box">
+      <div class="mb-num">$1.6B</div>
+      <div class="mb-label">글로벌 콜드브루 시장<br>(2025, CAGR ~25%)</div>
+    </div>
+    <div class="market-box">
+      <div class="mb-num">$92B</div>
+      <div class="mb-label">글로벌 젤라또·아이스크림<br>(2025)</div>
+    </div>
+    <div class="market-box">
+      <div class="mb-num">~30억</div>
+      <div class="mb-label">커피벨트 인구<br>(미개척 냉음료 소비자)</div>
+    </div>
+  </div>
+  <div class="note">HARA의 진입 지점은 시장 전체가 아닌 "커피벨트 도시의 스페셜티 냉음료" 세그먼트. 작게 시작하되, 전체 시장의 구조적 전환 위에 서 있는 포지션.</div>
+</div>
+
+<!-- BOTTOM LINE -->
+<div class="bottom-line">
+  <div class="bl-text">
+    열이 지배하는 커피 세계에서,<br>
+    <em>차가움</em>은 아직 쓰이지 않은 언어다.<br><br>
+    HARA는 그 언어를 만들고, 가르치고, 퍼뜨린다.<br>
+    한 방울씩. 한 숟갈씩. 한 도시씩.<br><br>
+    <strong>Welcome to the Cold Universe.</strong>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <div class="footer-left">HARA · COLD UNIVERSE · SALTA, ARGENTINA</div>
+  <div class="footer-right">MICHAEL HAN · FOUNDER & CEO · hello@hara.lat</div>
+</div>
+
+</div>
+</body>
+</html>

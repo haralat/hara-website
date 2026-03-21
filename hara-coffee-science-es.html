@@ -1,0 +1,1267 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HARA Coffee Lab — La Ciencia de la Extracción</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Noto+Sans:wght@200;300;400;500;600&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --espresso: #1a1210;
+  --crema: #d4a574;
+  --cream: #f5efe6;
+  --warm-white: #faf8f4;
+  --roast-dark: #2c1f1a;
+  --roast-mid: #6b4226;
+  --copper: #b87333;
+  --sage: #8a9a7b;
+  --water-blue: #7ba0b8;
+  --text-primary: #1a1210;
+  --text-secondary: #6b5b50;
+  --text-light: #a09080;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+}
+
+body {
+  background: var(--warm-white);
+  color: var(--text-primary);
+  font-family: 'Noto Sans', sans-serif;
+  font-weight: 300;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--warm-white); }
+::-webkit-scrollbar-thumb { background: var(--crema); border-radius: 3px; }
+
+/* ─── NAVIGATION ─── */
+nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  padding: 1.5rem 3rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all 0.5s ease;
+}
+
+nav.scrolled {
+  background: rgba(250, 248, 244, 0.9);
+  backdrop-filter: blur(20px);
+  padding: 1rem 3rem;
+  box-shadow: 0 1px 0 rgba(26, 18, 16, 0.06);
+}
+
+.nav-logo {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.4rem;
+  font-weight: 500;
+  letter-spacing: 0.15em;
+  color: var(--text-primary);
+}
+
+.nav-logo span {
+  font-weight: 300;
+  font-size: 0.7rem;
+  letter-spacing: 0.3em;
+  display: block;
+  margin-top: 2px;
+  color: var(--text-secondary);
+}
+
+.nav-dots {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.nav-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--text-light);
+  cursor: pointer;
+  transition: all 0.4s ease;
+  border: none;
+  padding: 0;
+}
+
+.nav-dot.active {
+  background: var(--crema);
+  transform: scale(1.3);
+}
+
+.nav-dot:hover { background: var(--copper); }
+
+/* ─── HERO ─── */
+.hero {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 30% 50%, rgba(212, 165, 116, 0.08) 0%, transparent 60%),
+    radial-gradient(ellipse at 70% 30%, rgba(184, 115, 51, 0.05) 0%, transparent 50%);
+}
+
+.hero-overline {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.65rem;
+  font-weight: 300;
+  letter-spacing: 0.4em;
+  color: var(--crema);
+  margin-bottom: 2rem;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeUp 1s ease 0.3s forwards;
+}
+
+.hero h1 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(3rem, 7vw, 6.5rem);
+  font-weight: 300;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: var(--espresso);
+  opacity: 0;
+  transform: translateY(30px);
+  animation: fadeUp 1.2s ease 0.5s forwards;
+}
+
+.hero h1 em {
+  font-style: italic;
+  color: var(--copper);
+}
+
+.hero-sub {
+  margin-top: 2rem;
+  font-size: 1rem;
+  font-weight: 300;
+  color: var(--text-secondary);
+  letter-spacing: 0.05em;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeUp 1s ease 0.9s forwards;
+  max-width: 500px;
+  line-height: 1.6;
+}
+
+.hero-scroll {
+  position: absolute;
+  bottom: 3rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  opacity: 0;
+  animation: fadeUp 1s ease 1.3s forwards;
+}
+
+.hero-scroll span {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.3em;
+  color: var(--text-light);
+}
+
+.scroll-line {
+  width: 1px;
+  height: 40px;
+  background: linear-gradient(to bottom, var(--crema), transparent);
+  animation: scrollPulse 2s ease infinite;
+}
+
+@keyframes scrollPulse {
+  0%, 100% { opacity: 0.3; transform: scaleY(0.6); }
+  50% { opacity: 1; transform: scaleY(1); }
+}
+
+/* ─── SECTIONS ─── */
+section {
+  padding: 8rem 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.section-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.4em;
+  color: var(--crema);
+  margin-bottom: 1rem;
+  text-transform: uppercase;
+}
+
+.section-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(2rem, 4vw, 3.2rem);
+  font-weight: 300;
+  line-height: 1.2;
+  color: var(--espresso);
+  margin-bottom: 1.5rem;
+}
+
+.section-desc {
+  font-size: 0.95rem;
+  line-height: 1.9;
+  color: var(--text-secondary);
+  max-width: 620px;
+}
+
+/* ─── DIVIDER ─── */
+.divider {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  height: 1px;
+  background: linear-gradient(to right, transparent, var(--crema), transparent);
+  opacity: 0.4;
+}
+
+/* ─── GRIND SECTION ─── */
+.grind-visual {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: center;
+  margin-top: 4rem;
+}
+
+.grind-diagram {
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+}
+
+.grind-item {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  opacity: 0;
+  transform: translateX(-30px);
+  transition: all 0.8s ease;
+}
+
+.grind-item.visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.particle-viz {
+  flex-shrink: 0;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.particle-viz .ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 1px solid var(--crema);
+  opacity: 0.4;
+}
+
+.particle-core {
+  border-radius: 50%;
+  background: var(--roast-dark);
+  transition: all 0.5s ease;
+}
+
+.grind-item:hover .particle-core {
+  box-shadow: 0 0 20px rgba(212, 165, 116, 0.3);
+}
+
+.grind-info h4 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.2rem;
+  font-weight: 500;
+  margin-bottom: 0.3rem;
+}
+
+.grind-info .size {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  color: var(--copper);
+  letter-spacing: 0.1em;
+}
+
+.grind-info p {
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  line-height: 1.7;
+  margin-top: 0.4rem;
+}
+
+.formula-card {
+  background: var(--espresso);
+  border-radius: 20px;
+  padding: 3rem;
+  color: var(--cream);
+  position: relative;
+  overflow: hidden;
+}
+
+.formula-card::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -30%;
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(212, 165, 116, 0.1), transparent);
+}
+
+.formula-card .label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.3em;
+  color: var(--crema);
+  margin-bottom: 2rem;
+}
+
+.formula {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.8rem;
+  font-weight: 300;
+  margin-bottom: 0.5rem;
+  line-height: 1.6;
+}
+
+.formula em {
+  font-style: italic;
+  color: var(--crema);
+}
+
+.formula-note {
+  font-size: 0.75rem;
+  color: rgba(245, 239, 230, 0.5);
+  line-height: 1.8;
+  margin-top: 1.5rem;
+}
+
+/* ─── FLOW SECTION ─── */
+.flow-timeline {
+  margin-top: 4rem;
+  position: relative;
+  padding-left: 2rem;
+}
+
+.flow-timeline::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: linear-gradient(to bottom,
+    var(--sage),
+    var(--crema),
+    var(--copper)
+  );
+  border-radius: 1px;
+}
+
+.flow-phase {
+  position: relative;
+  padding: 0 0 3.5rem 3rem;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.8s ease;
+}
+
+.flow-phase.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.flow-phase::before {
+  content: '';
+  position: absolute;
+  left: -5px;
+  top: 6px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 2px solid var(--crema);
+  background: var(--warm-white);
+  transition: all 0.4s ease;
+}
+
+.flow-phase:nth-child(1)::before { border-color: var(--sage); }
+.flow-phase:nth-child(2)::before { border-color: var(--crema); }
+.flow-phase:nth-child(3)::before { border-color: var(--copper); }
+
+.flow-phase:hover::before {
+  transform: scale(1.4);
+  background: var(--crema);
+}
+
+.phase-time {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  color: var(--text-light);
+  margin-bottom: 0.5rem;
+}
+
+.phase-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.5rem;
+  font-weight: 400;
+  margin-bottom: 0.5rem;
+}
+
+.phase-flavor {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.flavor-tag {
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+  padding: 0.3rem 0.8rem;
+  border-radius: 20px;
+  border: 1px solid;
+  font-weight: 400;
+}
+
+.flavor-tag.acid { color: var(--sage); border-color: var(--sage); }
+.flavor-tag.sweet { color: var(--crema); border-color: var(--crema); }
+.flavor-tag.bitter { color: var(--copper); border-color: var(--copper); }
+
+.phase-desc {
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  line-height: 1.8;
+}
+
+/* ─── DRIPPER SECTION ─── */
+.dripper-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+  margin-top: 4rem;
+}
+
+.dripper-card {
+  background: white;
+  border-radius: 20px;
+  padding: 2.5rem 2rem;
+  text-align: center;
+  border: 1px solid rgba(212, 165, 116, 0.15);
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  opacity: 0;
+  transform: translateY(30px);
+  cursor: default;
+  position: relative;
+  overflow: hidden;
+}
+
+.dripper-card.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.dripper-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 0%, rgba(212,165,116,0.06), transparent 70%);
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.dripper-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 60px rgba(26, 18, 16, 0.08);
+  border-color: rgba(212, 165, 116, 0.3);
+}
+
+.dripper-card:hover::after { opacity: 1; }
+
+.dripper-icon {
+  width: 100px;
+  height: 100px;
+  margin: 0 auto 1.5rem;
+  position: relative;
+  z-index: 1;
+}
+
+.dripper-icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+.dripper-card h3 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.4rem;
+  font-weight: 500;
+  margin-bottom: 0.3rem;
+  position: relative;
+  z-index: 1;
+}
+
+.dripper-type {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.25em;
+  color: var(--copper);
+  margin-bottom: 1.2rem;
+  position: relative;
+  z-index: 1;
+}
+
+.dripper-card p {
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  line-height: 1.8;
+  position: relative;
+  z-index: 1;
+}
+
+.dripper-traits {
+  display: flex;
+  justify-content: center;
+  gap: 0.4rem;
+  margin-top: 1.2rem;
+  position: relative;
+  z-index: 1;
+}
+
+.trait {
+  font-size: 0.6rem;
+  letter-spacing: 0.05em;
+  padding: 0.25rem 0.6rem;
+  border-radius: 4px;
+  background: rgba(212, 165, 116, 0.08);
+  color: var(--roast-mid);
+}
+
+/* ─── ESPRESSO SECTION ─── */
+.espresso-section {
+  background: var(--espresso);
+  padding: 8rem 2rem;
+  margin: 0;
+  max-width: none;
+  color: var(--cream);
+  position: relative;
+  overflow: hidden;
+}
+
+.espresso-section::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 20% 80%, rgba(184, 115, 51, 0.08), transparent 60%),
+    radial-gradient(ellipse at 80% 20%, rgba(212, 165, 116, 0.05), transparent 50%);
+}
+
+.espresso-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+.espresso-inner .section-label { color: var(--copper); }
+.espresso-inner .section-title { color: var(--cream); }
+.espresso-inner .section-desc { color: rgba(245, 239, 230, 0.65); }
+
+.espresso-compare {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 3rem;
+  margin-top: 4rem;
+  align-items: center;
+}
+
+.compare-col {
+  text-align: center;
+}
+
+.compare-col h4 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.6rem;
+  font-weight: 300;
+  margin-bottom: 2rem;
+  opacity: 0.9;
+}
+
+.compare-stat {
+  margin-bottom: 1.8rem;
+}
+
+.compare-stat .val {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 1.8rem;
+  font-weight: 400;
+  color: var(--crema);
+  display: block;
+  margin-bottom: 0.2rem;
+}
+
+.compare-stat .lbl {
+  font-size: 0.7rem;
+  letter-spacing: 0.15em;
+  color: rgba(245, 239, 230, 0.4);
+}
+
+.compare-vs {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.2rem;
+  font-style: italic;
+  color: rgba(245, 239, 230, 0.2);
+  position: relative;
+}
+
+.compare-vs::before,
+.compare-vs::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  width: 1px;
+  height: 60px;
+  background: rgba(212, 165, 116, 0.15);
+  transform: translateX(-50%);
+}
+
+.compare-vs::before { bottom: 100%; margin-bottom: 1rem; }
+.compare-vs::after { top: 100%; margin-top: 1rem; }
+
+/* ─── CHAIN FLOW ─── */
+.chain-flow {
+  margin-top: 5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  flex-wrap: wrap;
+}
+
+.chain-node {
+  padding: 1rem 1.5rem;
+  border: 1px solid rgba(212, 165, 116, 0.25);
+  border-radius: 12px;
+  text-align: center;
+  background: rgba(212, 165, 116, 0.04);
+  opacity: 0;
+  transform: scale(0.9);
+  transition: all 0.6s ease;
+  min-width: 130px;
+}
+
+.chain-node.visible {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.chain-node .node-val {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.85rem;
+  color: var(--crema);
+  display: block;
+  margin-bottom: 0.25rem;
+}
+
+.chain-node .node-lbl {
+  font-size: 0.65rem;
+  color: rgba(245, 239, 230, 0.4);
+  letter-spacing: 0.1em;
+}
+
+.chain-arrow {
+  font-size: 1.2rem;
+  color: rgba(212, 165, 116, 0.3);
+  padding: 0 0.5rem;
+  opacity: 0;
+  transition: opacity 0.6s ease 0.3s;
+}
+
+.chain-arrow.visible { opacity: 1; }
+
+/* ─── COLLOIDAL SECTION ─── */
+.colloidal-card {
+  margin-top: 4rem;
+  background: rgba(212, 165, 116, 0.06);
+  border: 1px solid rgba(212, 165, 116, 0.12);
+  border-radius: 20px;
+  padding: 3rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 2.5rem;
+  text-align: center;
+}
+
+.phase-item {
+  opacity: 0;
+  transform: translateY(15px);
+  transition: all 0.6s ease;
+}
+
+.phase-item.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.phase-circle {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  margin: 0 auto 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+}
+
+.phase-circle.gas {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+.phase-circle.aqueous {
+  background: rgba(123, 160, 184, 0.12);
+  border: 1px solid rgba(123, 160, 184, 0.25);
+}
+.phase-circle.oil {
+  background: rgba(212, 165, 116, 0.12);
+  border: 1px solid rgba(212, 165, 116, 0.25);
+}
+
+.phase-item h5 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.1rem;
+  font-weight: 400;
+  margin-bottom: 0.3rem;
+}
+
+.phase-item .phase-sub {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.6rem;
+  color: var(--copper);
+  letter-spacing: 0.15em;
+  margin-bottom: 0.6rem;
+}
+
+.phase-item p {
+  font-size: 0.78rem;
+  color: rgba(245, 239, 230, 0.5);
+  line-height: 1.7;
+}
+
+/* ─── FOOTER ─── */
+.footer {
+  padding: 5rem 2rem;
+  text-align: center;
+  position: relative;
+}
+
+.footer-tagline {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(1.8rem, 3.5vw, 3rem);
+  font-weight: 300;
+  font-style: italic;
+  color: var(--espresso);
+  margin-bottom: 0.5rem;
+}
+
+.footer-tagline-sub {
+  font-size: 0.85rem;
+  color: var(--text-light);
+  letter-spacing: 0.05em;
+}
+
+.footer-brand {
+  margin-top: 3rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.4em;
+  color: var(--text-light);
+}
+
+/* ─── ANIMATIONS ─── */
+@keyframes fadeUp {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ─── RESPONSIVE ─── */
+@media (max-width: 900px) {
+  nav { padding: 1rem 1.5rem; }
+  section { padding: 5rem 1.5rem; }
+
+  .grind-visual {
+    grid-template-columns: 1fr;
+    gap: 3rem;
+  }
+
+  .dripper-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .espresso-compare {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .compare-vs { display: none; }
+
+  .chain-flow {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .chain-arrow {
+    transform: rotate(90deg);
+  }
+
+  .colloidal-card {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    padding: 2rem;
+  }
+
+  .espresso-section { padding: 5rem 1.5rem; }
+}
+
+@media (max-width: 600px) {
+  .grind-item { gap: 1.2rem; }
+  .particle-viz { width: 60px; height: 60px; }
+  .formula { font-size: 1.3rem; }
+  .formula-card { padding: 2rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="mainNav">
+  <div class="nav-logo">
+    HARA
+    <span>COFFEE LAB</span>
+  </div>
+  <div class="nav-dots">
+    <button class="nav-dot active" data-section="hero" aria-label="Inicio"></button>
+    <button class="nav-dot" data-section="grind" aria-label="Molienda"></button>
+    <button class="nav-dot" data-section="flow" aria-label="Flujo"></button>
+    <button class="nav-dot" data-section="dripper" aria-label="Dripper"></button>
+    <button class="nav-dot" data-section="espresso" aria-label="Espresso"></button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero" id="hero">
+  <div class="hero-overline">THE CHEMISTRY OF EXTRACTION</div>
+  <h1>Una taza de café,<br>la ciencia de la <em>extracción</em></h1>
+  <p class="hero-sub">Del grano a la taza — los principios de la ingeniería química que revelan el origen del sabor</p>
+  <div class="hero-scroll">
+    <span>SCROLL</span>
+    <div class="scroll-line"></div>
+  </div>
+</div>
+
+<!-- GRIND SIZE -->
+<section id="grind">
+  <div class="section-label">01 — TAMAÑO DE MOLIENDA</div>
+  <div class="section-title">Lo que determina la molienda</div>
+  <div class="section-desc">
+    La esencia de la extracción del café es una extracción sólido-líquido.<br>
+    Cuanto más fino se muele el grano, mayor es la superficie de contacto con el agua<br>
+    y más corta la distancia que los compuestos de sabor deben recorrer para disolverse.
+  </div>
+
+  <div class="grind-visual">
+    <div class="grind-diagram">
+      <div class="grind-item" data-delay="0">
+        <div class="particle-viz">
+          <div class="ring"></div>
+          <div class="particle-core" style="width:50px; height:50px;"></div>
+        </div>
+        <div class="grind-info">
+          <h4>Molienda Gruesa</h4>
+          <div class="size">~ 1.000 μm</div>
+          <p>Ideal para prensa francesa y cold brew. Se extrae lentamente durante un tiempo prolongado, generando un cuerpo suave y redondo.</p>
+        </div>
+      </div>
+
+      <div class="grind-item" data-delay="200">
+        <div class="particle-viz">
+          <div class="ring"></div>
+          <div class="particle-core" style="width:32px; height:32px;"></div>
+        </div>
+        <div class="grind-info">
+          <h4>Molienda Media</h4>
+          <div class="size">~ 600 μm</div>
+          <p>El estándar para café filtrado. Ofrece el punto óptimo más amplio para equilibrar acidez, dulzura y cuerpo.</p>
+        </div>
+      </div>
+
+      <div class="grind-item" data-delay="400">
+        <div class="particle-viz">
+          <div class="ring"></div>
+          <div class="particle-core" style="width:16px; height:16px;"></div>
+        </div>
+        <div class="grind-info">
+          <h4>Molienda Fina</h4>
+          <div class="size">~ 200 μm</div>
+          <p>Exclusiva para espresso. La superficie maximizada permite extraer un sabor concentrado en apenas 25 segundos.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="formula-card">
+      <div class="label">LEY DE FICK (SEGUNDA)</div>
+      <div class="formula">
+        <em>t</em> ∝ <em>r</em>² / <em>D</em>
+      </div>
+      <div class="formula-note">
+        t = tiempo de extracción<br>
+        r = radio de la partícula (d/2)<br>
+        D = coeficiente de difusión efectivo<br><br>
+        Al reducir el tamaño de la partícula a la mitad,<br>
+        el tiempo teórico de extracción se reduce a <strong style="color:var(--crema);">1/4</strong>.
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- EXTRACTION FLOW -->
+<section id="flow">
+  <div class="section-label">02 — LÍNEA DE TIEMPO DE EXTRACCIÓN</div>
+  <div class="section-title">Las capas de sabor que crea el tiempo</div>
+  <div class="section-desc">
+    La extracción libera diferentes compuestos en orden secuencial.<br>
+    Al comprender esta secuencia, es posible capturar selectivamente<br>
+    los sabores deseados en cada taza.
+  </div>
+
+  <div class="flow-timeline">
+    <div class="flow-phase" data-delay="0">
+      <div class="phase-time">0 — 30 SEG · RENDIMIENTO 0–30%</div>
+      <div class="phase-title">Primera ola: acidez y aroma</div>
+      <div class="phase-flavor">
+        <span class="flavor-tag acid">Ácidos orgánicos</span>
+        <span class="flavor-tag acid">Notas frutales</span>
+        <span class="flavor-tag acid">Notas florales</span>
+      </div>
+      <div class="phase-desc">
+        Los ácidos orgánicos de bajo peso molecular y los compuestos aromáticos volátiles son los primeros en disolverse.
+        Este momento nos regala una acidez brillante y vibrante, con aromas a frutas y flores.
+      </div>
+    </div>
+
+    <div class="flow-phase" data-delay="200">
+      <div class="phase-time">30 — 90 SEG · RENDIMIENTO 30–60%</div>
+      <div class="phase-title">Segunda ola: dulzura y cuerpo</div>
+      <div class="phase-flavor">
+        <span class="flavor-tag sweet">Azúcares</span>
+        <span class="flavor-tag sweet">Aminoácidos</span>
+        <span class="flavor-tag sweet">Cafeína</span>
+      </div>
+      <div class="phase-desc">
+        Los azúcares y aminoácidos se disuelven, aportando dulzura y sabor umami.
+        La cafeína se extrae de forma más intensa en esta fase, construyendo un cuerpo pleno y generoso.
+      </div>
+    </div>
+
+    <div class="flow-phase" data-delay="400">
+      <div class="phase-time">90 SEG + · RENDIMIENTO 60–80%</div>
+      <div class="phase-title">Tercera ola: el límite del amargor</div>
+      <div class="phase-flavor">
+        <span class="flavor-tag bitter">Taninos</span>
+        <span class="flavor-tag bitter">Polifenoles</span>
+        <span class="flavor-tag bitter">Astringencia</span>
+      </div>
+      <div class="phase-desc">
+        Comienzan a extraerse polifenoles de alto peso molecular y taninos.
+        Controlados con precisión, aportan profundidad; en exceso, generan amargor y astringencia desagradables.
+        <strong style="color:var(--roast-mid);">Saber cuándo detenerse es el arte del barista.</strong>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- DRIPPER -->
+<section id="dripper">
+  <div class="section-label">03 — GEOMETRÍA DEL DRIPPER</div>
+  <div class="section-title">La forma del dripper define el flujo</div>
+  <div class="section-desc">
+    Un dripper no es una simple herramienta, sino un reactor que diseña el flujo del agua.<br>
+    Su geometría determina la uniformidad de la extracción y el carácter del sabor.
+  </div>
+
+  <div class="dripper-grid">
+    <div class="dripper-card" data-delay="0">
+      <div class="dripper-icon">
+        <svg viewBox="0 0 100 100" fill="none">
+          <path d="M25 20 L50 85 L75 20" stroke="#d4a574" stroke-width="1.5" fill="none"/>
+          <circle cx="50" cy="85" r="3" fill="#d4a574" opacity="0.6"/>
+          <line x1="30" y1="30" x2="70" y2="30" stroke="#d4a574" stroke-width="0.5" opacity="0.3"/>
+          <line x1="33" y1="38" x2="67" y2="38" stroke="#d4a574" stroke-width="0.5" opacity="0.3"/>
+          <line x1="36" y1="46" x2="64" y2="46" stroke="#d4a574" stroke-width="0.5" opacity="0.3"/>
+        </svg>
+      </div>
+      <h3>Cónico</h3>
+      <div class="dripper-type">V60 · FLUJO PISTÓN</div>
+      <p>
+        El agua fluye de arriba hacia abajo en una sola dirección,
+        y cada capa del café entra en contacto con agua de diferente concentración.
+        Una extracción con alto grado de libertad que varía según la técnica del barista.
+      </p>
+      <div class="dripper-traits">
+        <span class="trait">Acidez nítida</span>
+        <span class="trait">Alta libertad</span>
+      </div>
+    </div>
+
+    <div class="dripper-card" data-delay="200">
+      <div class="dripper-icon">
+        <svg viewBox="0 0 100 100" fill="none">
+          <path d="M22 20 L32 80 L68 80 L78 20" stroke="#d4a574" stroke-width="1.5" fill="none"/>
+          <circle cx="38" cy="83" r="2" fill="#d4a574" opacity="0.6"/>
+          <circle cx="50" cy="83" r="2" fill="#d4a574" opacity="0.6"/>
+          <circle cx="62" cy="83" r="2" fill="#d4a574" opacity="0.6"/>
+          <line x1="23" y1="28" x2="77" y2="28" stroke="#d4a574" stroke-width="0.5" opacity="0.3"/>
+          <rect x="30" y="70" width="40" height="8" rx="1" stroke="#d4a574" stroke-width="0.5" fill="rgba(212,165,116,0.05)"/>
+        </svg>
+      </div>
+      <h3>Fondo Plano</h3>
+      <div class="dripper-type">KALITA · TANQUE MEZCLADO</div>
+      <p>
+        El agua se acumula sobre el fondo plano y se mezcla uniformemente.
+        Un método de extracción estable que amortigua las variaciones de técnica,
+        logrando un sabor consistente sin importar quién lo prepare.
+      </p>
+      <div class="dripper-traits">
+        <span class="trait">Cuerpo redondo</span>
+        <span class="trait">Alta reproducibilidad</span>
+      </div>
+    </div>
+
+    <div class="dripper-card" data-delay="400">
+      <div class="dripper-icon">
+        <svg viewBox="0 0 100 100" fill="none">
+          <rect x="22" y="15" width="56" height="70" rx="6" stroke="#d4a574" stroke-width="1.5" fill="none"/>
+          <line x1="22" y1="25" x2="78" y2="25" stroke="#d4a574" stroke-width="0.5" opacity="0.3"/>
+          <rect x="30" y="35" width="40" height="40" rx="3" stroke="#d4a574" stroke-width="0.5" fill="rgba(212,165,116,0.05)" stroke-dasharray="3 2"/>
+          <circle cx="50" cy="55" r="4" fill="#d4a574" opacity="0.15"/>
+        </svg>
+      </div>
+      <h3>Inmersión</h3>
+      <div class="dripper-type">PRENSA FRANCESA · BATCH</div>
+      <p>
+        El agua y el café permanecen juntos en un sistema cerrado.
+        Al eliminar el caudal como variable, solo la molienda y el tiempo
+        controlan el sabor. La mayor reproducibilidad posible.
+      </p>
+      <div class="dripper-traits">
+        <span class="trait">Sabor profundo</span>
+        <span class="trait">Variables simples</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ESPRESSO -->
+<div class="espresso-section" id="espresso">
+  <div class="espresso-inner">
+    <div class="section-label">04 — FÍSICA DEL ESPRESSO</div>
+    <div class="section-title">¿Por qué el espresso exige molienda fina?</div>
+    <div class="section-desc">
+      25 segundos. 30 ml de agua. 9 atmósferas.<br>
+      Las condiciones extremas del proceso determinan la molienda.
+    </div>
+
+    <!-- Compare -->
+    <div class="espresso-compare">
+      <div class="compare-col">
+        <h4>Filtrado</h4>
+        <div class="compare-stat">
+          <span class="val">3 min</span>
+          <span class="lbl">TIEMPO DE CONTACTO</span>
+        </div>
+        <div class="compare-stat">
+          <span class="val">600 μm</span>
+          <span class="lbl">MOLIENDA</span>
+        </div>
+        <div class="compare-stat">
+          <span class="val">1 atm</span>
+          <span class="lbl">PRESIÓN</span>
+        </div>
+        <div class="compare-stat">
+          <span class="val">1,3%</span>
+          <span class="lbl">TDS</span>
+        </div>
+      </div>
+
+      <div class="compare-vs">vs</div>
+
+      <div class="compare-col">
+        <h4>Espresso</h4>
+        <div class="compare-stat">
+          <span class="val">25 seg</span>
+          <span class="lbl">TIEMPO DE CONTACTO</span>
+        </div>
+        <div class="compare-stat">
+          <span class="val">200 μm</span>
+          <span class="lbl">MOLIENDA</span>
+        </div>
+        <div class="compare-stat">
+          <span class="val">9 atm</span>
+          <span class="lbl">PRESIÓN</span>
+        </div>
+        <div class="compare-stat">
+          <span class="val">10%</span>
+          <span class="lbl">TDS</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Chain -->
+    <div class="chain-flow">
+      <div class="chain-node">
+        <span class="node-val">25 seg</span>
+        <span class="node-lbl">LÍMITE DE TIEMPO</span>
+      </div>
+      <span class="chain-arrow">→</span>
+      <div class="chain-node">
+        <span class="node-val">200 μm</span>
+        <span class="node-lbl">MOLIENDA FINA</span>
+      </div>
+      <span class="chain-arrow">→</span>
+      <div class="chain-node">
+        <span class="node-val">ΔP ↑ 9×</span>
+        <span class="node-lbl">RESISTENCIA</span>
+      </div>
+      <span class="chain-arrow">→</span>
+      <div class="chain-node">
+        <span class="node-val">9 bar</span>
+        <span class="node-lbl">PRESIÓN DE BOMBA</span>
+      </div>
+      <span class="chain-arrow">→</span>
+      <div class="chain-node">
+        <span class="node-val">Crema</span>
+        <span class="node-lbl">CREMA + EMULSIÓN</span>
+      </div>
+    </div>
+
+    <!-- Colloidal -->
+    <div class="colloidal-card">
+      <div class="phase-item" data-delay="0">
+        <div class="phase-circle gas">○</div>
+        <h5>Fase Gaseosa</h5>
+        <div class="phase-sub">MICROBURBUJAS DE CO₂</div>
+        <p>El CO₂ disuelto bajo presión<br>se libera como microburbujas<br>al despresurizarse, formando la crema</p>
+      </div>
+      <div class="phase-item" data-delay="200">
+        <div class="phase-circle aqueous">◎</div>
+        <h5>Fase Acuosa</h5>
+        <div class="phase-sub">SÓLIDOS DISUELTOS</div>
+        <p>Solución de alta concentración<br>con TDS del 8–12%. Complejo<br>de cafeína, ácidos, azúcares y aminoácidos</p>
+      </div>
+      <div class="phase-item" data-delay="400">
+        <div class="phase-circle oil">●</div>
+        <h5>Fase Oleosa</h5>
+        <div class="phase-sub">EMULSIÓN LIPÍDICA</div>
+        <p>Gotas de aceite de ~10 μm dispersas<br>en una emulsión aceite-en-agua.<br>La clave del cuerpo y la textura en boca</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <div class="footer-tagline">Cada Gota Cuenta</div>
+  <div class="footer-tagline-sub">Cada gota tiene un significado</div>
+  <div class="footer-brand">HARA COFFEE LAB · SALTA, ARGENTINA</div>
+</div>
+
+<script>
+// ─── Scroll Observer ───
+const observerOptions = {
+  threshold: 0.15,
+  rootMargin: '0px 0px -50px 0px'
+};
+
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const delay = entry.target.dataset.delay || 0;
+      setTimeout(() => {
+        entry.target.classList.add('visible');
+      }, parseInt(delay));
+    }
+  });
+}, observerOptions);
+
+document.querySelectorAll('.grind-item, .flow-phase, .dripper-card, .chain-node, .chain-arrow, .phase-item').forEach(el => {
+  observer.observe(el);
+});
+
+// ─── Nav Scroll ───
+const nav = document.getElementById('mainNav');
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('scrolled', window.scrollY > 80);
+});
+
+// ─── Nav Dots ───
+const sections = ['hero', 'grind', 'flow', 'dripper', 'espresso'];
+const dots = document.querySelectorAll('.nav-dot');
+
+const sectionObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      dots.forEach(d => d.classList.remove('active'));
+      const idx = sections.indexOf(entry.target.id);
+      if (idx >= 0) dots[idx].classList.add('active');
+    }
+  });
+}, { threshold: 0.3 });
+
+sections.forEach(id => {
+  const el = document.getElementById(id);
+  if (el) sectionObserver.observe(el);
+});
+
+dots.forEach(dot => {
+  dot.addEventListener('click', () => {
+    const target = document.getElementById(dot.dataset.section);
+    if (target) target.scrollIntoView({ behavior: 'smooth' });
+  });
+});
+</script>
+
+</body>
+</html>

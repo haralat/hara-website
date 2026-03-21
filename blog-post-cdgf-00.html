@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HARA Blog — ¿Por qué el mismo grano sabe diferente?</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Noto+Sans+KR:wght@200;300;400;500;600&family=Noto+Sans:wght@200;300;400;500;600&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+:root{--espresso:#1a1210;--crema:#d4a574;--cream:#f5efe6;--warm-white:#faf8f4;--roast-mid:#6b4226;--copper:#b87333;--water-blue:#7ba0b8;--ice-blue:#a8c8d8;--cold-blue:#4a7a9b;--hot-red:#c45d3e;--hara-gold:#c9a84c;--text-primary:#1a1210;--text-secondary:#6b5b50;--text-light:#a09080;--border-light:rgba(212,165,116,.15)}
+*{margin:0;padding:0;box-sizing:border-box}html{scroll-behavior:smooth;font-size:16px}
+body{background:var(--warm-white);color:var(--text-primary);font-family:'Noto Sans','Noto Sans KR',sans-serif;font-weight:300;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:var(--warm-white)}::-webkit-scrollbar-thumb{background:var(--crema);border-radius:3px}
+nav{position:fixed;top:0;left:0;right:0;z-index:200;padding:1.2rem 3rem;display:flex;justify-content:space-between;align-items:center;transition:all .5s ease}
+nav.scrolled{background:rgba(250,248,244,.92);backdrop-filter:blur(24px);padding:.9rem 3rem;box-shadow:0 1px 0 rgba(26,18,16,.06)}
+.nav-left{display:flex;align-items:center;gap:2.5rem}
+.nav-logo{font-family:'Cormorant Garamond',serif;font-weight:500;letter-spacing:.15em;color:var(--text-primary);text-decoration:none;font-size:1.3rem;line-height:1}
+.nav-logo small{display:block;font-weight:300;font-size:.55rem;letter-spacing:.3em;color:var(--text-secondary);margin-top:2px}
+.nav-back{font-size:.72rem;font-weight:400;letter-spacing:.08em;color:var(--text-secondary);text-decoration:none;display:flex;align-items:center;gap:.4rem;transition:color .3s}
+.nav-back:hover{color:var(--espresso)}
+.lang-switcher{display:flex;border:1px solid var(--border-light);border-radius:6px;overflow:hidden}
+.lang-btn{font-family:'JetBrains Mono',monospace;font-size:.6rem;letter-spacing:.1em;padding:.4rem .65rem;border:none;background:transparent;color:var(--text-light);cursor:pointer;transition:all .3s}
+.lang-btn:not(:last-child){border-right:1px solid var(--border-light)}
+.lang-btn.active{background:var(--espresso);color:var(--cream)}
+.lang-btn:hover:not(.active){background:rgba(212,165,116,.08);color:var(--roast-mid)}
+.progress-bar{position:fixed;top:0;left:0;height:2px;z-index:300;width:0%;background:linear-gradient(to right,var(--crema),var(--hara-gold));transition:width .1s linear}
+
+/* HERO — warm, inviting */
+.post-hero{height:80vh;min-height:500px;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;background:var(--espresso)}
+.post-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 60%,rgba(212,165,116,.1),transparent 55%)}
+.hero-content{position:relative;z-index:2;text-align:center;padding:2rem;max-width:750px}
+.hero-overline{font-family:'JetBrains Mono',monospace;font-size:.55rem;letter-spacing:.5em;margin-bottom:2rem;opacity:0;animation:fadeUp .8s ease .3s forwards}
+.hero-overline .series-tag{color:var(--crema);border:1px solid rgba(212,165,116,.3);padding:.25rem .6rem;border-radius:4px;margin-right:.8rem}
+.hero-overline .series-num{color:rgba(245,239,230,.35)}
+.hero-title{font-family:'Cormorant Garamond',serif;font-size:clamp(2.2rem,5vw,4rem);font-weight:300;line-height:1.15;color:var(--cream);margin-bottom:1.5rem;opacity:0;animation:fadeUp 1s ease .5s forwards}
+.hero-sub{font-size:1.05rem;line-height:1.8;color:rgba(245,239,230,.55);max-width:480px;margin:0 auto;opacity:0;animation:fadeUp .8s ease .8s forwards}
+.hero-meta{margin-top:2.5rem;display:flex;justify-content:center;gap:1.5rem;opacity:0;animation:fadeUp .8s ease 1s forwards}
+.hero-badge{font-family:'JetBrains Mono',monospace;font-size:.55rem;letter-spacing:.2em;padding:.35rem .8rem;border-radius:4px;background:rgba(212,165,116,.15);color:var(--crema)}
+.hero-date,.hero-read{font-family:'JetBrains Mono',monospace;font-size:.6rem;color:rgba(245,239,230,.35);letter-spacing:.1em}
+.hero-cups{position:absolute;bottom:3.5rem;left:50%;transform:translateX(-50%);display:flex;gap:2rem;opacity:0;animation:fadeUp .8s ease 1.2s forwards}
+.hero-cup{font-size:1.8rem}
+
+/* ARTICLE — conversational */
+.article-body{max-width:680px;margin:0 auto;padding:5rem 2rem 4rem}
+.article-body h2{font-family:'Cormorant Garamond',serif;font-size:1.8rem;font-weight:400;color:var(--espresso);margin:3.5rem 0 1rem;line-height:1.3}
+.article-body h2:first-child{margin-top:0}
+.article-body p{font-size:.95rem;line-height:2.1;color:var(--text-secondary);margin-bottom:1.4rem}
+.article-body p strong{color:var(--text-primary);font-weight:500}
+.article-body p em.t{font-style:italic;color:var(--copper);font-family:'Cormorant Garamond',serif;font-size:1.05em}
+.sep{width:40px;height:1px;background:var(--crema);margin:3rem auto;opacity:.4}
+
+/* ANALOGY CARD — friendly */
+.analogy{margin:2.5rem -1rem;padding:2rem 2.5rem;border-radius:20px;border:1px solid var(--border-light);background:white;position:relative}
+.analogy::before{content:'💡';position:absolute;top:-12px;left:24px;font-size:1.2rem;background:var(--warm-white);padding:0 .5rem}
+.analogy p{font-size:.88rem;line-height:1.9;color:var(--text-secondary);margin-bottom:.6rem}
+.analogy p:last-child{margin-bottom:0}
+.analogy p strong{color:var(--text-primary)}
+
+/* SIMPLE COMPARISON */
+.simple-vs{margin:2.5rem -1rem;display:grid;grid-template-columns:1fr 1fr;gap:0;border-radius:20px;overflow:hidden;border:1px solid var(--border-light)}
+.sv-side{padding:2rem 2rem}
+.sv-hot{background:rgba(196,93,62,.03)}
+.sv-cold{background:rgba(74,122,155,.03)}
+.sv-icon{font-size:2rem;margin-bottom:.8rem}
+.sv-name{font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-weight:500;margin-bottom:.5rem}
+.sv-desc{font-size:.82rem;line-height:1.8;color:var(--text-secondary)}
+.sv-taste{margin-top:1rem;display:flex;flex-wrap:wrap;gap:.4rem}
+.sv-tag{font-size:.65rem;padding:.25rem .6rem;border-radius:20px;border:1px solid var(--border-light);color:var(--text-secondary)}
+
+/* FOUR METHODS SIMPLE */
+.methods-simple{margin:2.5rem -1rem;display:grid;grid-template-columns:repeat(4,1fr);gap:1rem}
+.ms-card{text-align:center;padding:1.5rem 1rem;border-radius:16px;border:1px solid var(--border-light);background:white;transition:all .3s}
+.ms-card:hover{border-color:var(--crema);transform:translateY(-2px)}
+.ms-icon{font-size:1.5rem;margin-bottom:.5rem}
+.ms-name{font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:500;margin-bottom:.3rem}
+.ms-one{font-size:.72rem;color:var(--text-secondary);line-height:1.5}
+.ms-key{font-family:'JetBrains Mono',monospace;font-size:.55rem;letter-spacing:.08em;color:var(--copper);margin-top:.6rem}
+
+/* SMELL TEST */
+.smell-test{margin:2.5rem -1rem;padding:2.5rem;background:var(--espresso);border-radius:20px;color:var(--cream);text-align:center}
+.st-label{font-family:'JetBrains Mono',monospace;font-size:.55rem;letter-spacing:.3em;color:var(--crema);margin-bottom:1.5rem}
+.st-question{font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:300;line-height:1.5;margin-bottom:1.5rem;max-width:500px;margin-left:auto;margin-right:auto}
+.st-answer{font-size:.85rem;color:rgba(245,239,230,.5);line-height:1.8;max-width:480px;margin:0 auto}
+.st-answer strong{color:var(--crema)}
+
+/* THREE THINGS */
+.three-things{margin:2.5rem -1rem;display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem}
+.tt-card{padding:1.8rem 1.5rem;border-radius:16px;border:1px solid var(--border-light);background:white;text-align:center}
+.tt-emoji{font-size:1.8rem;margin-bottom:.6rem}
+.tt-name{font-family:'Cormorant Garamond',serif;font-size:1.05rem;font-weight:500;margin-bottom:.4rem}
+.tt-analogy{font-size:.78rem;color:var(--text-secondary);line-height:1.6;margin-bottom:.5rem}
+.tt-real{font-size:.7rem;color:var(--copper);font-style:italic}
+
+/* CTA — gentle */
+.cta-block{margin:3rem -1rem;padding:2.5rem;background:rgba(201,168,76,.04);border:1px solid rgba(201,168,76,.12);border-radius:20px;text-align:center}
+.cta-label{font-family:'JetBrains Mono',monospace;font-size:.5rem;letter-spacing:.3em;color:var(--hara-gold);margin-bottom:1rem}
+.cta-title{font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:400;color:var(--espresso);margin-bottom:.5rem}
+.cta-desc{font-size:.85rem;color:var(--text-secondary);line-height:1.6;max-width:450px;margin:0 auto 1.5rem}
+.cta-links{display:flex;justify-content:center;gap:.8rem;flex-wrap:wrap}
+.cta-link{font-size:.72rem;padding:.5rem 1rem;border-radius:8px;border:1px solid var(--border-light);color:var(--text-secondary);text-decoration:none;transition:all .3s}
+.cta-link:hover{border-color:var(--crema);color:var(--espresso);background:rgba(212,165,116,.04)}
+
+/* CALLOUT */
+.callout{background:var(--espresso);color:var(--cream);border-radius:16px;padding:2.5rem;margin:2.5rem -1rem;position:relative;overflow:hidden}
+.callout::before{content:'';position:absolute;top:-40%;right:-20%;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,rgba(212,165,116,.08),transparent)}
+.callout .callout-label{font-family:'JetBrains Mono',monospace;font-size:.55rem;letter-spacing:.3em;color:var(--crema);margin-bottom:1rem}
+.callout p{font-size:.88rem;line-height:1.9;color:rgba(245,239,230,.6);margin-bottom:0}
+.callout p strong{color:var(--crema)}
+
+.author-card{max-width:680px;margin:0 auto 4rem;padding:2rem 2rem 0;display:flex;align-items:center;gap:1.5rem;border-top:1px solid var(--border-light)}
+.author-avatar{width:56px;height:56px;border-radius:50%;background:var(--espresso);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.author-avatar span{font-family:'Cormorant Garamond',serif;font-size:1.2rem;color:var(--crema);font-weight:500}
+.author-info h4{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:500;margin-bottom:.15rem}
+.author-info p{font-size:.78rem;color:var(--text-secondary);line-height:1.5}
+footer{padding:3rem 2rem;text-align:center}
+.footer-brand{font-family:'JetBrains Mono',monospace;font-size:.58rem;letter-spacing:.25em;color:var(--text-light)}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@media(max-width:768px){nav{padding:1rem 1.5rem}.post-hero{height:70vh;min-height:450px}.article-body{padding:3.5rem 1.5rem 3rem}.simple-vs,.analogy,.smell-test,.callout,.cta-block{margin-left:-.5rem;margin-right:-.5rem}.simple-vs,.methods-simple,.three-things{grid-template-columns:1fr 1fr}.methods-simple{grid-template-columns:repeat(2,1fr)}.sv-side{padding:1.5rem}.smell-test,.callout{padding:2rem 1.5rem}.author-card{flex-direction:column;text-align:center;padding:1.5rem}.hero-cups{bottom:2rem}}
+@media(max-width:480px){.three-things,.methods-simple{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="progress-bar" id="progressBar"></div>
+<nav id="mainNav"><div class="nav-left"><a href="/" class="nav-logo">HARA<small>COFFEE LAB</small></a><a href="blog-index.html" class="nav-back"><span>←</span> Blog</a></div><div class="lang-switcher"><button class="lang-btn active" data-lang="es">ES</button><button class="lang-btn" data-lang="ko">KO</button><button class="lang-btn" data-lang="en">EN</button></div></nav>
+
+<div class="post-hero">
+  <div class="hero-content">
+    <div class="hero-overline"><span class="series-tag" data-i18n="st">CdGF SERIES</span><span class="series-num" data-i18n="sn">INTRODUCCIÓN</span></div>
+    <h1 class="hero-title" data-i18n="ht">¿Por qué el mismo grano<br>sabe diferente?</h1>
+    <p class="hero-sub" data-i18n="hs">Un espresso y un cold brew, hechos con el mismo café. Uno es intenso y amargo. El otro es dulce y suave. ¿Qué pasó?</p>
+    <div class="hero-meta"><span class="hero-badge" data-i18n="hb">PARA TODOS</span><span class="hero-date">17 FEB 2026</span><span class="hero-read" data-i18n="hr">5 min lectura</span></div>
+  </div>
+  <div class="hero-cups">
+    <div class="hero-cup">☕</div>
+    <div class="hero-cup">🧊</div>
+  </div>
+</div>
+
+<article class="article-body" id="articleBody">
+
+<!-- ══ SPANISH ══ -->
+<div class="lang-content" data-lang="es">
+
+<h2>Un grano, dos mundos</h2>
+
+<p>Imaginá que tenés un paquete de café recién tostado. Molés la mitad y hacés un espresso. Molés la otra mitad y preparás un cold brew. Mismo grano, mismo tostador, mismo día. Pero cuando probás los dos, parecen cafés completamente distintos.</p>
+
+<p>El espresso es <strong>intenso, con cuerpo, un poco amargo</strong>, con un aroma que te golpea al acercar la nariz. El cold brew es <strong>dulce, suave, casi sedoso</strong>, con notas sutiles de fruta que no sabías que el café podía tener. ¿Qué pasó? ¿Cómo puede el mismo grano producir dos experiencias tan diferentes?</p>
+
+<p>La respuesta es más simple de lo que parece. Y una vez que la entendés, cambia para siempre la forma en que pensás sobre el café.</p>
+
+<div class="sep"></div>
+
+<h2>La metáfora del azúcar</h2>
+
+<p>Pensá en algo que todos hemos hecho: disolver azúcar en agua.</p>
+
+<div class="analogy">
+  <p>Agarrá dos vasos de agua. En uno poné <strong>agua bien caliente</strong>. En el otro, <strong>agua helada con hielo</strong>. Ahora poné una cucharada de azúcar en cada uno y revolvé.</p>
+  <p>¿Qué pasa? En el agua caliente, el azúcar desaparece en segundos. En el agua helada, queda un montón de granitos en el fondo que no se disuelven por más que revuelvas.</p>
+  <p><strong>Eso es exactamente lo que pasa con el café.</strong> El agua caliente disuelve todo rápido — lo bueno y lo malo. El agua fría disuelve solo lo que puede, y resulta que lo que puede disolver son sobre todo las cosas que saben bien.</p>
+</div>
+
+<p>El café tostado tiene cientos de compuestos adentro. Algunos son los que nos gustan: los que dan dulzura, los aromas florales, los tonos de fruta, el chocolate suave. Otros son más agresivos: los que dan amargor fuerte, la astringencia que te seca la boca, la acidez que pica.</p>
+
+<p>Cuando usás agua caliente, <strong>sale todo</strong> — lo agradable y lo agresivo juntos. Cuando usás agua fría, solo salen los compuestos más "fáciles" de disolver, que son los suaves y aromáticos. Los compuestos amargos y astringentes son más "pesados" y necesitan más energía para salir del grano. A baja temperatura, <strong>simplemente se quedan adentro</strong>.</p>
+
+<p>Por eso el cold brew sabe más dulce y suave. No es que le pongas azúcar — es que el frío filtra naturalmente lo amargo.</p>
+
+<div class="sep"></div>
+
+<h2>Cuatro formas de hacer café</h2>
+
+<p>Si la temperatura es tan importante, ¿qué pasa con los otros métodos? Acá hay un mapa simple:</p>
+
+<div class="methods-simple">
+  <div class="ms-card">
+    <div class="ms-icon">⚡</div>
+    <div class="ms-name">Espresso</div>
+    <div class="ms-one">Agua muy caliente empujada con mucha fuerza a través de café muy fino. Rápido e intenso.</div>
+    <div class="ms-key">Caliente + Presión + Rápido</div>
+  </div>
+  <div class="ms-card">
+    <div class="ms-icon">💧</div>
+    <div class="ms-name">Filtrado</div>
+    <div class="ms-one">Agua caliente que cae por gravedad a través de café molido. Limpio y claro, como un té elegante.</div>
+    <div class="ms-key">Caliente + Gravedad + Medio</div>
+  </div>
+  <div class="ms-card">
+    <div class="ms-icon">🫖</div>
+    <div class="ms-name">Prensa francesa</div>
+    <div class="ms-one">Café sumergido en agua caliente. Reposa unos minutos. Cuerpo completo con todo lo que el grano tiene.</div>
+    <div class="ms-key">Caliente + Inmersión + Medio</div>
+  </div>
+  <div class="ms-card">
+    <div class="ms-icon">🧊</div>
+    <div class="ms-name">Cold brew</div>
+    <div class="ms-one">Agua fría que toca el café durante horas. Lento y paciente. Solo extrae lo más delicado.</div>
+    <div class="ms-key">Frío + Tiempo + Lento</div>
+  </div>
+</div>
+
+<p>Cada método es una combinación diferente de tres cosas: <strong>qué tan caliente</strong> está el agua, <strong>cuánta fuerza</strong> se aplica, y <strong>cuánto tiempo</strong> dura el contacto. Cambiá cualquiera de las tres y el café sabe distinto.</p>
+
+<div class="sep"></div>
+
+<h2>Las tres llaves del sabor</h2>
+
+<p>Pensalo como tres perillas de una mesa de sonido. Cada una controla algo diferente, y la combinación define el resultado final.</p>
+
+<div class="three-things">
+  <div class="tt-card">
+    <div class="tt-emoji">🌡️</div>
+    <div class="tt-name">Temperatura</div>
+    <div class="tt-analogy">Como la velocidad de un auto. Más calor = más rápido se disuelve todo.</div>
+    <div class="tt-real">Decide qué compuestos salen del grano</div>
+  </div>
+  <div class="tt-card">
+    <div class="tt-emoji">💪</div>
+    <div class="tt-name">Presión</div>
+    <div class="tt-analogy">Como apretar una esponja. Más fuerza = sale más líquido, más rápido.</div>
+    <div class="tt-real">Decide la textura y la crema</div>
+  </div>
+  <div class="tt-card">
+    <div class="tt-emoji">⏱️</div>
+    <div class="tt-name">Tiempo</div>
+    <div class="tt-analogy">Como marinar un bife. Más tiempo = más profundo llega el sabor.</div>
+    <div class="tt-real">Decide la intensidad y la profundidad</div>
+  </div>
+</div>
+
+<p>El espresso sube la temperatura y la presión al máximo pero usa muy poco tiempo (25 segundos). El cold brew baja la temperatura al mínimo, no usa presión, pero deja pasar muchas horas. Son estrategias opuestas para el mismo objetivo: sacarle sabor al grano.</p>
+
+<div class="sep"></div>
+
+<h2>El dato que lo cambia todo</h2>
+
+<p>¿Sabés ese aroma increíble que sentís cuando te acercás a un espresso recién hecho? Esa nube de olor a café que te envuelve y te hace cerrar los ojos un segundo.</p>
+
+<p>Bueno, ese aroma que estás oliendo es, literalmente, <strong>sabor que se está escapando de tu taza</strong>.</p>
+
+<div class="smell-test">
+  <div class="st-label" data-i18n="stl">PENSALO ASÍ</div>
+  <div class="st-question" data-i18n="stq">El aroma que te llega a la nariz<br>es sabor que no te va a llegar a la boca.</div>
+  <div class="st-answer" data-i18n="sta">El agua caliente hace que las moléculas de aroma vibren tan rápido que se escapan al aire. Ese olor delicioso que te envuelve antes de tomar el primer sorbo es <strong>complejidad aromática que se pierde</strong>. En el cold brew, esas mismas moléculas están quietas, frías, dormidas en el líquido. <strong>No se escapan</strong>. Te esperan hasta que llegan a tu boca.</div>
+</div>
+
+<p>Por eso un cold brew bien hecho, cuando le dás el primer sorbo, te sorprende con notas que nunca sentiste en un café caliente — una sutileza de jazmin, un toque de durazno, algo que parece miel — porque esos aromas que normalmente se evaporan al aire están todos ahí, intactos, esperándote.</p>
+
+<div class="sep"></div>
+
+<h2>Y ahora una pregunta más</h2>
+
+<p>Si el frío preserva mejor el aroma, ¿existe una forma de hacer cold brew que sea aún mejor para guardar esos aromas? ¿Que sea tan selectiva que saque solo lo más delicado del grano y deje absolutamente todo lo amargo adentro?</p>
+
+<p>La respuesta es sí. Y tiene que ver con <strong>cómo</strong> el agua fría toca al café: si lo rodea y se queda quieta (como un baño), o si lo atraviesa gota a gota (como una lluvia suave).</p>
+
+<p>Pero eso es otra historia. Esa es la historia de por qué en HARA elegimos el goteo lento — y por qué lo llamamos <em class="t">Café de Goteo en Frío</em>.</p>
+
+<div class="callout">
+  <div class="callout-label">EN RESUMEN</div>
+  <p>El mismo grano sabe diferente según cómo le pedís que te entregue su sabor. Agua caliente: rápido, intenso, todo junto. Agua fría: lento, suave, solo lo mejor. No hay uno mejor que el otro — pero si lo que buscás es la <strong>máxima fidelidad al aroma original del grano</strong>, el frío tiene una ventaja que la física no le puede dar al calor.</p>
+</div>
+
+<div class="cta-block">
+  <div class="cta-label" data-i18n="cta-l">¿QUERÉS IR MÁS PROFUNDO?</div>
+  <div class="cta-title" data-i18n="cta-t">La ciencia detrás de cada sorbo</div>
+  <div class="cta-desc" data-i18n="cta-d">Si te quedaste con curiosidad, tenemos una serie de tres artículos que exploran la ciencia detrás de lo que acabás de leer.</div>
+  <div class="cta-links">
+    <a class="cta-link" href="blog-post-cdgf-01.html" data-i18n="cta1">01 · Temperatura, Presión, Tiempo</a>
+    <a class="cta-link" href="blog-post-cdgf-02.html" data-i18n="cta2">02 · Goteo vs Inmersión</a>
+    <a class="cta-link" href="blog-post-cdgf-03.html" data-i18n="cta3">03 · La filosofía CdGF1%</a>
+  </div>
+</div>
+
+</div>
+
+<!-- ══ KOREAN ══ -->
+<div class="lang-content" data-lang="ko" style="display:none;">
+
+<h2>하나의 원두, 두 개의 세계</h2>
+
+<p>갓 로스팅된 커피 한 봉지가 있다고 상상해보세요. 반을 갈아서 에스프레소를 내립니다. 나머지 반을 갈아서 콜드브루를 만듭니다. 같은 원두, 같은 로스터, 같은 날. 그런데 둘을 마셔보면 완전히 다른 커피 같습니다.</p>
+
+<p>에스프레소는 <strong>강렬하고, 묵직하고, 약간 쓴</strong>, 코를 가져가면 확 치는 향이 있습니다. 콜드브루는 <strong>달콤하고, 부드럽고, 거의 실크 같은</strong>, 커피에서 이런 맛이 난다는 걸 몰랐던 은은한 과일 노트가 있습니다. 무슨 일이 일어난 걸까요?</p>
+
+<p>답은 생각보다 간단합니다. 그리고 한 번 이해하면 커피를 바라보는 방식이 영원히 바뀝니다.</p>
+
+<div class="sep"></div>
+
+<h2>설탕의 비유</h2>
+
+<p>누구나 해본 경험을 생각해보세요: 물에 설탕 녹이기.</p>
+
+<div class="analogy">
+  <p>물 두 잔을 준비하세요. 하나에는 <strong>뜨거운 물</strong>을 넣고. 다른 하나에는 <strong>얼음물</strong>을 넣고. 이제 각각에 설탕 한 스푼을 넣고 저으세요.</p>
+  <p>어떻게 될까요? 뜨거운 물에서는 설탕이 몇 초 만에 사라집니다. 얼음물에서는 아무리 저어도 바닥에 알갱이가 남아 있습니다.</p>
+  <p><strong>커피에서도 정확히 같은 일이 일어납니다.</strong> 뜨거운 물은 모든 것을 빠르게 녹입니다 — 좋은 것도 나쁜 것도. 찬물은 녹일 수 있는 것만 녹이는데, 녹을 수 있는 것들이 대부분 맛있는 것들입니다.</p>
+</div>
+
+<p>로스팅된 커피에는 수백 가지 화합물이 들어 있습니다. 일부는 우리가 좋아하는 것: 단맛, 꽃향, 과일 톤, 부드러운 초콜릿. 다른 일부는 더 공격적인 것: 강한 쓴맛, 입을 마르게 하는 수렴미, 찌르는 산미.</p>
+
+<p>뜨거운 물을 쓰면 <strong>전부 나옵니다</strong> — 좋은 것과 공격적인 것이 함께. 찬물을 쓰면 "녹기 쉬운" 화합물만 나오는데, 그게 바로 부드럽고 향기로운 것들입니다. 쓰고 떫은 화합물은 더 "무겁고" 빠져나오려면 더 많은 에너지가 필요합니다. 낮은 온도에서는 <strong>그냥 안에 남아 있습니다</strong>.</p>
+
+<p>그래서 콜드브루가 더 달고 부드러운 겁니다. 설탕을 넣어서가 아닙니다 — 냉기가 자연스럽게 쓴맛을 걸러내는 겁니다.</p>
+
+<div class="sep"></div>
+
+<h2>커피를 만드는 네 가지 방법</h2>
+
+<div class="methods-simple">
+  <div class="ms-card">
+    <div class="ms-icon">⚡</div>
+    <div class="ms-name">에스프레소</div>
+    <div class="ms-one">아주 뜨거운 물을 강한 힘으로 아주 고운 커피 가루에 밀어넣기. 빠르고 강렬.</div>
+    <div class="ms-key">뜨거움 + 압력 + 빠름</div>
+  </div>
+  <div class="ms-card">
+    <div class="ms-icon">💧</div>
+    <div class="ms-name">핸드드립</div>
+    <div class="ms-one">뜨거운 물이 중력으로 커피 가루를 통과. 깨끗하고 맑은, 우아한 차 같은.</div>
+    <div class="ms-key">뜨거움 + 중력 + 보통</div>
+  </div>
+  <div class="ms-card">
+    <div class="ms-icon">🫖</div>
+    <div class="ms-name">프렌치프레스</div>
+    <div class="ms-one">커피를 뜨거운 물에 담가놓기. 몇 분 기다리기. 원두가 가진 모든 것이 담긴 풍성한 바디.</div>
+    <div class="ms-key">뜨거움 + 침출 + 보통</div>
+  </div>
+  <div class="ms-card">
+    <div class="ms-icon">🧊</div>
+    <div class="ms-name">콜드브루</div>
+    <div class="ms-one">차가운 물이 커피에 몇 시간 동안 닿기. 느리고 참을성 있게. 가장 섬세한 것만 추출.</div>
+    <div class="ms-key">차가움 + 시간 + 느림</div>
+  </div>
+</div>
+
+<p>각 방법은 세 가지의 다른 조합입니다: 물이 <strong>얼마나 뜨거운지</strong>, <strong>얼마나 힘을 주는지</strong>, <strong>얼마나 오래</strong> 접촉하는지. 셋 중 하나만 바꿔도 커피 맛이 달라집니다.</p>
+
+<div class="sep"></div>
+
+<h2>맛의 세 가지 열쇠</h2>
+
+<div class="three-things">
+  <div class="tt-card">
+    <div class="tt-emoji">🌡️</div>
+    <div class="tt-name">온도</div>
+    <div class="tt-analogy">자동차 속도와 같습니다. 더 뜨거울수록 = 모든 것이 더 빨리 녹습니다.</div>
+    <div class="tt-real">어떤 성분이 나올지를 결정</div>
+  </div>
+  <div class="tt-card">
+    <div class="tt-emoji">💪</div>
+    <div class="tt-name">압력</div>
+    <div class="tt-analogy">스펀지 짜기와 같습니다. 더 세게 = 더 많이, 더 빨리 나옵니다.</div>
+    <div class="tt-real">질감과 크레마를 결정</div>
+  </div>
+  <div class="tt-card">
+    <div class="tt-emoji">⏱️</div>
+    <div class="tt-name">시간</div>
+    <div class="tt-analogy">고기 재우기와 같습니다. 더 오래 = 맛이 더 깊이 스밉니다.</div>
+    <div class="tt-real">강도와 깊이를 결정</div>
+  </div>
+</div>
+
+<div class="sep"></div>
+
+<h2>모든 것을 바꾸는 한 가지 사실</h2>
+
+<p>갓 뽑은 에스프레소에 코를 가져갈 때 느끼는 그 놀라운 향. 눈을 감게 만드는 커피 향기의 그 구름.</p>
+
+<p>그 향기는, 문자 그대로, <strong>당신의 잔에서 빠져나가고 있는 맛</strong>입니다.</p>
+
+<div class="smell-test">
+  <div class="st-label">이렇게 생각해보세요</div>
+  <div class="st-question">코에 도달하는 향은<br>입에 도달하지 못할 맛입니다.</div>
+  <div class="st-answer">뜨거운 물은 향기 분자들을 너무 빠르게 진동시켜서 공기 중으로 탈출합니다. 첫 모금 전에 감싸는 그 맛있는 향은 <strong>사라지고 있는 향미 복합성</strong>입니다. 콜드브루에서 그 분자들은 조용히, 차갑게, 액체 안에서 잠들어 있습니다. <strong>탈출하지 않습니다</strong>. 당신의 입에 도달할 때까지 기다립니다.</div>
+</div>
+
+<p>그래서 잘 만든 콜드브루의 첫 모금에서 뜨거운 커피에서는 느껴본 적 없는 노트에 놀라게 됩니다 — 자스민의 섬세함, 복숭아 터치, 꿀 같은 무언가 — 보통은 공기 중으로 증발하는 향들이 전부 거기에, 온전히, 기다리고 있으니까요.</p>
+
+<div class="sep"></div>
+
+<h2>그리고 한 가지 질문 더</h2>
+
+<p>냉기가 향을 더 잘 보존한다면, 콜드브루 중에서도 그 향을 더 잘 지키는 방법이 있을까요? 원두에서 가장 섬세한 것만 꺼내고 쓴 것은 절대적으로 전부 안에 남기는, 그렇게 선택적인 방법이?</p>
+
+<p>답은 예입니다. 그리고 차가운 물이 커피에 <strong>어떻게</strong> 닿는지와 관련이 있습니다: 둘러싸고 가만히 있는지(목욕처럼), 아니면 한 방울씩 통과하는지(부드러운 비처럼).</p>
+
+<p>하지만 그건 다음 이야기입니다. HARA가 왜 점적식을 선택했는지의 이야기 — 그리고 왜 그것을 <em class="t">Café de Goteo en Frío</em>라 부르는지의 이야기.</p>
+
+<div class="callout">
+  <div class="callout-label">요약</div>
+  <p>같은 원두도 맛을 달라고 요청하는 방식에 따라 다른 맛을 냅니다. 뜨거운 물: 빠르고, 강렬하고, 전부 한꺼번에. 찬물: 느리고, 부드럽고, 좋은 것만. 어느 쪽이 더 낫다고 할 수 없지만 — <strong>원두 본래 향의 최대 충실도</strong>를 원한다면, 냉기에는 물리학이 열에 줄 수 없는 이점이 있습니다.</p>
+</div>
+
+<div class="cta-block">
+  <div class="cta-label">더 깊이 들어가볼까요?</div>
+  <div class="cta-title">한 모금 뒤의 과학</div>
+  <div class="cta-desc">궁금증이 남았다면, 방금 읽은 내용 뒤의 과학을 탐구하는 3편의 시리즈가 있습니다.</div>
+  <div class="cta-links">
+    <a class="cta-link" href="blog-post-cdgf-01.html">01 · 온도, 압력, 시간</a>
+    <a class="cta-link" href="blog-post-cdgf-02.html">02 · 점적 vs 침출</a>
+    <a class="cta-link" href="blog-post-cdgf-03.html">03 · CdGF1% 철학</a>
+  </div>
+</div>
+
+</div>
+
+<!-- ══ ENGLISH ══ -->
+<div class="lang-content" data-lang="en" style="display:none;">
+
+<h2>One bean, two worlds</h2>
+
+<p>Imagine you have a bag of freshly roasted coffee. You grind half and pull an espresso. You grind the other half and make a cold brew. Same bean, same roaster, same day. But when you taste both, they seem like completely different coffees.</p>
+
+<p>The espresso is <strong>intense, full-bodied, a little bitter</strong>, with an aroma that hits you when you bring it to your nose. The cold brew is <strong>sweet, smooth, almost silky</strong>, with subtle fruit notes you didn't know coffee could have. What happened? How can the same bean produce two such different experiences?</p>
+
+<p>The answer is simpler than you'd think. And once you get it, it changes the way you think about coffee forever.</p>
+
+<div class="sep"></div>
+
+<h2>The sugar metaphor</h2>
+
+<div class="analogy">
+  <p>Take two glasses of water. In one, pour <strong>very hot water</strong>. In the other, <strong>ice-cold water</strong>. Now put a spoonful of sugar in each and stir.</p>
+  <p>What happens? In the hot water, the sugar vanishes in seconds. In the ice water, a pile of crystals sits at the bottom no matter how much you stir.</p>
+  <p><strong>That's exactly what happens with coffee.</strong> Hot water dissolves everything fast — the good and the bad. Cold water dissolves only what it can, and it turns out what it can dissolve is mostly the stuff that tastes good.</p>
+</div>
+
+<p>Roasted coffee has hundreds of compounds inside. Some are the ones we love: sweetness, floral aromas, fruit tones, smooth chocolate. Others are more aggressive: harsh bitterness, mouth-drying astringency, sharp acidity.</p>
+
+<p>When you use hot water, <strong>everything comes out</strong> — pleasant and aggressive together. When you use cold water, only the "easy to dissolve" compounds come out, which happen to be the smooth and aromatic ones. The bitter and astringent compounds are "heavier" and need more energy to leave the bean. At low temperature, <strong>they just stay inside</strong>.</p>
+
+<p>That's why cold brew tastes sweeter and smoother. You're not adding sugar — the cold naturally filters out the bitter.</p>
+
+<div class="sep"></div>
+
+<h2>Four ways to make coffee</h2>
+
+<div class="methods-simple">
+  <div class="ms-card">
+    <div class="ms-icon">⚡</div>
+    <div class="ms-name">Espresso</div>
+    <div class="ms-one">Very hot water pushed with lots of force through very fine coffee. Fast and intense.</div>
+    <div class="ms-key">Hot + Pressure + Fast</div>
+  </div>
+  <div class="ms-card">
+    <div class="ms-icon">💧</div>
+    <div class="ms-name">Pour-over</div>
+    <div class="ms-one">Hot water falling by gravity through ground coffee. Clean and clear, like an elegant tea.</div>
+    <div class="ms-key">Hot + Gravity + Medium</div>
+  </div>
+  <div class="ms-card">
+    <div class="ms-icon">🫖</div>
+    <div class="ms-name">French press</div>
+    <div class="ms-one">Coffee soaked in hot water. Rests for a few minutes. Full body with everything the bean has.</div>
+    <div class="ms-key">Hot + Immersion + Medium</div>
+  </div>
+  <div class="ms-card">
+    <div class="ms-icon">🧊</div>
+    <div class="ms-name">Cold brew</div>
+    <div class="ms-one">Cold water touching coffee for hours. Slow and patient. Extracts only the most delicate.</div>
+    <div class="ms-key">Cold + Time + Slow</div>
+  </div>
+</div>
+
+<div class="sep"></div>
+
+<h2>The three keys to flavor</h2>
+
+<div class="three-things">
+  <div class="tt-card">
+    <div class="tt-emoji">🌡️</div>
+    <div class="tt-name">Temperature</div>
+    <div class="tt-analogy">Like a car's speed. Hotter = everything dissolves faster.</div>
+    <div class="tt-real">Decides which compounds come out</div>
+  </div>
+  <div class="tt-card">
+    <div class="tt-emoji">💪</div>
+    <div class="tt-name">Pressure</div>
+    <div class="tt-analogy">Like squeezing a sponge. More force = more comes out, faster.</div>
+    <div class="tt-real">Decides texture and crema</div>
+  </div>
+  <div class="tt-card">
+    <div class="tt-emoji">⏱️</div>
+    <div class="tt-name">Time</div>
+    <div class="tt-analogy">Like marinating a steak. Longer = deeper the flavor goes.</div>
+    <div class="tt-real">Decides intensity and depth</div>
+  </div>
+</div>
+
+<div class="sep"></div>
+
+<h2>The fact that changes everything</h2>
+
+<p>You know that incredible aroma you smell when you lean over a fresh espresso? That cloud of coffee scent that makes you close your eyes.</p>
+
+<p>Well, that aroma is, literally, <strong>flavor escaping your cup</strong>.</p>
+
+<div class="smell-test">
+  <div class="st-label">THINK ABOUT IT</div>
+  <div class="st-question">The aroma reaching your nose<br>is flavor that won't reach your mouth.</div>
+  <div class="st-answer">Hot water makes aroma molecules vibrate so fast they escape into the air. That delicious scent enveloping you before the first sip is <strong>aromatic complexity being lost</strong>. In cold brew, those same molecules are quiet, cold, asleep in the liquid. <strong>They don't escape</strong>. They wait for you until they reach your mouth.</div>
+</div>
+
+<p>That's why a well-made cold brew surprises you with notes you've never tasted in hot coffee — a hint of jasmine, a touch of peach, something like honey — because those aromas that normally evaporate are all there, intact, waiting for you.</p>
+
+<div class="sep"></div>
+
+<h2>And now one more question</h2>
+
+<p>If cold preserves aroma better, is there a cold brew method that's even better at preserving it? So selective it extracts only the most delicate from the bean and leaves absolutely everything bitter inside?</p>
+
+<p>The answer is yes. And it has to do with <strong>how</strong> the cold water touches the coffee: whether it surrounds it and stays still (like a bath), or passes through drop by drop (like a gentle rain).</p>
+
+<p>But that's another story. That's the story of why HARA chose slow drip — and why we call it <em class="t">Café de Goteo en Frío</em>.</p>
+
+<div class="callout">
+  <div class="callout-label">IN SUMMARY</div>
+  <p>The same bean tastes different depending on how you ask it to give you its flavor. Hot water: fast, intense, everything at once. Cold water: slow, smooth, only the best. Neither is objectively better — but if what you're after is <strong>maximum fidelity to the bean's original aroma</strong>, cold has an advantage that physics simply can't give to heat.</p>
+</div>
+
+<div class="cta-block">
+  <div class="cta-label">WANT TO GO DEEPER?</div>
+  <div class="cta-title">The science behind every sip</div>
+  <div class="cta-desc">If you're still curious, we have a three-part series exploring the science behind what you just read.</div>
+  <div class="cta-links">
+    <a class="cta-link" href="blog-post-cdgf-01.html">01 · Temperature, Pressure, Time</a>
+    <a class="cta-link" href="blog-post-cdgf-02.html">02 · Drip vs Immersion</a>
+    <a class="cta-link" href="blog-post-cdgf-03.html">03 · The CdGF1% Philosophy</a>
+  </div>
+</div>
+
+</div>
+
+</article>
+<div class="author-card"><div class="author-avatar"><span>H</span></div><div class="author-info"><h4>HARA Coffee Lab</h4><p data-i18n="ab">Ciencia, precisión y pasión por el café de especialidad. Salta, Argentina.</p></div></div>
+<footer><div class="footer-brand">© 2026 HARA COFFEE LAB · SALTA, ARGENTINA · CADA GOTA CUENTA</div></footer>
+<script>
+let currentLang='es';
+const ui={es:{st:'CdGF SERIES',sn:'INTRODUCCIÓN',ht:'¿Por qué el mismo grano<br>sabe diferente?',hs:'Un espresso y un cold brew, hechos con el mismo café. Uno es intenso y amargo. El otro es dulce y suave. ¿Qué pasó?',hb:'PARA TODOS',hr:'5 min lectura',ab:'Ciencia, precisión y pasión por el café de especialidad. Salta, Argentina.',stl:'PENSALO ASÍ',stq:'El aroma que te llega a la nariz<br>es sabor que no te va a llegar a la boca.',sta:'El agua caliente hace que las moléculas de aroma vibren tan rápido que se escapan al aire. Ese olor delicioso que te envuelve antes de tomar el primer sorbo es <strong>complejidad aromática que se pierde</strong>. En el cold brew, esas mismas moléculas están quietas, frías, dormidas en el líquido. <strong>No se escapan</strong>. Te esperan hasta que llegan a tu boca.','cta-l':'¿QUERÉS IR MÁS PROFUNDO?','cta-t':'La ciencia detrás de cada sorbo','cta-d':'Si te quedaste con curiosidad, tenemos una serie de tres artículos que exploran la ciencia detrás de lo que acabás de leer.',cta1:'01 · Temperatura, Presión, Tiempo',cta2:'02 · Goteo vs Inmersión',cta3:'03 · La filosofía CdGF1%'},
+ko:{st:'CdGF 시리즈',sn:'입문',ht:'왜 같은 원두인데<br>맛이 다를까?',hs:'같은 커피로 만든 에스프레소와 콜드브루. 하나는 강렬하고 쓰다. 다른 하나는 달콤하고 부드럽다. 무슨 일이?',hb:'누구나',hr:'5분 소요',ab:'과학, 정밀함, 그리고 스페셜티 커피에 대한 열정. 아르헨티나 살타.',stl:'이렇게 생각해보세요',stq:'코에 도달하는 향은<br>입에 도달하지 못할 맛입니다.',sta:'뜨거운 물은 향기 분자들을 너무 빠르게 진동시켜서 공기 중으로 탈출합니다. 첫 모금 전에 감싸는 그 맛있는 향은 <strong>사라지고 있는 향미 복합성</strong>입니다. 콜드브루에서 그 분자들은 조용히, 차갑게, 액체 안에서 잠들어 있습니다. <strong>탈출하지 않습니다</strong>. 당신의 입에 도달할 때까지 기다립니다.','cta-l':'더 깊이 들어가볼까요?','cta-t':'한 모금 뒤의 과학','cta-d':'궁금증이 남았다면, 방금 읽은 내용 뒤의 과학을 탐구하는 3편의 시리즈가 있습니다.',cta1:'01 · 온도, 압력, 시간',cta2:'02 · 점적 vs 침출',cta3:'03 · CdGF1% 철학'},
+en:{st:'CdGF SERIES',sn:'INTRODUCTION',ht:'Why does the same bean<br>taste different?',hs:'An espresso and a cold brew, made with the same coffee. One is intense and bitter. The other is sweet and smooth. What happened?',hb:'FOR EVERYONE',hr:'5 min read',ab:'Science, precision, and passion for specialty coffee. Salta, Argentina.',stl:'THINK ABOUT IT',stq:'The aroma reaching your nose<br>is flavor that won\'t reach your mouth.',sta:'Hot water makes aroma molecules vibrate so fast they escape into the air. That delicious scent before the first sip is <strong>aromatic complexity being lost</strong>. In cold brew, those same molecules are quiet, cold, asleep in the liquid. <strong>They don\'t escape</strong>. They wait until they reach your mouth.','cta-l':'WANT TO GO DEEPER?','cta-t':'The science behind every sip','cta-d':'If you\'re still curious, we have a three-part series exploring the science behind what you just read.',cta1:'01 · Temperature, Pressure, Time',cta2:'02 · Drip vs Immersion',cta3:'03 · The CdGF1% Philosophy'}};
+function switchLang(l){currentLang=l;document.documentElement.lang=l==='ko'?'ko':l==='en'?'en':'es';document.querySelectorAll('[data-i18n]').forEach(e=>{const k=e.dataset.i18n;if(ui[l][k])e.innerHTML=ui[l][k]});document.querySelectorAll('.lang-content').forEach(e=>{e.style.display=e.dataset.lang===l?'block':'none'});document.querySelectorAll('.lang-btn').forEach(b=>b.classList.toggle('active',b.dataset.lang===l))}
+document.querySelectorAll('.lang-btn').forEach(b=>{b.addEventListener('click',()=>switchLang(b.dataset.lang))});
+window.addEventListener('scroll',()=>{const d=document.documentElement;document.getElementById('progressBar').style.width=(d.scrollTop/(d.scrollHeight-d.clientHeight))*100+'%';document.getElementById('mainNav').classList.toggle('scrolled',d.scrollTop>60)});
+</script>
+</body>
+</html>

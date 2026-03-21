@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HARA Blog — La ciencia del gelato</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Noto+Sans+KR:wght@200;300;400;500;600&family=Noto+Sans:wght@200;300;400;500;600&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+:root{--espresso:#1a1210;--crema:#d4a574;--cream:#f5efe6;--warm-white:#faf8f4;--roast-mid:#6b4226;--copper:#b87333;--amber:#c9a84c;--gelato-vanilla:#f0e6c8;--gelato-pink:#e8c0c8;--gelato-mint:#c0ddd0;--gelato-coffee:#b89878;--ice-blue:#a8c8d8;--text-primary:#1a1210;--text-secondary:#6b5b50;--text-light:#a09080;--border-light:rgba(212,165,116,.15)}
+*{margin:0;padding:0;box-sizing:border-box}html{scroll-behavior:smooth;font-size:16px}
+body{background:var(--warm-white);color:var(--text-primary);font-family:'Noto Sans','Noto Sans KR',sans-serif;font-weight:300;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:var(--warm-white)}::-webkit-scrollbar-thumb{background:var(--crema);border-radius:3px}
+nav{position:fixed;top:0;left:0;right:0;z-index:200;padding:1.2rem 3rem;display:flex;justify-content:space-between;align-items:center;transition:all .5s}
+nav.scrolled{background:rgba(250,248,244,.92);backdrop-filter:blur(24px);padding:.9rem 3rem;box-shadow:0 1px 0 rgba(26,18,16,.06)}
+.nav-left{display:flex;align-items:center;gap:2.5rem}
+.nav-logo{font-family:'Cormorant Garamond',serif;font-weight:500;letter-spacing:.15em;color:var(--text-primary);text-decoration:none;font-size:1.3rem;line-height:1}
+.nav-logo small{display:block;font-weight:300;font-size:.55rem;letter-spacing:.3em;color:var(--text-secondary);margin-top:2px}
+.nav-back{font-size:.72rem;font-weight:400;letter-spacing:.08em;color:var(--text-secondary);text-decoration:none;display:flex;align-items:center;gap:.4rem;transition:color .3s}
+.nav-back:hover{color:var(--espresso)}
+.lang-switcher{display:flex;border:1px solid var(--border-light);border-radius:6px;overflow:hidden}
+.lang-btn{font-family:'JetBrains Mono',monospace;font-size:.6rem;letter-spacing:.1em;padding:.4rem .65rem;border:none;background:transparent;color:var(--text-light);cursor:pointer;transition:all .3s}
+.lang-btn:not(:last-child){border-right:1px solid var(--border-light)}
+.lang-btn.active{background:var(--espresso);color:var(--cream)}
+.lang-btn:hover:not(.active){background:rgba(212,165,116,.08);color:var(--roast-mid)}
+.progress-bar{position:fixed;top:0;left:0;height:2px;z-index:300;width:0%;background:linear-gradient(to right,var(--gelato-pink),var(--gelato-vanilla),var(--gelato-coffee));transition:width .1s linear}
+
+.post-hero{height:85vh;min-height:540px;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;background:var(--espresso)}
+.post-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 35% 55%,rgba(232,192,200,.05),transparent 40%),radial-gradient(ellipse at 65% 45%,rgba(184,152,120,.05),transparent 40%)}
+.hero-content{position:relative;z-index:2;text-align:center;padding:2rem;max-width:720px}
+.hero-overline{font-family:'JetBrains Mono',monospace;font-size:.55rem;letter-spacing:.5em;color:rgba(245,239,230,.25);margin-bottom:2.5rem;opacity:0;animation:fadeUp .8s ease .3s forwards}
+.hero-title{font-family:'Cormorant Garamond',serif;font-size:clamp(2.4rem,5.5vw,4.2rem);font-weight:300;line-height:1.12;color:var(--cream);margin-bottom:1.5rem;opacity:0;animation:fadeUp 1s ease .5s forwards}
+.hero-title em{font-style:italic;color:var(--crema)}
+.hero-sub{font-size:1rem;line-height:1.85;color:rgba(245,239,230,.45);max-width:500px;margin:0 auto;opacity:0;animation:fadeUp .8s ease .8s forwards}
+.hero-meta{margin-top:2.5rem;display:flex;justify-content:center;gap:1.5rem;opacity:0;animation:fadeUp .8s ease 1s forwards}
+.hero-badge{font-family:'JetBrains Mono',monospace;font-size:.55rem;letter-spacing:.2em;padding:.35rem .8rem;border-radius:4px;background:rgba(212,165,116,.12);color:var(--crema)}
+.hero-date,.hero-read{font-family:'JetBrains Mono',monospace;font-size:.6rem;color:rgba(245,239,230,.25);letter-spacing:.1em}
+
+.article-body{max-width:680px;margin:0 auto;padding:5rem 2rem 4rem}
+.article-body h2{font-family:'Cormorant Garamond',serif;font-size:1.75rem;font-weight:400;color:var(--espresso);margin:3.5rem 0 1rem;line-height:1.3}
+.article-body h2:first-child{margin-top:0}
+.article-body h3{font-family:'Cormorant Garamond',serif;font-size:1.15rem;font-weight:500;color:var(--roast-mid);margin:2rem 0 .6rem}
+.article-body p{font-size:.95rem;line-height:2.1;color:var(--text-secondary);margin-bottom:1.4rem}
+.article-body p strong{color:var(--text-primary);font-weight:500}
+.article-body p em.t{font-style:italic;color:var(--copper);font-family:'Cormorant Garamond',serif;font-size:1.05em}
+.sep{width:40px;height:1px;background:var(--crema);margin:3rem auto;opacity:.4}
+
+/* VS BLOCK */
+.vs-block{margin:2.5rem -1rem;display:grid;grid-template-columns:1fr 1fr;gap:0;border-radius:20px;overflow:hidden;border:1px solid var(--border-light)}
+.vs-side{padding:2.5rem}
+.vs-gelato{background:rgba(240,230,200,.15)}
+.vs-icecream{background:rgba(168,200,216,.08)}
+.vs-icon{font-size:1.8rem;margin-bottom:.6rem}
+.vs-label{font-family:'JetBrains Mono',monospace;font-size:.5rem;letter-spacing:.25em;margin-bottom:.8rem}
+.vs-gelato .vs-label{color:var(--copper)}
+.vs-icecream .vs-label{color:var(--ice-blue)}
+.vs-side h4{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:400;margin-bottom:.5rem;line-height:1.4}
+.vs-side p{font-size:.78rem;line-height:1.8;color:var(--text-secondary);margin:0}
+
+/* PILLAR CARDS */
+.pillar-cards{margin:2.5rem -1rem;display:grid;grid-template-columns:repeat(4,1fr);gap:1rem}
+.pcard{padding:1.8rem 1.2rem;border-radius:16px;border:1px solid var(--border-light);background:white;text-align:center;position:relative;overflow:hidden}
+.pcard::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+.pc1::before{background:var(--gelato-pink)}.pc2::before{background:var(--ice-blue)}.pc3::before{background:var(--gelato-vanilla)}.pc4::before{background:var(--gelato-coffee)}
+.pcard .pc-icon{font-size:1.5rem;margin-bottom:.5rem}
+.pcard h5{font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:500;margin-bottom:.3rem}
+.pcard p{font-size:.72rem;color:var(--text-secondary);line-height:1.6;margin:0}
+
+/* DATA TABLE */
+.data-table{margin:1.5rem -1rem;border-radius:16px;overflow:hidden;border:1px solid var(--border-light)}
+.dt-header{padding:1rem 1.5rem;font-family:'JetBrains Mono',monospace;font-size:.55rem;letter-spacing:.2em;background:rgba(212,165,116,.06);color:var(--copper)}
+.dt-body{background:white}
+.dt-row{display:grid;grid-template-columns:1.2fr 2fr;align-items:start;border-bottom:1px solid var(--border-light);font-size:.78rem}
+.dt-row:last-child{border-bottom:none}
+.dt-cell{padding:.8rem 1.2rem;color:var(--text-secondary);line-height:1.65}
+.dt-cell:first-child{font-weight:400;color:var(--text-primary);background:rgba(212,165,116,.02)}
+
+/* SCENE */
+.scene{margin:2.5rem -1rem;padding:2.5rem;background:var(--espresso);border-radius:20px;color:var(--cream);position:relative;overflow:hidden}
+.scene::before{content:'';position:absolute;top:-40%;right:-20%;width:250px;height:250px;border-radius:50%;background:radial-gradient(circle,rgba(212,165,116,.05),transparent)}
+.scene-label{font-family:'JetBrains Mono',monospace;font-size:.55rem;letter-spacing:.3em;color:var(--crema);margin-bottom:1.2rem}
+.scene p{font-size:.88rem;line-height:2;color:rgba(245,239,230,.55);margin-bottom:1rem;position:relative;z-index:1}
+.scene p:last-child{margin-bottom:0}
+.scene p strong{color:var(--crema)}
+
+/* TEMP SCALE */
+.temp-scale{margin:2.5rem -1rem;padding:2.5rem;background:white;border:1px solid var(--border-light);border-radius:20px}
+.ts-label{font-family:'JetBrains Mono',monospace;font-size:.55rem;letter-spacing:.3em;color:var(--copper);margin-bottom:1.5rem}
+.ts-bar{height:16px;border-radius:8px;background:linear-gradient(to right,#a0c8e0,#c0ddd0,#f0e6c8,#e8c0c8,#d4a574);margin-bottom:1rem;position:relative}
+.ts-markers{display:flex;justify-content:space-between;position:relative}
+.ts-mark{text-align:center;flex:1}
+.ts-temp{font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:500;color:var(--text-primary);margin-bottom:.2rem}
+.ts-desc{font-size:.68rem;color:var(--text-secondary);line-height:1.5}
+
+/* CHAIN VISUAL */
+.chain{margin:2.5rem -1rem;padding:2.5rem;background:var(--espresso);border-radius:20px;color:var(--cream)}
+.chain-label{font-family:'JetBrains Mono',monospace;font-size:.55rem;letter-spacing:.3em;color:var(--crema);margin-bottom:1.5rem;text-align:center}
+.chain-flow{display:flex;align-items:center;justify-content:center;gap:.5rem;flex-wrap:wrap}
+.chain-step{text-align:center;padding:1rem;border-radius:12px;border:1px solid rgba(255,255,255,.06);background:rgba(255,255,255,.02);min-width:100px}
+.chain-step .cs-icon{font-size:1.2rem;margin-bottom:.3rem}
+.chain-step .cs-name{font-size:.72rem;margin-bottom:.15rem}
+.chain-step .cs-temp{font-family:'JetBrains Mono',monospace;font-size:.55rem;color:var(--crema)}
+.chain-arrow{color:rgba(212,165,116,.3);font-size:1rem}
+.chain-note{text-align:center;margin-top:1.2rem;font-size:.72rem;color:rgba(245,239,230,.3);line-height:1.6}
+.chain-note strong{color:var(--crema)}
+
+/* INSIGHT BOX */
+.insight{margin:2.5rem -1rem;padding:2.5rem;border-radius:20px;border:2px solid rgba(212,165,116,.15);background:rgba(212,165,116,.02);text-align:center}
+.insight-icon{font-size:2rem;margin-bottom:.8rem}
+.insight h4{font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:400;margin-bottom:.6rem}
+.insight p{font-size:.88rem;line-height:1.9;color:var(--text-secondary);max-width:520px;margin:0 auto}
+
+/* CALLOUT */
+.callout{background:var(--espresso);color:var(--cream);border-radius:16px;padding:2.5rem;margin:2.5rem -1rem;position:relative;overflow:hidden}
+.callout::before{content:'';position:absolute;top:-40%;right:-20%;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,rgba(212,165,116,.06),transparent)}
+.callout .callout-label{font-family:'JetBrains Mono',monospace;font-size:.55rem;letter-spacing:.3em;color:var(--crema);margin-bottom:1rem}
+.callout p{font-size:.88rem;line-height:1.95;color:rgba(245,239,230,.55);margin-bottom:.8rem}
+.callout p:last-child{margin-bottom:0}
+.callout p strong{color:var(--crema)}
+
+.author-card{max-width:680px;margin:0 auto 4rem;padding:2rem 2rem 0;display:flex;align-items:center;gap:1.5rem;border-top:1px solid var(--border-light)}
+.author-avatar{width:56px;height:56px;border-radius:50%;background:var(--espresso);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.author-avatar span{font-family:'Cormorant Garamond',serif;font-size:1.2rem;color:var(--crema);font-weight:500}
+.author-info h4{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:500;margin-bottom:.15rem}
+.author-info p{font-size:.78rem;color:var(--text-secondary);line-height:1.5}
+footer{padding:3rem 2rem;text-align:center}
+.footer-brand{font-family:'JetBrains Mono',monospace;font-size:.58rem;letter-spacing:.25em;color:var(--text-light)}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@media(max-width:768px){nav{padding:1rem 1.5rem}.post-hero{height:75vh}.article-body{padding:3.5rem 1.5rem 3rem}.vs-block,.pillar-cards,.data-table,.scene,.temp-scale,.chain,.insight,.callout{margin-left:-.5rem;margin-right:-.5rem}.vs-block,.pillar-cards{grid-template-columns:1fr 1fr}.scene,.chain,.callout{padding:2rem 1.5rem}.chain-flow{gap:.3rem}.chain-step{min-width:70px;padding:.6rem}.author-card{flex-direction:column;text-align:center;padding:1.5rem}}
+@media(max-width:480px){.pillar-cards{grid-template-columns:1fr 1fr}.chain-flow{flex-direction:column}.chain-arrow{transform:rotate(90deg)}}
+</style>
+</head>
+<body>
+<div class="progress-bar" id="progressBar"></div>
+<nav id="mainNav"><div class="nav-left"><a href="/" class="nav-logo">HARA<small>COFFEE LAB</small></a><a href="blog-index.html" class="nav-back"><span>←</span> Blog</a></div><div class="lang-switcher"><button class="lang-btn active" data-lang="es">ES</button><button class="lang-btn" data-lang="ko">KO</button><button class="lang-btn" data-lang="en">EN</button></div></nav>
+
+<div class="post-hero">
+  <div class="hero-content">
+    <div class="hero-overline" data-i18n="ho">HARA COFFEE LAB · CIENCIA</div>
+    <h1 class="hero-title" data-i18n="ht">La ciencia<br>del <em>gelato</em></h1>
+    <p class="hero-sub" data-i18n="hs">El gelato no es helado. Es una máquina de precisión diseñada para entregar sabor. Y resulta ser el vehículo perfecto para el café de goteo en frío.</p>
+    <div class="hero-meta"><span class="hero-badge" data-i18n="hb">CIENCIA</span><span class="hero-date">18 FEB 2026</span><span class="hero-read" data-i18n="hr">10 min lectura</span></div>
+  </div>
+</div>
+
+<article class="article-body" id="articleBody">
+
+<!-- ══ SPANISH ══ -->
+<div class="lang-content" data-lang="es">
+
+<h2>No es helado</h2>
+
+<p>La gente dice "helado" y piensa que todo es lo mismo. No lo es. La diferencia entre el helado industrial y el gelato artesanal es comparable a la diferencia entre café commodity y café de especialidad — es la misma categoría, pero son mundos distintos. Y la diferencia no es solo de calidad o ingredientes. Es de <strong>física</strong>.</p>
+
+<p>El gelato es una estructura termodinámica donde cuatro cosas suceden al mismo tiempo: agua se congela en cristales, grasa se dispersa en glóbulos microscópicos, aire se atrapa en burbujas diminutas, y azúcar controla la temperatura a la que todo ocurre. Cada una de estas variables afecta directamente <strong>cómo y cuándo el sabor llega a tu lengua</strong>.</p>
+
+<p>Y esto es lo que lo convierte en el vehículo perfecto para el café.</p>
+
+<div class="sep"></div>
+
+<h2>Gelato vs Ice cream: la diferencia que importa</h2>
+
+<div class="vs-block">
+  <div class="vs-side vs-gelato">
+    <div class="vs-icon">🍨</div>
+    <div class="vs-label" data-i18n="vgl">GELATO ARTESANAL</div>
+    <h4 data-i18n="vgh">Menos aire, más densidad, más sabor</h4>
+    <p data-i18n="vgp">Overrun: 25–40% (poco aire). Grasa: 4–8%. Servido a –12°C / –14°C. La textura es densa, sedosa, elástica. Menor grasa = los sabores se perciben más directamente porque la grasa no recubre la lengua. Menor temperatura de servicio = se derrite más lento en boca, liberando el sabor de forma progresiva.</p>
+  </div>
+  <div class="vs-side vs-icecream">
+    <div class="vs-icon">🍦</div>
+    <div class="vs-label" data-i18n="vil">ICE CREAM INDUSTRIAL</div>
+    <h4 data-i18n="vih">Más aire, más grasa, menos claridad</h4>
+    <p data-i18n="vip">Overrun: 80–120% (mucho aire — hasta la mitad es aire). Grasa: 10–18%. Servido a –18°C. La textura es liviana, esponjosa, se derrite rápido. Más grasa = recubrimiento en la lengua que amortigua los sabores. Más aire = menos concentración de ingredientes por cucharada.</p>
+  </div>
+</div>
+
+<p>El overrun es el dato más revelador. Si un ice cream tiene 100% de overrun, significa que <strong>la mitad de lo que comés es aire</strong>. En el gelato artesanal, el aire es solo un cuarto del volumen. Cada cucharada tiene el doble de concentración de ingredientes reales. Por eso el gelato sabe más — porque literalmente <em class="t">hay más</em>.</p>
+
+<div class="sep"></div>
+
+<h2>Los cuatro pilares del gelato</h2>
+
+<p>Para entender por qué el gelato es un vehículo de sabor tan efectivo, hay que entender sus cuatro componentes estructurales:</p>
+
+<div class="pillar-cards">
+  <div class="pcard pc1">
+    <div class="pc-icon">❄️</div>
+    <h5 data-i18n="p1n">Cristales de hielo</h5>
+    <p data-i18n="p1d">Determinan la textura. Más pequeños = más suave y cremoso. Tamaño ideal: &lt;50 micras. Congelación rápida produce cristales pequeños.</p>
+  </div>
+  <div class="pcard pc2">
+    <div class="pc-icon">💨</div>
+    <h5 data-i18n="p2n">Aire (overrun)</h5>
+    <p data-i18n="p2d">Determina la densidad. Menos aire = más concentración. El gelato mantiene 25–40% para textura sedosa sin sacrificar intensidad.</p>
+  </div>
+  <div class="pcard pc3">
+    <div class="pc-icon">🧈</div>
+    <h5 data-i18n="p3n">Grasa</h5>
+    <p data-i18n="p3d">Vehículo de aromas lipofílicos. Pero demasiada recubre la lengua. El gelato usa 4–8% — suficiente para transportar, no para amortiguar.</p>
+  </div>
+  <div class="pcard pc4">
+    <div class="pc-icon">🍯</div>
+    <h5 data-i18n="p4n">Azúcar</h5>
+    <p data-i18n="p4d">No solo dulzor — deprime el punto de congelación. Controla qué fracción permanece líquida. Más azúcar = más suave, pero menos definición.</p>
+  </div>
+</div>
+
+<h3>Por qué importa el tamaño de los cristales</h3>
+
+<p>Cuando el gelato se congela, el agua forma cristales de hielo. Si estos cristales son grandes (más de 50 micras), sentís una textura granulosa, arenosa — eso es lo que pasa con el helado casero mal hecho o con el helado que se derritió y se volvió a congelar. Si los cristales son pequeños (menos de 30 micras), la textura se siente sedosa, lisa, cremosa, aunque no tenga tanta grasa.</p>
+
+<p>¿Cómo se logran cristales pequeños? <strong>Velocidad de congelación</strong>. Cuanto más rápido se congela la mezcla, más puntos de nucleación se forman simultáneamente, y cada cristal tiene menos tiempo para crecer. Los mantecadores profesionales congelan la mezcla en 8–12 minutos. Un freezer doméstico tarda horas — y el resultado se nota.</p>
+
+<div class="sep"></div>
+
+<h2>Cómo el gelato entrega el sabor</h2>
+
+<p>Acá es donde la ciencia se pone interesante para el café. El gelato no simplemente "contiene" sabor — tiene un <strong>mecanismo de liberación controlada</strong> que determina cómo percibís cada nota.</p>
+
+<div class="data-table">
+  <div class="dt-header" data-i18n="dth">MECANISMO DE LIBERACIÓN DE SABOR EN GELATO</div>
+  <div class="dt-body">
+    <div class="dt-row"><div class="dt-cell" data-i18n="d1a">Contacto inicial (0–2 seg)</div><div class="dt-cell" data-i18n="d1b">El gelato toca la lengua a –12°C. El choque térmico adormece parcialmente los receptores. Sentís frío, textura, y las notas más volátiles que se liberan primero: florales, cítricos, aromas altos.</div></div>
+    <div class="dt-row"><div class="dt-cell" data-i18n="d2a">Fusión (2–5 seg)</div><div class="dt-cell" data-i18n="d2b">El calor corporal (37°C) derrite la superficie. La fase líquida libera los compuestos solubles en agua: ácidos, azúcares simples. Sentís dulzura, acidez, frutalidad. Los cristales de hielo se convierten en agua que disuelve y transporta.</div></div>
+    <div class="dt-row"><div class="dt-cell" data-i18n="d3a">Liberación lipídica (5–10 seg)</div><div class="dt-cell" data-i18n="d3b">Los glóbulos de grasa se derriten y liberan los compuestos aromáticos lipofílicos que estaban atrapados: chocolate, nuez, caramelo, terpenos complejos. Estos aromas suben por la vía retronasal. Es el "medio" de la experiencia.</div></div>
+    <div class="dt-row"><div class="dt-cell" data-i18n="d4a">Final (10–20 seg)</div><div class="dt-cell" data-i18n="d4b">Lo último en llegar: compuestos de alto peso molecular que necesitan más energía para volatilizarse. Cuerpo, profundidad, notas terrosas. El "after taste" del gelato es más largo que el del ice cream porque hay menos grasa residual bloqueando los receptores.</div></div>
+  </div>
+</div>
+
+<p>Notá algo: esta secuencia — notas altas primero, notas medias después, notas profundas al final — es exactamente la misma secuencia en la que se extraen los compuestos del café en un goteo lento. Las primeras gotas traen los volátiles, las del medio traen el cuerpo, las últimas traen la profundidad. <strong>El gelato reproduce en tu boca la misma secuencia temporal que el gotero frío produce en la extracción.</strong></p>
+
+<div class="insight">
+  <div class="insight-icon">💡</div>
+  <h4 data-i18n="inh">El gelato no solo contiene café. Lo reproduce.</h4>
+  <p data-i18n="inp">La secuencia de liberación térmica del gelato en la boca replica la secuencia de extracción por goteo frío del café. Volátiles primero, solubles después, compuestos pesados al final. El gelato es un reproductor temporal de la misma película que el gotero filmó.</p>
+</div>
+
+<div class="sep"></div>
+
+<h2>La temperatura: el director invisible</h2>
+
+<p>La temperatura de servicio del gelato no es un detalle — es la variable que controla toda la experiencia sensorial. Unos grados de diferencia cambian completamente lo que percibís.</p>
+
+<div class="temp-scale">
+  <div class="ts-label" data-i18n="tsl">TEMPERATURA DE SERVICIO Y PERCEPCIÓN</div>
+  <div class="ts-bar"></div>
+  <div class="ts-markers">
+    <div class="ts-mark"><div class="ts-temp">–18°C</div><div class="ts-desc" data-i18n="tm1">Congelador. Duro, sin sabor. La lengua se adormece. Los volátiles no se liberan. Así se almacena, no se sirve.</div></div>
+    <div class="ts-mark"><div class="ts-temp">–14°C</div><div class="ts-desc" data-i18n="tm2">Servicio gelato. Textura firme pero cremosa. Sabor empieza a abrirse. Notas altas presentes. Ideal.</div></div>
+    <div class="ts-mark"><div class="ts-temp">–10°C</div><div class="ts-desc" data-i18n="tm3">Suave. Sabor completo. Todas las capas presentes. Algunos gelatos brillan acá. Ventana corta.</div></div>
+    <div class="ts-mark"><div class="ts-temp">–6°C</div><div class="ts-desc" data-i18n="tm4">Derritiéndose. Textura líquida. Sabor intenso pero desordenado. Sin estructura. Demasiado tarde.</div></div>
+    <div class="ts-mark"><div class="ts-temp">0°C</div><div class="ts-desc" data-i18n="tm5">Sopa. La estructura colapsa. Solo queda dulzor y grasa. Toda la complejidad se perdió.</div></div>
+  </div>
+</div>
+
+<p>La ventana óptima es estrecha: entre –14°C y –10°C. En ese rango, los cristales de hielo son lo suficientemente pequeños para dar textura suave, la fase líquida es suficiente para transportar sabor, y los volátiles tienen la energía justa para desprenderse sin evaporarse de golpe. Servir gelato es un acto de precisión térmica.</p>
+
+<div class="sep"></div>
+
+<h2>Por qué el CdGF es el café perfecto para gelato</h2>
+
+<p>Ahora viene la conexión que explica por qué HARA hace café por goteo frío <em class="t">y</em> gelato. No es diversificación de producto. Es lógica termodinámica.</p>
+
+<div class="scene">
+  <div class="scene-label" data-i18n="scl">EL PROBLEMA</div>
+  <p data-i18n="sc1">Si hacés un espresso y lo mezclás con la base de gelato, tenés un problema: <strong>el espresso está a 90°C y la base a 4°C</strong>. Ese choque térmico degrada los compuestos volátiles más delicados — las mismas notas florales, cítricas y frutales que hacen especial a un café de especialidad. Llegás al gelato con el café, pero sin su complejidad. Solo la base amarga y el cuerpo.</p>
+  <p data-i18n="sc2">Lo mismo pasa si hacés un café de filtro caliente y lo enfriás para agregarlo. El enfriamiento cambia el perfil aromático. Las notas altas se evaporan durante el proceso. Llegás frío, pero empobrecido.</p>
+</div>
+
+<div class="scene" style="margin-top:1rem">
+  <div class="scene-label" data-i18n="sol">LA SOLUCIÓN: CdGF</div>
+  <p data-i18n="so1">El café de goteo en frío se extrae a <strong>4°C</strong>. La base de gelato antes de mantecarse está a <strong>4°C</strong>. <strong>No hay choque térmico.</strong> Los compuestos aromáticos del café — incluidos los volátiles delicados que se extrajeron sin calor — pasan directamente a la base de gelato sin degradación. La complejidad completa del café se transfiere intacta.</p>
+  <p data-i18n="so2">Y hay algo más: como el CdGF extrae selectivamente (los compuestos amargos de alto peso molecular necesitan energía térmica que el agua fría no tiene), el café que llega al gelato es <strong>naturalmente más dulce, más aromático y menos amargo</strong> que cualquier café preparado en caliente. Es el ingrediente ideal para un postre que necesita complejidad sin amargor.</p>
+</div>
+
+<div class="chain">
+  <div class="chain-label" data-i18n="chl">LA CADENA DE FRÍO COMPLETA — DE LA GOTA AL GELATO</div>
+  <div class="chain-flow">
+    <div class="chain-step"><div class="cs-icon">💧</div><div class="cs-name" data-i18n="ch1">Agua</div><div class="cs-temp">4°C</div></div>
+    <div class="chain-arrow">→</div>
+    <div class="chain-step"><div class="cs-icon">⏳</div><div class="cs-name" data-i18n="ch2">Goteo</div><div class="cs-temp">4°C</div></div>
+    <div class="chain-arrow">→</div>
+    <div class="chain-step"><div class="cs-icon">☕</div><div class="cs-name" data-i18n="ch3">CdGF</div><div class="cs-temp">4°C</div></div>
+    <div class="chain-arrow">→</div>
+    <div class="chain-step"><div class="cs-icon">🥛</div><div class="cs-name" data-i18n="ch4">Base</div><div class="cs-temp">4°C</div></div>
+    <div class="chain-arrow">→</div>
+    <div class="chain-step"><div class="cs-icon">🌀</div><div class="cs-name" data-i18n="ch5">Mantecado</div><div class="cs-temp">–6°C</div></div>
+    <div class="chain-arrow">→</div>
+    <div class="chain-step"><div class="cs-icon">🍨</div><div class="cs-name" data-i18n="ch6">Servicio</div><div class="cs-temp">–12°C</div></div>
+  </div>
+  <div class="chain-note" data-i18n="chn">De 4°C a –12°C. <strong>Sin un solo momento de calor.</strong> Los volátiles que el gotero frío extrajo con paciencia se conservan intactos hasta el instante en que tu lengua los libera. Esta es la cadena de frío de HARA. Es lo que llamamos <strong>CdGF1%</strong>.</div>
+</div>
+
+<div class="sep"></div>
+
+<h2>Lo que esto significa en la taza — en la cuchara</h2>
+
+<p>Cuando comés un gelato de café HARA, la secuencia que experimentás es esta:</p>
+
+<p>Primero, el frío. La textura densa y sedosa del gelato artesanal con bajo overrun. Después, mientras se derrite: las <strong>notas florales y cítricas</strong> del café — las mismas que se perderían si el café hubiera pasado por calor. Después, el <strong>dulzor natural y el cuerpo</strong> — la extracción selectiva del goteo frío que privilegió los compuestos agradables. Y al final, una <strong>profundidad limpia</strong> sin el amargor áspero que asociamos con el café en postres.</p>
+
+<p>Eso no pasa por accidente. Pasa porque cada decisión — desde la extracción en frío, pasando por la formulación de la base, hasta la temperatura de servicio — fue diseñada para que el sabor del café llegue a tu lengua exactamente como salió del grano. Sin pérdida. Sin degradación. Sin compromiso.</p>
+
+<div class="callout">
+  <div class="callout-label" data-i18n="cl">DESDE HARA</div>
+  <p data-i18n="ct1">Cuando empezamos a hacer gelato de café, la pregunta no era "¿cómo le ponemos sabor a café al helado?". La pregunta era: <strong>"¿cómo hacemos para que el café llegue intacto hasta la cuchara?"</strong></p>
+  <p data-i18n="ct2">La respuesta fue eliminar el calor de toda la cadena. Extraer en frío. Mezclar en frío. Mantener en frío. Y dejar que la única fuente de calor sea la que tiene que ser: <strong>tu boca</strong>, a 37°C, liberando la complejidad del café en la secuencia exacta en la que fue diseñado para ser percibido.</p>
+  <p data-i18n="ct3">Es café de goteo en frío convertido en gelato. Es CdGF1%. Es <em>Cada Gota Cuenta</em>, hasta la última cucharada.</p>
+</div>
+
+</div>
+
+<!-- ══ KOREAN ══ -->
+<div class="lang-content" data-lang="ko" style="display:none;">
+
+<h2>아이스크림이 아니다</h2>
+
+<p>사람들은 "아이스크림"이라고 하며 다 같다고 생각합니다. 아닙니다. 공장 아이스크림과 아르티잔 젤라또의 차이는 커머디티 커피와 스페셜티 커피의 차이에 비견됩니다 — 같은 범주지만 다른 세계. 차이는 품질이나 재료만이 아닙니다. <strong>물리학</strong>입니다.</p>
+
+<p>젤라또는 네 가지가 동시에 일어나는 열역학적 구조입니다: 물이 결정으로 얼고, 지방이 미세 구체로 분산되고, 공기가 극소 기포에 갇히고, 당이 모든 것이 일어나는 온도를 제어합니다. 이 각각의 변수가 <strong>맛이 혀에 언제, 어떻게 도달하는지</strong>를 직접 결정합니다.</p>
+
+<div class="sep"></div>
+
+<h2>젤라또 vs 아이스크림: 중요한 차이</h2>
+
+<div class="vs-block">
+  <div class="vs-side vs-gelato">
+    <div class="vs-icon">🍨</div>
+    <div class="vs-label">아르티잔 젤라또</div>
+    <h4>적은 공기, 높은 밀도, 더 많은 맛</h4>
+    <p>오버런: 25–40%(적은 공기). 유지방: 4–8%. 서빙 온도: –12°C/–14°C. 질감은 조밀하고, 실크 같고, 탄력적. 낮은 지방 = 혀를 코팅하지 않아 맛이 더 직접 인지. 서빙 온도가 높아 입에서 천천히 녹으며 맛을 점진적으로 방출.</p>
+  </div>
+  <div class="vs-side vs-icecream">
+    <div class="vs-icon">🍦</div>
+    <div class="vs-label">공장 아이스크림</div>
+    <h4>많은 공기, 많은 지방, 적은 선명도</h4>
+    <p>오버런: 80–120%(많은 공기 — 절반이 공기). 유지방: 10–18%. 서빙: –18°C. 질감은 가볍고, 스펀지 같고, 빨리 녹음. 높은 지방 = 혀 코팅으로 맛 차단. 많은 공기 = 한 숟갈당 실제 재료 농도 낮음.</p>
+  </div>
+</div>
+
+<p>오버런이 가장 드러내는 수치입니다. 아이스크림의 오버런이 100%이면 <strong>먹는 것의 절반이 공기</strong>입니다. 아르티잔 젤라또에서는 공기가 부피의 1/4뿐. 한 숟갈에 실제 재료 농도가 두 배. 젤라또가 더 맛있는 이유 — 말 그대로 <em class="t">더 많으니까</em>.</p>
+
+<div class="sep"></div>
+
+<h2>젤라또의 네 기둥</h2>
+
+<div class="pillar-cards">
+  <div class="pcard pc1"><div class="pc-icon">❄️</div><h5>얼음 결정</h5><p>질감 결정. 작을수록 = 부드럽고 크리미. 이상: &lt;50μm. 빠른 냉동이 작은 결정 생산.</p></div>
+  <div class="pcard pc2"><div class="pc-icon">💨</div><h5>공기(오버런)</h5><p>밀도 결정. 적은 공기 = 높은 농도. 젤라또는 25–40% 유지로 강도 희생 없는 실크 질감.</p></div>
+  <div class="pcard pc3"><div class="pc-icon">🧈</div><h5>지방</h5><p>지용성 아로마 운반체. 하지만 과다하면 혀를 코팅. 젤라또는 4–8% — 운반하되 차단하지 않는 양.</p></div>
+  <div class="pcard pc4"><div class="pc-icon">🍯</div><h5>당</h5><p>단맛만이 아님 — 빙점을 낮춤. 액상 유지 비율 제어. 많을수록 = 부드럽지만 선명도 떨어짐.</p></div>
+</div>
+
+<h3>얼음 결정 크기가 왜 중요한가</h3>
+
+<p>젤라또가 얼 때 물이 얼음 결정을 형성합니다. 50μm 이상이면 거칠고 모래 같은 질감 — 잘못 만든 홈메이드 아이스크림이나 녹았다 다시 얼린 것에서 느끼는 것. 30μm 이하면 실크처럼 매끈하고 크리미한 질감, 지방이 많지 않아도. 작은 결정의 비밀: <strong>냉동 속도</strong>. 빠를수록 핵 생성점이 동시다발적이고 각 결정의 성장 시간이 짧음. 전문 만테카도레는 8–12분에 냉동. 가정용 냉동실은 수 시간.</p>
+
+<div class="sep"></div>
+
+<h2>젤라또가 맛을 전달하는 방법</h2>
+
+<div class="data-table">
+  <div class="dt-header">젤라또의 맛 방출 메커니즘</div>
+  <div class="dt-body">
+    <div class="dt-row"><div class="dt-cell">초기 접촉 (0–2초)</div><div class="dt-cell">젤라또가 –12°C에서 혀에 닿음. 열충격이 수용체를 부분 마비. 차가움, 질감, 가장 휘발성 높은 노트 먼저 방출: 꽃향, 시트러스, 하이노트.</div></div>
+    <div class="dt-row"><div class="dt-cell">용융 (2–5초)</div><div class="dt-cell">체온(37°C)이 표면 녹임. 액상이 수용성 화합물 방출: 산, 단당류. 단맛, 산미, 과일향 인지. 얼음 결정이 물이 되어 용해·운반.</div></div>
+    <div class="dt-row"><div class="dt-cell">지질 방출 (5–10초)</div><div class="dt-cell">지방 구체가 녹으며 갇혀 있던 지용성 향미 화합물 방출: 초콜릿, 견과, 캐러멜, 복합 테르펜. 후비강 경유. 경험의 "중반".</div></div>
+    <div class="dt-row"><div class="dt-cell">여운 (10–20초)</div><div class="dt-cell">마지막 도착: 고분자량 화합물. 바디, 깊이, 흙 노트. 젤라또의 여운이 아이스크림보다 긴 이유: 잔류 지방이 적어 수용체를 덜 차단.</div></div>
+  </div>
+</div>
+
+<p>이 순서를 주목하세요 — 하이노트 먼저, 미드노트 다음, 깊은 노트 마지막 — 이것은 냉점적에서 커피 화합물이 추출되는 순서와 정확히 같습니다. 첫 방울이 휘발성분, 중간이 바디, 마지막이 깊이를 가져오듯. <strong>젤라또는 입 안에서 냉점적기가 추출 과정에서 만든 것과 같은 시간적 순서를 재현합니다.</strong></p>
+
+<div class="insight">
+  <div class="insight-icon">💡</div>
+  <h4>젤라또는 커피를 담기만 하는 게 아니다. 재현한다.</h4>
+  <p>입 안에서 젤라또의 열적 방출 순서가 냉점적 추출 순서를 복제합니다. 휘발성분 먼저, 수용성분 다음, 고분자 화합물 마지막. 젤라또는 점적기가 촬영한 같은 영화의 시간적 재생기입니다.</p>
+</div>
+
+<div class="sep"></div>
+
+<h2>온도: 보이지 않는 연출가</h2>
+
+<div class="temp-scale">
+  <div class="ts-label">서빙 온도와 인지</div>
+  <div class="ts-bar"></div>
+  <div class="ts-markers">
+    <div class="ts-mark"><div class="ts-temp">–18°C</div><div class="ts-desc">냉동고. 딱딱, 무미. 혀 마비. 휘발성분 미방출. 저장 온도이지 서빙 온도 아님.</div></div>
+    <div class="ts-mark"><div class="ts-temp">–14°C</div><div class="ts-desc">젤라또 서빙. 단단하지만 크리미. 맛 열림 시작. 하이노트 존재. 이상적.</div></div>
+    <div class="ts-mark"><div class="ts-temp">–10°C</div><div class="ts-desc">소프트. 완전한 맛. 모든 층 존재. 일부 젤라또의 황금점. 짧은 창.</div></div>
+    <div class="ts-mark"><div class="ts-temp">–6°C</div><div class="ts-desc">녹는 중. 액체 질감. 강렬하지만 무질서. 구조 상실. 너무 늦음.</div></div>
+    <div class="ts-mark"><div class="ts-temp">0°C</div><div class="ts-desc">수프. 구조 붕괴. 단맛과 지방만 남음. 모든 복합성 소실.</div></div>
+  </div>
+</div>
+
+<div class="sep"></div>
+
+<h2>왜 CdGF가 젤라또를 위한 완벽한 커피인가</h2>
+
+<p>HARA가 냉점적 커피 <em class="t">그리고</em> 젤라또를 만드는 이유가 여기에 있습니다. 제품 다각화가 아닙니다. 열역학적 논리입니다.</p>
+
+<div class="scene">
+  <div class="scene-label">문제</div>
+  <p>에스프레소를 젤라또 베이스에 섞으면 문제가 있습니다: <strong>에스프레소는 90°C, 베이스는 4°C</strong>. 그 열충격이 가장 섬세한 휘발성 화합물 — 스페셜티 커피를 특별하게 만드는 꽃향, 시트러스, 과일 노트 — 을 파괴합니다. 커피는 젤라또에 도달하지만 복합성은 도달하지 못합니다.</p>
+  <p>뜨거운 필터 커피를 식혀서 넣어도 마찬가지. 냉각 과정에서 향미 프로파일이 변합니다. 하이노트가 증발. 차갑게 도달하지만, 가난해져서.</p>
+</div>
+
+<div class="scene" style="margin-top:1rem">
+  <div class="scene-label">해법: CdGF</div>
+  <p>냉점적 커피는 <strong>4°C</strong>에서 추출합니다. 젤라또 베이스는 만테카도 전 <strong>4°C</strong>. <strong>열충격 없음.</strong> 커피의 향미 화합물 — 열 없이 추출한 섬세한 휘발성분 포함 — 이 분해 없이 직접 젤라또 베이스로 이전. 커피의 완전한 복합성이 온전히 전달.</p>
+  <p>더 있습니다: CdGF는 선택적으로 추출하므로(고분자 쓴맛 화합물은 찬물이 없는 열에너지가 필요), 젤라또에 도달하는 커피가 <strong>자연스럽게 더 달고, 더 향기롭고, 덜 쓴</strong> — 쓴맛 없이 복합성이 필요한 디저트를 위한 이상적 재료.</p>
+</div>
+
+<div class="chain">
+  <div class="chain-label">완전한 콜드체인 — 한 방울에서 젤라또까지</div>
+  <div class="chain-flow">
+    <div class="chain-step"><div class="cs-icon">💧</div><div class="cs-name">물</div><div class="cs-temp">4°C</div></div>
+    <div class="chain-arrow">→</div>
+    <div class="chain-step"><div class="cs-icon">⏳</div><div class="cs-name">점적</div><div class="cs-temp">4°C</div></div>
+    <div class="chain-arrow">→</div>
+    <div class="chain-step"><div class="cs-icon">☕</div><div class="cs-name">CdGF</div><div class="cs-temp">4°C</div></div>
+    <div class="chain-arrow">→</div>
+    <div class="chain-step"><div class="cs-icon">🥛</div><div class="cs-name">베이스</div><div class="cs-temp">4°C</div></div>
+    <div class="chain-arrow">→</div>
+    <div class="chain-step"><div class="cs-icon">🌀</div><div class="cs-name">만테카도</div><div class="cs-temp">–6°C</div></div>
+    <div class="chain-arrow">→</div>
+    <div class="chain-step"><div class="cs-icon">🍨</div><div class="cs-name">서빙</div><div class="cs-temp">–12°C</div></div>
+  </div>
+  <div class="chain-note">4°C에서 –12°C까지. <strong>단 한 순간의 열도 없이.</strong> 냉점적기가 인내로 추출한 휘발성분이 혀가 방출하는 순간까지 온전히 보존. 이것이 HARA의 콜드체인. 우리가 <strong>CdGF1%</strong>라 부르는 것.</div>
+</div>
+
+<div class="sep"></div>
+
+<h2>잔에서가 아닌 — 숟가락에서</h2>
+
+<p>HARA 커피 젤라또를 먹을 때 경험하는 순서: 먼저 차가움, 낮은 오버런 아르티잔 젤라또의 조밀하고 실크 같은 질감. 그 다음 녹으면서: 커피의 <strong>꽃향과 시트러스 노트</strong> — 열을 거쳤다면 사라졌을 것들. 그 다음 <strong>자연 단맛과 바디</strong> — 쾌적한 화합물을 우선한 냉점적의 선택적 추출. 마지막으로 <strong>깨끗한 깊이</strong>, 디저트의 커피에서 연상하는 거친 쓴맛 없이.</p>
+
+<div class="callout">
+  <div class="callout-label">HARA에서</div>
+  <p>커피 젤라또를 만들기 시작했을 때, 질문은 "아이스크림에 커피 맛을 어떻게 넣지?"가 아니었습니다. 질문은: <strong>"커피가 숟가락까지 온전하게 도달하려면 어떻게 해야 하지?"</strong></p>
+  <p>답은 전체 체인에서 열을 제거하는 것이었습니다. 냉추출. 냉혼합. 냉보관. 유일한 열원이 있어야 할 것만 남기기: <strong>당신의 입</strong>, 37°C에서, 커피의 복합성을 인지되도록 설계된 정확한 순서로 방출하는.</p>
+  <p>냉점적 커피가 젤라또가 된 것. CdGF1%. <em>Cada Gota Cuenta</em>, 마지막 숟가락까지.</p>
+</div>
+
+</div>
+
+<!-- ══ ENGLISH ══ -->
+<div class="lang-content" data-lang="en" style="display:none;">
+
+<h2>It's not ice cream</h2>
+
+<p>People say "ice cream" and think it's all the same. It's not. The difference between industrial ice cream and artisan gelato is comparable to the difference between commodity and specialty coffee — same category, different worlds. And the difference isn't just quality or ingredients. It's <strong>physics</strong>.</p>
+
+<p>Gelato is a thermodynamic structure where four things happen simultaneously: water freezes into crystals, fat disperses into microscopic globules, air gets trapped in tiny bubbles, and sugar controls the temperature at which it all occurs. Each variable directly affects <strong>how and when flavor reaches your tongue</strong>.</p>
+
+<div class="sep"></div>
+
+<h2>Gelato vs Ice cream</h2>
+
+<div class="vs-block">
+  <div class="vs-side vs-gelato">
+    <div class="vs-icon">🍨</div>
+    <div class="vs-label">ARTISAN GELATO</div>
+    <h4>Less air, more density, more flavor</h4>
+    <p>Overrun: 25–40% (little air). Fat: 4–8%. Served at –12°C/–14°C. Dense, silky, elastic texture. Lower fat = flavors perceived more directly. Higher serving temp = melts slower in mouth, releasing flavor progressively.</p>
+  </div>
+  <div class="vs-side vs-icecream">
+    <div class="vs-icon">🍦</div>
+    <div class="vs-label">INDUSTRIAL ICE CREAM</div>
+    <h4>More air, more fat, less clarity</h4>
+    <p>Overrun: 80–120% (up to half is air). Fat: 10–18%. Served at –18°C. Light, spongy, melts fast. More fat = coats tongue, muffles flavors. More air = less ingredient concentration per spoonful.</p>
+  </div>
+</div>
+
+<div class="sep"></div>
+
+<h2>The four pillars of gelato</h2>
+
+<div class="pillar-cards">
+  <div class="pcard pc1"><div class="pc-icon">❄️</div><h5>Ice crystals</h5><p>Determine texture. Smaller = smoother. Ideal: &lt;50μm. Fast freezing makes small crystals.</p></div>
+  <div class="pcard pc2"><div class="pc-icon">💨</div><h5>Air (overrun)</h5><p>Determines density. Less air = more concentration. Gelato keeps 25–40% for silk without sacrificing intensity.</p></div>
+  <div class="pcard pc3"><div class="pc-icon">🧈</div><h5>Fat</h5><p>Carries lipophilic aromas. But too much coats the tongue. Gelato uses 4–8% — enough to transport, not muffle.</p></div>
+  <div class="pcard pc4"><div class="pc-icon">🍯</div><h5>Sugar</h5><p>Not just sweetness — depresses freezing point. Controls liquid fraction. More = softer but less definition.</p></div>
+</div>
+
+<div class="sep"></div>
+
+<h2>How gelato delivers flavor</h2>
+
+<div class="data-table">
+  <div class="dt-header">FLAVOR RELEASE MECHANISM IN GELATO</div>
+  <div class="dt-body">
+    <div class="dt-row"><div class="dt-cell">Initial contact (0–2s)</div><div class="dt-cell">Gelato touches tongue at –12°C. Thermal shock partially numbs receptors. You feel cold, texture, and the most volatile notes first: florals, citrus, high aromas.</div></div>
+    <div class="dt-row"><div class="dt-cell">Melting (2–5s)</div><div class="dt-cell">Body heat (37°C) melts surface. Liquid phase releases water-soluble compounds: acids, simple sugars. Sweetness, acidity, fruitiness appear.</div></div>
+    <div class="dt-row"><div class="dt-cell">Lipid release (5–10s)</div><div class="dt-cell">Fat globules melt, releasing trapped lipophilic aromatics: chocolate, nut, caramel, complex terpenes. Via retronasal pathway. The "middle" of the experience.</div></div>
+    <div class="dt-row"><div class="dt-cell">Finish (10–20s)</div><div class="dt-cell">Last to arrive: high molecular weight compounds. Body, depth, earthy notes. Gelato's aftertaste is longer than ice cream's because less residual fat blocks receptors.</div></div>
+  </div>
+</div>
+
+<p>Notice: this sequence — high notes first, mid notes next, deep notes last — is exactly how compounds extract in slow cold drip. <strong>Gelato reproduces in your mouth the same temporal sequence the cold dripper produced during extraction.</strong></p>
+
+<div class="insight">
+  <div class="insight-icon">💡</div>
+  <h4>Gelato doesn't just contain coffee. It reproduces it.</h4>
+  <p>The thermal release sequence of gelato in the mouth replicates the cold drip extraction sequence. Volatiles first, solubles next, heavy compounds last. Gelato is a temporal player of the same film the dripper recorded.</p>
+</div>
+
+<div class="sep"></div>
+
+<h2>Why CdGF is the perfect coffee for gelato</h2>
+
+<div class="scene">
+  <div class="scene-label">THE PROBLEM</div>
+  <p>Mix espresso (90°C) into gelato base (4°C): <strong>thermal shock degrades delicate volatiles</strong> — the florals, citruses, and fruit notes that make specialty coffee special. You get coffee flavor in gelato, but not its complexity.</p>
+</div>
+
+<div class="scene" style="margin-top:1rem">
+  <div class="scene-label">THE SOLUTION: CdGF</div>
+  <p>Cold drip extracts at <strong>4°C</strong>. Gelato base sits at <strong>4°C</strong>. <strong>No thermal shock.</strong> Aromatic compounds — including delicate volatiles extracted without heat — transfer directly without degradation. Full complexity preserved.</p>
+  <p>Plus: CdGF's selective extraction means the coffee reaching gelato is <strong>naturally sweeter, more aromatic, less bitter</strong> — the ideal dessert ingredient.</p>
+</div>
+
+<div class="chain">
+  <div class="chain-label">THE COMPLETE COLD CHAIN — DROP TO GELATO</div>
+  <div class="chain-flow">
+    <div class="chain-step"><div class="cs-icon">💧</div><div class="cs-name">Water</div><div class="cs-temp">4°C</div></div>
+    <div class="chain-arrow">→</div>
+    <div class="chain-step"><div class="cs-icon">⏳</div><div class="cs-name">Drip</div><div class="cs-temp">4°C</div></div>
+    <div class="chain-arrow">→</div>
+    <div class="chain-step"><div class="cs-icon">☕</div><div class="cs-name">CdGF</div><div class="cs-temp">4°C</div></div>
+    <div class="chain-arrow">→</div>
+    <div class="chain-step"><div class="cs-icon">🥛</div><div class="cs-name">Base</div><div class="cs-temp">4°C</div></div>
+    <div class="chain-arrow">→</div>
+    <div class="chain-step"><div class="cs-icon">🌀</div><div class="cs-name">Churn</div><div class="cs-temp">–6°C</div></div>
+    <div class="chain-arrow">→</div>
+    <div class="chain-step"><div class="cs-icon">🍨</div><div class="cs-name">Serve</div><div class="cs-temp">–12°C</div></div>
+  </div>
+  <div class="chain-note">4°C to –12°C. <strong>Not a single moment of heat.</strong> Volatiles the cold dripper patiently extracted are preserved intact until your tongue releases them. This is HARA's cold chain. This is <strong>CdGF1%</strong>.</div>
+</div>
+
+<div class="callout">
+  <div class="callout-label">FROM HARA</div>
+  <p>When we started making coffee gelato, the question wasn't "how do we add coffee flavor to ice cream?" It was: <strong>"how do we get the coffee to the spoon intact?"</strong></p>
+  <p>The answer was removing heat from the entire chain. Cold extract. Cold mix. Cold store. Let the only heat source be the one it should be: <strong>your mouth</strong>, at 37°C, releasing the coffee's complexity in the exact sequence it was designed to be perceived.</p>
+  <p>Cold drip coffee turned into gelato. CdGF1%. <em>Cada Gota Cuenta</em>, to the last spoonful.</p>
+</div>
+
+</div>
+
+</article>
+<div class="author-card"><div class="author-avatar"><span>H</span></div><div class="author-info"><h4>HARA Coffee Lab</h4><p data-i18n="ab">Ciencia, precisión y pasión por el café de especialidad. Salta, Argentina.</p></div></div>
+<footer><div class="footer-brand">© 2026 HARA COFFEE LAB · SALTA, ARGENTINA · CADA GOTA CUENTA</div></footer>
+<script>
+let currentLang='es';
+const ui={es:{ho:'HARA COFFEE LAB · CIENCIA',ht:'La ciencia<br>del <em>gelato</em>',hs:'El gelato no es helado. Es una máquina de precisión diseñada para entregar sabor. Y resulta ser el vehículo perfecto para el café de goteo en frío.',hb:'CIENCIA',hr:'10 min lectura',ab:'Ciencia, precisión y pasión por el café de especialidad. Salta, Argentina.'},ko:{ho:'HARA COFFEE LAB · 과학',ht:'<em>젤라또</em>의<br>과학',hs:'젤라또는 아이스크림이 아닙니다. 맛을 전달하도록 설계된 정밀 기계입니다. 그리고 냉점적 커피를 위한 완벽한 운반체이기도 합니다.',hb:'과학',hr:'10분 소요',ab:'과학, 정밀함, 그리고 스페셜티 커피에 대한 열정. 아르헨티나 살타.'},en:{ho:'HARA COFFEE LAB · SCIENCE',ht:'The science<br>of <em>gelato</em>',hs:"Gelato isn't ice cream. It's a precision machine designed to deliver flavor. And it happens to be the perfect vehicle for cold drip coffee.",hb:'SCIENCE',hr:'10 min read',ab:'Science, precision, and passion for specialty coffee. Salta, Argentina.'}};
+function switchLang(l){currentLang=l;document.documentElement.lang=l==='ko'?'ko':l==='en'?'en':'es';document.querySelectorAll('[data-i18n]').forEach(e=>{const k=e.dataset.i18n;if(ui[l]&&ui[l][k])e.innerHTML=ui[l][k]});document.querySelectorAll('.lang-content').forEach(e=>{e.style.display=e.dataset.lang===l?'block':'none'});document.querySelectorAll('.lang-btn').forEach(b=>b.classList.toggle('active',b.dataset.lang===l))}
+document.querySelectorAll('.lang-btn').forEach(b=>{b.addEventListener('click',()=>switchLang(b.dataset.lang))});
+window.addEventListener('scroll',()=>{const d=document.documentElement;document.getElementById('progressBar').style.width=(d.scrollTop/(d.scrollHeight-d.clientHeight))*100+'%';document.getElementById('mainNav').classList.toggle('scrolled',d.scrollTop>60)});
+</script>
+</body>
+</html>

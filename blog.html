@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HARA — Blog</title>
+<meta name="description" content="HARA Coffee Lab Blog — Ciencia, filosofía y personas detrás del Cold Universe.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400&family=Noto+Sans+KR:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--cloud-milk:#F9F8F6;--cold-brew:#0E0E10;--cacao:#3A2B23;--copper:#B07A5E;--copper-light:#C4957A;--warm-stone:#E8E2DA;--sage:#8A9A7B;--ice:#a0c8e0;--ice-deep:#5a8aa0}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;font-size:16px}
+body{font-family:'DM Sans',sans-serif;background:var(--cloud-milk);color:var(--cold-brew);line-height:1.7;-webkit-font-smoothing:antialiased}
+
+nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:0 48px;height:72px;display:flex;align-items:center;justify-content:space-between;background:rgba(14,14,16,0.88);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
+.nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+.nav-logo img{height:28px;width:auto;filter:brightness(2.5)}
+.nav-logo-text{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:600;letter-spacing:6px;color:var(--cloud-milk)}
+.nav-logo-text span{color:var(--copper)}
+.nav-right{display:flex;gap:24px;align-items:center}
+.nav-back{font-size:12px;font-weight:500;letter-spacing:2px;text-transform:uppercase;color:rgba(249,248,246,0.6);text-decoration:none;transition:color 0.3s}
+.nav-back:hover{color:var(--cloud-milk)}
+.lang-sw{display:flex;gap:2px;background:rgba(249,248,246,0.06);border-radius:4px;padding:2px}
+.lb{font-size:10px;font-weight:500;letter-spacing:1.5px;text-transform:uppercase;color:rgba(249,248,246,0.35);background:transparent;border:none;padding:6px 10px;cursor:pointer;transition:all 0.3s;border-radius:3px;font-family:'DM Sans',sans-serif}
+.lb:hover{color:rgba(249,248,246,0.7)}
+.lb.on{color:var(--cloud-milk);background:rgba(249,248,246,0.1)}
+
+.blog-hero{padding:160px 48px 80px;background:var(--cold-brew);text-align:center;position:relative;overflow:hidden}
+.blog-hero::after{content:'';position:absolute;bottom:-10%;left:50%;transform:translateX(-50%);width:80%;height:60%;background:radial-gradient(ellipse,rgba(176,122,94,0.06) 0%,transparent 65%);pointer-events:none}
+.blog-hero-content{position:relative;z-index:2}
+.blog-hero-label{font-size:10px;font-weight:500;letter-spacing:4px;text-transform:uppercase;color:var(--copper);margin-bottom:24px}
+.blog-hero-title{font-family:'Cormorant Garamond',serif;font-size:clamp(36px,5vw,64px);font-weight:300;color:var(--cloud-milk);letter-spacing:4px;margin-bottom:16px}
+.blog-hero-sub{font-size:13px;font-weight:300;color:rgba(249,248,246,0.4);letter-spacing:1.5px;max-width:520px;margin:0 auto}
+
+.blog-section{padding:80px 48px 40px;max-width:1200px;margin:0 auto}
+.pillar-header{display:flex;align-items:baseline;gap:16px;margin-bottom:40px}
+.pillar-tag{font-size:9px;font-weight:500;letter-spacing:3px;text-transform:uppercase;padding:4px 12px;border-radius:2px}
+.pillar-tag-ciencia{color:var(--copper);background:rgba(176,122,94,0.08)}
+.pillar-tag-alma{color:var(--ice-deep);background:rgba(90,138,160,0.08)}
+.pillar-tag-gente{color:var(--sage);background:rgba(138,154,123,0.1)}
+.pillar-name{font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:300;color:var(--cacao)}
+.pillar-count{font-size:11px;color:rgba(58,43,35,0.3);letter-spacing:1px}
+
+.post-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:24px;margin-bottom:72px}
+
+.post-card{background:white;border:1px solid rgba(58,43,35,0.06);padding:36px 32px;transition:all 0.4s;text-decoration:none;display:block;position:relative}
+.post-card:hover{transform:translateY(-4px);box-shadow:0 16px 48px rgba(58,43,35,0.08);border-color:rgba(176,122,94,0.15)}
+.post-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;opacity:0;transition:opacity 0.4s}
+.post-card:hover::before{opacity:1}
+.post-card.ciencia::before{background:var(--copper)}
+.post-card.alma::before{background:var(--ice-deep)}
+
+.post-meta{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+.post-series{font-size:10px;font-weight:500;letter-spacing:2px;text-transform:uppercase;color:var(--copper)}
+.post-time{font-size:11px;color:rgba(58,43,35,0.3)}
+.post-title{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:400;color:var(--cacao);line-height:1.3;margin-bottom:12px}
+.post-desc{font-size:13px;font-weight:300;color:rgba(58,43,35,0.5);line-height:1.8}
+.post-arrow{position:absolute;bottom:32px;right:32px;font-size:14px;color:rgba(176,122,94,0.3);transition:all 0.3s}
+.post-card:hover .post-arrow{color:var(--copper);transform:translateX(4px)}
+
+.blog-empty{text-align:center;padding:60px 0;margin-bottom:72px}
+.blog-empty-icon{font-size:32px;margin-bottom:16px;opacity:0.3}
+.blog-empty-text{font-size:14px;font-weight:300;color:rgba(58,43,35,0.35);font-style:italic}
+
+footer{padding:48px;background:var(--cold-brew);color:var(--cloud-milk);text-align:center}
+.ft-logo{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:4px}
+.ft-logo img{height:22px;width:auto;filter:brightness(1.8)}
+.ft-logo-text{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:600;letter-spacing:6px}
+.ft-logo-text span{color:var(--copper)}
+.ft-tag{font-size:10px;font-weight:300;letter-spacing:2px;color:var(--ice-deep);margin-bottom:16px}
+.ft-copy{font-size:10px;color:rgba(249,248,246,0.2)}
+
+@media(max-width:768px){nav{padding:0 16px}.lb{padding:6px 8px;font-size:9px}.blog-hero{padding:120px 24px 60px}.blog-section{padding:40px 24px 20px}.post-grid{grid-template-columns:1fr}.post-card{padding:28px 24px}footer{padding:32px 24px}}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo"><img src="logo-nav.png" alt="HARA"><span class="nav-logo-text">H<span>A</span>R<span>A</span></span></a>
+  <div class="nav-right">
+    <a href="index.html" class="nav-back" id="n1">← Inicio</a>
+    <div class="lang-sw">
+      <button class="lb on" onclick="go('es')">ES</button>
+      <button class="lb" onclick="go('en')">EN</button>
+      <button class="lb" onclick="go('ko')">KO</button>
+      <button class="lb" onclick="go('pt')">PT</button>
+    </div>
+  </div>
+</nav>
+
+<section class="blog-hero">
+  <div class="blog-hero-content">
+    <div class="blog-hero-label">HARA Coffee Lab</div>
+    <h1 class="blog-hero-title">Blog</h1>
+    <p class="blog-hero-sub" id="t1">Ciencia, filosofía y personas detrás del Cold Universe</p>
+  </div>
+</section>
+
+<!-- CIENCIA -->
+<section class="blog-section">
+  <div class="pillar-header">
+    <span class="pillar-tag pillar-tag-ciencia">CIENCIA</span>
+    <span class="pillar-name" id="t2">Ciencia</span>
+    <span class="pillar-count">11 posts</span>
+  </div>
+  <div class="post-grid">
+
+    <a href="blog-post-terroir.html" class="post-card ciencia">
+      <div class="post-meta"><span class="post-series">Terroir</span><span class="post-time">15 min</span></div>
+      <div class="post-title" id="t3">Terroir: el lenguaje compartido del café y el vino</div>
+      <div class="post-desc" id="t4">Cómo el suelo, el clima y la altitud construyen el sabor antes de que intervenga cualquier ser humano.</div>
+      <span class="post-arrow">→</span>
+    </a>
+
+    <a href="blog-post-fire-ferment.html" class="post-card ciencia">
+      <div class="post-meta"><span class="post-series" id="t5">Tueste & Fermento</span><span class="post-time">14 min</span></div>
+      <div class="post-title" id="t6">Fuego y Fermento: la química compartida del tueste y la fermentación</div>
+      <div class="post-desc" id="t7">Dos procesos paralelos que transforman un grano verde en algo extraordinario.</div>
+      <span class="post-arrow">→</span>
+    </a>
+
+    <a href="blog-post-extraction.html" class="post-card ciencia">
+      <div class="post-meta"><span class="post-series" id="t8">Extracción</span><span class="post-time">12 min</span></div>
+      <div class="post-title" id="t9">La ciencia de la extracción</div>
+      <div class="post-desc" id="t10">Temperatura, presión, tiempo — las tres variables que definen cada taza.</div>
+      <span class="post-arrow">→</span>
+    </a>
+
+    <a href="blog-post-cdgf-00.html" class="post-card ciencia">
+      <div class="post-meta"><span class="post-series">CdGF 00</span><span class="post-time">5 min</span></div>
+      <div class="post-title" id="t11">¿Por qué el mismo grano sabe diferente?</div>
+      <div class="post-desc" id="t12">La pregunta que abre toda la serie sobre goteo frío.</div>
+      <span class="post-arrow">→</span>
+    </a>
+
+    <a href="blog-post-cdgf-01.html" class="post-card ciencia">
+      <div class="post-meta"><span class="post-series">CdGF 01</span><span class="post-time">13 min</span></div>
+      <div class="post-title" id="t13">Temperatura, Presión, Tiempo: el espacio de extracción del café</div>
+      <div class="post-desc" id="t14">Cómo cada método de extracción ocupa un lugar diferente en el espacio tridimensional.</div>
+      <span class="post-arrow">→</span>
+    </a>
+
+    <a href="blog-post-cdgf-02.html" class="post-card ciencia">
+      <div class="post-meta"><span class="post-series">CdGF 02</span><span class="post-time">12 min</span></div>
+      <div class="post-title" id="t15">Goteo vs Inmersión: dos caminos en frío</div>
+      <div class="post-desc" id="t16">Cold drip y cold brew parecen iguales — pero la física dice lo contrario.</div>
+      <span class="post-arrow">→</span>
+    </a>
+
+    <a href="blog-post-cdgf-03.html" class="post-card ciencia">
+      <div class="post-meta"><span class="post-series">CdGF 03</span><span class="post-time">11 min</span></div>
+      <div class="post-title" id="t17">CdGF1%: la filosofía de HARA</div>
+      <div class="post-desc" id="t18">Solo el 1% de lo que el agua toca se convierte en café. Eso lo cambia todo.</div>
+      <span class="post-arrow">→</span>
+    </a>
+
+    <a href="blog-post-flavor-factors-intro.html" class="post-card ciencia">
+      <div class="post-meta"><span class="post-series" id="t19">Sabor</span><span class="post-time">6 min</span></div>
+      <div class="post-title" id="t20">¿Qué decide el sabor de tu café?</div>
+      <div class="post-desc" id="t21">Cuatro factores, explicados de manera simple, para entender por qué cada café sabe distinto.</div>
+      <span class="post-arrow">→</span>
+    </a>
+
+    <a href="blog-post-flavor-factors-deep.html" class="post-card ciencia">
+      <div class="post-meta"><span class="post-series" id="t22">Sabor · Deep</span><span class="post-time">15 min</span></div>
+      <div class="post-title" id="t23">Anatomía completa del sabor del café</div>
+      <div class="post-desc" id="t24">La versión técnica: reacciones de Maillard, ácidos orgánicos, compuestos volátiles.</div>
+      <span class="post-arrow">→</span>
+    </a>
+
+    <a href="blog-post-how-to-taste.html" class="post-card ciencia">
+      <div class="post-meta"><span class="post-series" id="t25">Guía Práctica</span><span class="post-time">8 min</span></div>
+      <div class="post-title" id="t26">Cómo probar café (de verdad)</div>
+      <div class="post-desc" id="t27">Tu lengua ya sabe más de lo que pensás. Solo falta activar la atención.</div>
+      <span class="post-arrow">→</span>
+    </a>
+
+    <a href="blog-post-gelato-science.html" class="post-card ciencia">
+      <div class="post-meta"><span class="post-series" id="t28">Gelato</span><span class="post-time">10 min</span></div>
+      <div class="post-title" id="t29">La ciencia del gelato</div>
+      <div class="post-desc" id="t30">Overrun, cristales de hielo, y por qué el gelato artesanal y el helado industrial son cosas completamente diferentes.</div>
+      <span class="post-arrow">→</span>
+    </a>
+
+  </div>
+</section>
+
+<!-- ALMA -->
+<section class="blog-section">
+  <div class="pillar-header">
+    <span class="pillar-tag pillar-tag-alma">ALMA</span>
+    <span class="pillar-name" id="t31">Filosofía</span>
+    <span class="pillar-count">2 posts</span>
+  </div>
+  <div class="post-grid">
+
+    <a href="blog-post-cada-gota-cuenta.html" class="post-card alma">
+      <div class="post-meta"><span class="post-series" style="color:var(--ice-deep)">Cold Universe</span><span class="post-time">7 min</span></div>
+      <div class="post-title" id="t32">Cold Universe — El manifiesto de HARA</div>
+      <div class="post-desc" id="t33">Por qué construimos todo alrededor del frío. La filosofía detrás de cada producto.</div>
+      <span class="post-arrow">→</span>
+    </a>
+
+    <a href="blog-post-coffee-vivino-vision.html" class="post-card alma">
+      <div class="post-meta"><span class="post-series" style="color:var(--ice-deep)">Visión</span><span class="post-time">8 min</span></div>
+      <div class="post-title" id="t34">¿Por qué el café no tiene su Vivino?</div>
+      <div class="post-desc" id="t35">El vino tiene puntuación, comunidad, ritual. El café todavía no. ¿Qué falta?</div>
+      <span class="post-arrow">→</span>
+    </a>
+
+  </div>
+</section>
+
+<!-- GENTE -->
+<section class="blog-section">
+  <div class="pillar-header">
+    <span class="pillar-tag pillar-tag-gente">GENTE</span>
+    <span class="pillar-name" id="t36">Personas</span>
+    <span class="pillar-count">1 post</span>
+  </div>
+  <div class="post-grid">
+
+    <a href="blog-post-logo-story.html" class="post-card" style="border-color:rgba(138,154,123,0.1)">
+      <div class="post-meta"><span class="post-series" style="color:var(--sage)">Logo</span><span class="post-time">7 min</span></div>
+      <div class="post-title" id="t32b">La historia detrás de nuestro logo</div>
+      <div class="post-desc" id="t33b">Un croquis a mano, una amistad inesperada, y la decisión de comprimir toda una identidad en un solo símbolo.</div>
+      <span class="post-arrow">→</span>
+    </a>
+
+  </div>
+</section>
+
+<footer>
+  <div class="ft-logo"><img src="logo-nav.png" alt="HARA"><span class="ft-logo-text">H<span>A</span>R<span>A</span></span></div>
+  <div class="ft-tag">Cold Universe</div>
+  <div class="ft-copy" id="t38">© 2026 ARCOPA S.A.S. — Todos los derechos reservados</div>
+</footer>
+
+<script>
+var D={
+es:["← Inicio","Ciencia, filosofía y personas detrás del Cold Universe","Ciencia","Terroir: el lenguaje compartido del café y el vino","Cómo el suelo, el clima y la altitud construyen el sabor antes de que intervenga cualquier ser humano.","Tueste & Fermento","Fuego y Fermento: la química compartida del tueste y la fermentación","Dos procesos paralelos que transforman un grano verde en algo extraordinario.","Extracción","La ciencia de la extracción","Temperatura, presión, tiempo — las tres variables que definen cada taza.","¿Por qué el mismo grano sabe diferente?","La pregunta que abre toda la serie sobre goteo frío.","Temperatura, Presión, Tiempo: el espacio de extracción del café","Cómo cada método de extracción ocupa un lugar diferente en el espacio tridimensional.","Goteo vs Inmersión: dos caminos en frío","Cold drip y cold brew parecen iguales — pero la física dice lo contrario.","CdGF1%: la filosofía de HARA","Solo el 1% de lo que el agua toca se convierte en café. Eso lo cambia todo.","Sabor","¿Qué decide el sabor de tu café?","Cuatro factores, explicados de manera simple, para entender por qué cada café sabe distinto.","Sabor · Deep","Anatomía completa del sabor del café","La versión técnica: reacciones de Maillard, ácidos orgánicos, compuestos volátiles.","Guía Práctica","Cómo probar café (de verdad)","Tu lengua ya sabe más de lo que pensás. Solo falta activar la atención.","Gelato","La ciencia del gelato","Overrun, cristales de hielo, y por qué el gelato artesanal y el helado industrial son cosas completamente diferentes.","Filosofía","Cold Universe — El manifiesto de HARA","Por qué construimos todo alrededor del frío. La filosofía detrás de cada producto.","¿Por qué el café no tiene su Vivino?","El vino tiene puntuación, comunidad, ritual. El café todavía no. ¿Qué falta?","Personas","La historia detrás de nuestro logo","Un croquis a mano, una amistad inesperada, y la decisión de comprimir toda una identidad en un solo símbolo.","© 2026 ARCOPA S.A.S. — Todos los derechos reservados"],
+en:["← Home","Science, philosophy, and people behind the Cold Universe","Science","Terroir: the shared language of coffee and wine","How soil, climate, and altitude build flavor before any human intervenes.","Roast & Ferment","Fire and Ferment: the shared chemistry of roasting and fermentation","Two parallel processes that transform a green bean into something extraordinary.","Extraction","The science of extraction","Temperature, pressure, time — the three variables that define every cup.","Why does the same bean taste different?","The question that opens the entire cold drip series.","Temperature, Pressure, Time: the extraction space of coffee","How each extraction method occupies a different place in three-dimensional space.","Drip vs Immersion: two paths in cold","Cold drip and cold brew seem the same — but physics says otherwise.","CdGF1%: the philosophy of HARA","Only 1% of what the water touches becomes coffee. That changes everything.","Flavor","What decides the flavor of your coffee?","Four factors, simply explained, to understand why every coffee tastes different.","Flavor · Deep","Complete anatomy of coffee flavor","The technical version: Maillard reactions, organic acids, volatile compounds.","Practical Guide","How to taste coffee (for real)","Your tongue already knows more than you think. You just need to activate attention.","Gelato","The science of gelato","Overrun, ice crystals, and why artisan gelato and industrial ice cream are completely different things.","Philosophy","Cold Universe — The HARA manifesto","Why we build everything around cold. The philosophy behind every product.","Why doesn't coffee have its Vivino?","Wine has scoring, community, ritual. Coffee still doesn't. What's missing?","People","The story behind our logo","A hand-drawn sketch, an unexpected friendship, and the decision to compress an entire identity into a single symbol.","© 2026 ARCOPA S.A.S. — All rights reserved"],
+ko:["← 홈","Cold Universe 뒤의 과학, 철학, 그리고 사람들","과학","테루아: 커피와 와인이 공유하는 언어","토양, 기후, 고도가 사람의 손이 닿기 전에 맛을 만드는 방법.","로스팅 & 발효","불과 발효: 로스팅과 발효의 공유 화학","녹색 생두를 특별한 것으로 바꾸는 두 가지 병렬 과정.","추출","추출의 과학","온도, 압력, 시간 — 모든 한 잔을 결정하는 세 가지 변수.","같은 원두가 왜 다른 맛이 날까?","냉점적 시리즈 전체를 여는 질문.","온도, 압력, 시간: 커피 추출의 3차원 공간","각 추출 방법이 3차원 공간에서 서로 다른 위치를 차지하는 방법.","점적 vs 침지: 차가운 두 갈래 길","냉점적과 콜드브루는 같아 보이지만 — 물리학은 다르다고 말합니다.","CdGF1%: HARA의 철학","물이 닿는 것의 1%만이 커피가 됩니다. 그것이 모든 것을 바꿉니다.","맛","당신의 커피 맛을 결정하는 것은?","네 가지 요소를 간단하게 설명합니다. 왜 모든 커피가 다른 맛인지 이해하기 위해.","맛 · 심화","커피 맛의 완전한 해부학","기술적 버전: 마이야르 반응, 유기산, 휘발성 화합물.","실전 가이드","커피를 (진짜로) 맛보는 법","당신의 혀는 이미 생각보다 많이 알고 있습니다. 주의를 활성화하기만 하면 됩니다.","젤라또","젤라또의 과학","오버런, 얼음 결정, 그리고 왜 아르티잔 젤라또와 공장 아이스크림은 완전히 다른 것인지.","철학","Cold Universe — HARA의 선언","왜 우리는 모든 것을 차가움 중심으로 만드는가. 모든 제품 뒤의 철학.","왜 커피에는 비비노가 없을까?","와인에는 점수, 커뮤니티, 리추얼이 있습니다. 커피에는 아직 없습니다. 무엇이 부족할까?","사람들","우리 로고 뒤의 이야기","손으로 그린 크로키, 예상치 못한 우정, 그리고 하나의 정체성을 하나의 심볼에 압축하기로 한 결정.","© 2026 ARCOPA S.A.S. — 모든 권리 보유"],
+pt:["← Início","Ciência, filosofia e pessoas por trás do Cold Universe","Ciência","Terroir: a linguagem compartilhada do café e do vinho","Como o solo, o clima e a altitude constroem o sabor antes de qualquer intervenção humana.","Torra & Fermentação","Fogo e Fermento: a química compartilhada da torra e da fermentação","Dois processos paralelos que transformam um grão verde em algo extraordinário.","Extração","A ciência da extração","Temperatura, pressão, tempo — as três variáveis que definem cada xícara.","Por que o mesmo grão tem sabor diferente?","A pergunta que abre toda a série sobre gotejo frio.","Temperatura, Pressão, Tempo: o espaço de extração do café","Como cada método de extração ocupa um lugar diferente no espaço tridimensional.","Gotejo vs Imersão: dois caminhos no frio","Cold drip e cold brew parecem iguais — mas a física diz o contrário.","CdGF1%: a filosofia da HARA","Apenas 1% do que a água toca se torna café. Isso muda tudo.","Sabor","O que decide o sabor do seu café?","Quatro fatores, explicados de forma simples, para entender por que cada café tem sabor diferente.","Sabor · Deep","Anatomia completa do sabor do café","A versão técnica: reações de Maillard, ácidos orgânicos, compostos voláteis.","Guia Prático","Como provar café (de verdade)","Sua língua já sabe mais do que você pensa. Só falta ativar a atenção.","Gelato","A ciência do gelato","Overrun, cristais de gelo, e por que gelato artesanal e sorvete industrial são coisas completamente diferentes.","Filosofia","Cold Universe — O manifesto da HARA","Por que construímos tudo ao redor do frio. A filosofia por trás de cada produto.","Por que o café não tem seu Vivino?","O vinho tem pontuação, comunidade, ritual. O café ainda não. O que falta?","Pessoas","A história por trás do nosso logo","Um croquis à mão, uma amizade inesperada e a decisão de comprimir toda uma identidade em um único símbolo.","© 2026 ARCOPA S.A.S. — Todos os direitos reservados"]
+};
+var ids=['n1','t1','t2','t3','t4','t5','t6','t7','t8','t9','t10','t11','t12','t13','t14','t15','t16','t17','t18','t19','t20','t21','t22','t23','t24','t25','t26','t27','t28','t29','t30','t31','t32','t33','t34','t35','t36','t32b','t33b','t38'];
+function go(lang){var d=D[lang];if(!d)return;document.documentElement.lang=lang;for(var i=0;i<ids.length;i++){var el=document.getElementById(ids[i]);if(el&&d[i])el.textContent=d[i]}var btns=document.querySelectorAll('.lb');for(var j=0;j<btns.length;j++){btns[j].className='lb'+(btns[j].textContent.trim().toLowerCase()===lang?' on':'')}try{localStorage.setItem('hara-lang',lang)}catch(e){}}
+try{var s=localStorage.getItem('hara-lang');if(s&&D[s])go(s)}catch(e){}
+</script>
+</body>
+</html>

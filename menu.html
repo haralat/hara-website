@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HARA — Menú Gelato</title>
+<meta name="description" content="HARA Artisan Gelato — Menú completo. Clásica, Eco del Café, Eco del Té.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400&family=Noto+Sans+KR:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--cloud-milk:#F9F8F6;--cold-brew:#0E0E10;--cacao:#3A2B23;--copper:#B07A5E;--copper-light:#C4957A;--warm-stone:#E8E2DA;--sage:#8A9A7B;--ice:#a0c8e0;--ice-deep:#5a8aa0}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;font-size:16px}
+body{font-family:'DM Sans',sans-serif;background:var(--cloud-milk);color:var(--cold-brew);line-height:1.7;-webkit-font-smoothing:antialiased}
+
+nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:0 48px;height:72px;display:flex;align-items:center;justify-content:space-between;background:rgba(14,14,16,0.88);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
+.nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+.nav-logo img{height:28px;width:auto;filter:brightness(2.5)}
+.nav-logo-text{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:600;letter-spacing:6px;color:var(--cloud-milk)}
+.nav-logo-text span{color:var(--copper)}
+.nav-right{display:flex;gap:24px;align-items:center}
+.nav-back{font-size:12px;font-weight:500;letter-spacing:2px;text-transform:uppercase;color:rgba(249,248,246,0.6);text-decoration:none;transition:color 0.3s}
+.nav-back:hover{color:var(--cloud-milk)}
+.lang-sw{display:flex;gap:2px;background:rgba(249,248,246,0.06);border-radius:4px;padding:2px}
+.lb{font-size:10px;font-weight:500;letter-spacing:1.5px;text-transform:uppercase;color:rgba(249,248,246,0.35);background:transparent;border:none;padding:6px 10px;cursor:pointer;transition:all 0.3s;border-radius:3px;font-family:'DM Sans',sans-serif}
+.lb:hover{color:rgba(249,248,246,0.7)}
+.lb.on{color:var(--cloud-milk);background:rgba(249,248,246,0.1)}
+
+.menu-hero{padding:160px 48px 80px;background:var(--cold-brew);text-align:center;position:relative;overflow:hidden}
+.menu-hero::after{content:'';position:absolute;bottom:-10%;left:50%;transform:translateX(-50%);width:80%;height:60%;background:radial-gradient(ellipse,rgba(90,138,160,0.08) 0%,transparent 65%);pointer-events:none}
+.menu-hero-content{position:relative;z-index:2}
+.menu-hero-logo{width:64px;height:auto;margin-bottom:28px;filter:brightness(2.2);opacity:0.8}
+.menu-hero-label{font-size:10px;font-weight:500;letter-spacing:4px;text-transform:uppercase;color:var(--copper);margin-bottom:24px}
+.menu-hero-title{font-family:'Cormorant Garamond',serif;font-size:clamp(36px,5vw,64px);font-weight:300;color:var(--cloud-milk);letter-spacing:4px;margin-bottom:16px}
+.menu-hero-sub{font-size:13px;font-weight:300;color:rgba(249,248,246,0.4);letter-spacing:1.5px;max-width:480px;margin:0 auto}
+
+.menu-section{padding:80px 48px 120px;background:var(--cloud-milk)}
+.menu-grid{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:repeat(3,1fr);gap:40px}
+
+.menu-card{background:white;padding:48px 36px;border:1px solid rgba(58,43,35,0.06);transition:all 0.4s;position:relative;overflow:hidden}
+.menu-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+.menu-card:nth-child(1)::before{background:var(--copper-light)}
+.menu-card:nth-child(2)::before{background:var(--ice-deep)}
+.menu-card:nth-child(3)::before{background:var(--sage)}
+.menu-card:hover{transform:translateY(-6px);box-shadow:0 20px 50px rgba(58,43,35,0.08);border-color:rgba(176,122,94,0.15)}
+
+.mc-icon{font-size:32px;margin-bottom:20px}
+.mc-title{font-family:'Cormorant Garamond',serif;font-size:30px;font-weight:400;color:var(--cacao);margin-bottom:6px}
+.mc-desc{font-size:11px;font-weight:400;letter-spacing:2px;text-transform:uppercase;color:rgba(58,43,35,0.35);margin-bottom:28px}
+.mc-line{width:28px;height:1px;margin-bottom:28px}
+.menu-card:nth-child(1) .mc-line{background:var(--copper-light)}
+.menu-card:nth-child(2) .mc-line{background:var(--ice-deep)}
+.menu-card:nth-child(3) .mc-line{background:var(--sage)}
+
+.mi{padding:14px 0;border-bottom:1px solid rgba(58,43,35,0.04);display:flex;justify-content:space-between;align-items:center}
+.mi:last-child{border-bottom:none}
+.mi-name{font-size:15px;font-weight:400;color:var(--cacao);letter-spacing:0.3px}
+.mi-sub{font-size:11px;font-weight:300;color:rgba(58,43,35,0.4);margin-top:2px}
+.badge{font-size:9px;font-weight:500;letter-spacing:1.5px;text-transform:uppercase;padding:3px 10px;border-radius:2px;white-space:nowrap}
+.b-sig{color:var(--copper);background:rgba(176,122,94,0.08)}
+.b-cold{color:var(--ice-deep);background:rgba(90,138,160,0.08)}
+.b-new{color:var(--sage);background:rgba(138,154,123,0.1)}
+
+.menu-note{text-align:center;padding:0 48px 80px;font-size:12px;font-weight:300;color:rgba(58,43,35,0.35);letter-spacing:1px}
+
+footer{padding:48px;background:var(--cold-brew);color:var(--cloud-milk);text-align:center}
+.ft-logo{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:4px}
+.ft-logo img{height:22px;width:auto;filter:brightness(1.8)}
+.ft-logo-text{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:600;letter-spacing:6px}
+.ft-logo-text span{color:var(--copper)}
+.ft-tag{font-size:10px;font-weight:300;letter-spacing:2px;color:var(--ice-deep);margin-bottom:16px}
+.ft-copy{font-size:10px;color:rgba(249,248,246,0.2)}
+
+@media(max-width:1024px){.menu-grid{grid-template-columns:1fr;max-width:500px}}
+@media(max-width:768px){nav{padding:0 16px}.lb{padding:6px 8px;font-size:9px}.menu-hero{padding:120px 24px 60px}.menu-section{padding:40px 24px 80px}.menu-card{padding:36px 28px}.menu-note{padding:0 24px 60px}footer{padding:32px 24px}}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo"><img src="logo-nav.png" alt="HARA"><span class="nav-logo-text">H<span>A</span>R<span>A</span></span></a>
+  <div class="nav-right">
+    <a href="index.html" class="nav-back" id="n1">← Inicio</a>
+    <div class="lang-sw">
+      <button class="lb on" onclick="go('es')">ES</button>
+      <button class="lb" onclick="go('en')">EN</button>
+      <button class="lb" onclick="go('ko')">KO</button>
+      <button class="lb" onclick="go('pt')">PT</button>
+    </div>
+  </div>
+</nav>
+
+<section class="menu-hero">
+  <div class="menu-hero-content">
+    <img src="logo-menu.png" alt="HARA" class="menu-hero-logo">
+    <div class="menu-hero-label" id="t1">Artisan Gelato</div>
+    <h1 class="menu-hero-title" id="t2">Nuestro Menú</h1>
+    <p class="menu-hero-sub" id="t3">Tres universos de sabor, una misma filosofía del frío</p>
+  </div>
+</section>
+
+<section class="menu-section">
+  <div class="menu-grid">
+
+    <div class="menu-card">
+      <div class="mc-icon">🍨</div>
+      <div class="mc-title">Clásica</div>
+      <div class="mc-desc" id="t4">Tradición reinventada</div>
+      <div class="mc-line"></div>
+      <div class="mi">
+        <div><div class="mi-name">Nubita Fresca</div><div class="mi-sub" id="t5">Crema de nube, frescura natural</div></div>
+        <span class="badge b-sig" id="b1">Signature</span>
+      </div>
+      <div class="mi">
+        <div><div class="mi-name">Crema Cookie</div><div class="mi-sub" id="t6">Base cremosa con trozos de cookie</div></div>
+      </div>
+      <div class="mi">
+        <div><div class="mi-name">Dulce de Leche</div><div class="mi-sub" id="t7">El clásico argentino, nuestra versión</div></div>
+      </div>
+      <div class="mi">
+        <div><div class="mi-name">DDL con Cookie</div><div class="mi-sub" id="t8">Dulce de leche con crocante de cookie</div></div>
+      </div>
+    </div>
+
+    <div class="menu-card">
+      <div class="mc-icon">☕</div>
+      <div class="mc-title">Eco del Café</div>
+      <div class="mc-desc" id="t9">Cold drip como base</div>
+      <div class="mc-line"></div>
+      <div class="mi">
+        <div><div class="mi-name">Café Coldbrew 6H</div><div class="mi-sub" id="t10">Nuestro cold drip puro en gelato</div></div>
+        <span class="badge b-cold" id="b2">Cold Drip</span>
+      </div>
+      <div class="mi">
+        <div><div class="mi-name">Café Cookie</div><div class="mi-sub" id="t11">Cold drip con trozos de cookie</div></div>
+      </div>
+      <div class="mi">
+        <div><div class="mi-name">Caramel Macchiato</div><div class="mi-sub" id="t12">Café, caramelo, leche vaporizada</div></div>
+      </div>
+      <div class="mi">
+        <div><div class="mi-name">CAMACU</div><div class="mi-sub" id="t13">Caramel + Macchiato + Cookie</div></div>
+        <span class="badge b-new" id="b3">Nuevo</span>
+      </div>
+    </div>
+
+    <div class="menu-card">
+      <div class="mc-icon">🍵</div>
+      <div class="mc-title">Eco del Té</div>
+      <div class="mc-desc" id="t14">Infusiones de Oriente</div>
+      <div class="mc-line"></div>
+      <div class="mi">
+        <div><div class="mi-name">Matcha Latte</div><div class="mi-sub" id="t15">Matcha japonés ceremonial</div></div>
+        <span class="badge b-new" id="b4">Nuevo</span>
+      </div>
+      <div class="mi">
+        <div><div class="mi-name">MJ23</div><div class="mi-sub" id="t16">Matcha + jazmín, equilibrio perfecto</div></div>
+      </div>
+      <div class="mi">
+        <div><div class="mi-name">Earl Grey Latte</div><div class="mi-sub" id="t17">Bergamota y cremosidad</div></div>
+      </div>
+      <div class="mi">
+        <div><div class="mi-name">Rooibos Caramel</div><div class="mi-sub" id="t18">Rooibos sudafricano con caramelo</div></div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<p class="menu-note" id="t19">Menú sujeto a disponibilidad y temporada · Todos los sabores elaborados artesanalmente en Salta</p>
+
+<footer>
+  <div class="ft-logo"><img src="logo-nav.png" alt="HARA"><span class="ft-logo-text">H<span>A</span>R<span>A</span></span></div>
+  <div class="ft-tag">Cold Universe</div>
+  <div class="ft-copy" id="t20">© 2026 ARCOPA S.A.S. — Todos los derechos reservados</div>
+</footer>
+
+<script>
+var D = {
+  es: ["← Inicio","Artisan Gelato","Nuestro Menú","Tres universos de sabor, una misma filosofía del frío","Tradición reinventada","Crema de nube, frescura natural","Base cremosa con trozos de cookie","El clásico argentino, nuestra versión","Dulce de leche con crocante de cookie","Cold drip como base","Nuestro cold drip puro en gelato","Cold drip con trozos de cookie","Café, caramelo, leche vaporizada","Caramel + Macchiato + Cookie","Infusiones de Oriente","Matcha japonés ceremonial","Matcha + jazmín, equilibrio perfecto","Bergamota y cremosidad","Rooibos sudafricano con caramelo","Menú sujeto a disponibilidad y temporada · Todos los sabores elaborados artesanalmente en Salta","© 2026 ARCOPA S.A.S. — Todos los derechos reservados","Signature","Cold Drip","Nuevo","Nuevo"],
+  en: ["← Home","Artisan Gelato","Our Menu","Three flavor universes, one philosophy of cold","Tradition reimagined","Cloud cream, natural freshness","Creamy base with cookie pieces","The Argentine classic, our version","Dulce de leche with crunchy cookie","Cold drip as base","Our pure cold drip in gelato","Cold drip with cookie pieces","Coffee, caramel, steamed milk","Caramel + Macchiato + Cookie","Eastern infusions","Japanese ceremonial matcha","Matcha + jasmine, perfect balance","Bergamot and creaminess","South African rooibos with caramel","Menu subject to availability and season · All flavors handcrafted in Salta","© 2026 ARCOPA S.A.S. — All rights reserved","Signature","Cold Drip","New","New"],
+  ko: ["← 홈","아르티잔 젤라또","메뉴","세 가지 맛의 우주, 하나의 차가운 철학","전통의 재해석","구름 크림, 자연의 상쾌함","크리미 베이스와 쿠키 조각","아르헨티나의 클래식, 우리만의 버전","둘세 데 레체와 크런치 쿠키","냉점적 커피 베이스","순수한 냉점적 커피 젤라또","냉점적 커피와 쿠키 조각","커피, 캐러멜, 스팀 밀크","캐러멜 + 마끼아또 + 쿠키","동양의 인퓨전","일본 세레모니얼 말차","말차 + 재스민, 완벽한 균형","베르가못과 크리미함","남아프리카 루이보스와 캐러멜","메뉴는 계절과 재고에 따라 변경될 수 있습니다 · 모든 맛은 살타에서 수제로 만듭니다","© 2026 ARCOPA S.A.S. — 모든 권리 보유","시그니처","냉점적","신메뉴","신메뉴"],
+  pt: ["← Início","Artisan Gelato","Nosso Cardápio","Três universos de sabor, uma mesma filosofia do frio","Tradição reinventada","Creme de nuvem, frescor natural","Base cremosa com pedaços de cookie","O clássico argentino, nossa versão","Doce de leite com crocante de cookie","Cold drip como base","Nosso cold drip puro em gelato","Cold drip com pedaços de cookie","Café, caramelo, leite vaporizado","Caramel + Macchiato + Cookie","Infusões do Oriente","Matcha japonês cerimonial","Matcha + jasmim, equilíbrio perfeito","Bergamota e cremosidade","Rooibos sul-africano com caramelo","Cardápio sujeito a disponibilidade e temporada · Todos os sabores feitos artesanalmente em Salta","© 2026 ARCOPA S.A.S. — Todos os direitos reservados","Signature","Cold Drip","Novo","Novo"]
+};
+var ids = ['n1','t1','t2','t3','t4','t5','t6','t7','t8','t9','t10','t11','t12','t13','t14','t15','t16','t17','t18','t19','t20','b1','b2','b3','b4'];
+function go(lang) {
+  var d = D[lang];
+  if (!d) return;
+  document.documentElement.lang = lang;
+  for (var i = 0; i < ids.length; i++) {
+    var el = document.getElementById(ids[i]);
+    if (el && d[i]) el.textContent = d[i];
+  }
+  var btns = document.querySelectorAll('.lb');
+  for (var j = 0; j < btns.length; j++) {
+    btns[j].className = 'lb' + (btns[j].textContent.trim().toLowerCase() === lang ? ' on' : '');
+  }
+  try { localStorage.setItem('hara-lang', lang); } catch(e) {}
+}
+try { var s = localStorage.getItem('hara-lang'); if (s && D[s]) go(s); } catch(e) {}
+</script>
+</body>
+</html>

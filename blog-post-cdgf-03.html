@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HARA Blog — CdGF1%: la filosofía de HARA</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Noto+Sans+KR:wght@200;300;400;500;600&family=Noto+Sans:wght@200;300;400;500;600&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+:root{--espresso:#1a1210;--crema:#d4a574;--cream:#f5efe6;--warm-white:#faf8f4;--roast-dark:#2c1f1a;--roast-mid:#6b4226;--copper:#b87333;--sage:#8a9a7b;--water-blue:#7ba0b8;--ice-blue:#a8c8d8;--cold-blue:#4a7a9b;--hara-gold:#c9a84c;--hara-glow:rgba(201,168,76,.12);--text-primary:#1a1210;--text-secondary:#6b5b50;--text-light:#a09080;--border-light:rgba(212,165,116,.15)}
+*{margin:0;padding:0;box-sizing:border-box}html{scroll-behavior:smooth;font-size:16px}
+body{background:var(--warm-white);color:var(--text-primary);font-family:'Noto Sans','Noto Sans KR',sans-serif;font-weight:300;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:var(--warm-white)}::-webkit-scrollbar-thumb{background:var(--crema);border-radius:3px}
+nav{position:fixed;top:0;left:0;right:0;z-index:200;padding:1.2rem 3rem;display:flex;justify-content:space-between;align-items:center;transition:all .5s ease}
+nav.scrolled{background:rgba(250,248,244,.92);backdrop-filter:blur(24px);padding:.9rem 3rem;box-shadow:0 1px 0 rgba(26,18,16,.06)}
+.nav-left{display:flex;align-items:center;gap:2.5rem}
+.nav-logo{font-family:'Cormorant Garamond',serif;font-weight:500;letter-spacing:.15em;color:var(--text-primary);text-decoration:none;font-size:1.3rem;line-height:1}
+.nav-logo small{display:block;font-weight:300;font-size:.55rem;letter-spacing:.3em;color:var(--text-secondary);margin-top:2px}
+.nav-back{font-size:.72rem;font-weight:400;letter-spacing:.08em;color:var(--text-secondary);text-decoration:none;display:flex;align-items:center;gap:.4rem;transition:color .3s}
+.nav-back:hover{color:var(--espresso)}
+.lang-switcher{display:flex;border:1px solid var(--border-light);border-radius:6px;overflow:hidden}
+.lang-btn{font-family:'JetBrains Mono',monospace;font-size:.6rem;letter-spacing:.1em;padding:.4rem .65rem;border:none;background:transparent;color:var(--text-light);cursor:pointer;transition:all .3s}
+.lang-btn:not(:last-child){border-right:1px solid var(--border-light)}
+.lang-btn.active{background:var(--espresso);color:var(--cream)}
+.lang-btn:hover:not(.active){background:rgba(212,165,116,.08);color:var(--roast-mid)}
+.progress-bar{position:fixed;top:0;left:0;height:2px;z-index:300;width:0%;background:linear-gradient(to right,var(--cold-blue),var(--hara-gold),var(--crema));transition:width .1s linear}
+
+/* HERO — special for finale */
+.post-hero{height:90vh;min-height:600px;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;background:var(--espresso)}
+.post-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 50%,rgba(201,168,76,.1),transparent 55%),radial-gradient(ellipse at 25% 75%,rgba(74,122,155,.08),transparent 50%),radial-gradient(ellipse at 75% 25%,rgba(212,165,116,.06),transparent 50%)}
+.hero-content{position:relative;z-index:2;text-align:center;padding:2rem;max-width:850px}
+.hero-overline{font-family:'JetBrains Mono',monospace;font-size:.55rem;letter-spacing:.5em;margin-bottom:2rem;opacity:0;animation:fadeUp .8s ease .3s forwards}
+.hero-overline .series-tag{color:var(--hara-gold);border:1px solid rgba(201,168,76,.3);padding:.25rem .6rem;border-radius:4px;margin-right:.8rem}
+.hero-overline .series-num{color:rgba(245,239,230,.35)}
+.hero-title{font-family:'Cormorant Garamond',serif;font-size:clamp(2.8rem,6vw,5.5rem);font-weight:300;line-height:1.05;color:var(--cream);margin-bottom:.5rem;opacity:0;animation:fadeUp 1s ease .5s forwards}
+.hero-title .accent{color:var(--hara-gold)}
+.hero-subtitle{font-family:'Cormorant Garamond',serif;font-size:clamp(1.1rem,2.5vw,1.6rem);font-weight:300;font-style:italic;color:rgba(245,239,230,.35);margin-bottom:2rem;opacity:0;animation:fadeUp .8s ease .7s forwards}
+.hero-sub{font-size:1rem;line-height:1.8;color:rgba(245,239,230,.5);max-width:520px;margin:0 auto;opacity:0;animation:fadeUp .8s ease .9s forwards}
+.hero-meta{margin-top:2.5rem;display:flex;justify-content:center;gap:1.5rem;opacity:0;animation:fadeUp .8s ease 1.1s forwards}
+.hero-badge{font-family:'JetBrains Mono',monospace;font-size:.55rem;letter-spacing:.2em;padding:.35rem .8rem;border-radius:4px;background:rgba(201,168,76,.15);color:var(--hara-gold)}
+.hero-date,.hero-read{font-family:'JetBrains Mono',monospace;font-size:.6rem;color:rgba(245,239,230,.35);letter-spacing:.1em}
+
+/* Drop animation */
+.hero-drop-anim{position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:2px;height:120px;opacity:0;animation:fadeUp .8s ease 1.3s forwards}
+.hero-drop-anim::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:6px;height:6px;border-radius:50%;background:var(--hara-gold);animation:dropFall 3s ease-in-out infinite}
+.hero-drop-anim::after{content:'';position:absolute;top:0;left:0;right:0;bottom:0;background:linear-gradient(to bottom,var(--hara-gold),transparent);opacity:.15}
+@keyframes dropFall{0%{top:0;opacity:0}10%{opacity:1}90%{opacity:1}100%{top:100%;opacity:0}}
+
+.article-body{max-width:720px;margin:0 auto;padding:5rem 2rem 4rem}
+.article-body h2{font-family:'Cormorant Garamond',serif;font-size:1.9rem;font-weight:400;color:var(--espresso);margin:4rem 0 1.2rem;line-height:1.25}
+.article-body h2:first-child{margin-top:0}
+.article-body h3{font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:500;color:var(--roast-mid);margin:2.5rem 0 .8rem}
+.article-body p{font-size:.92rem;line-height:2.05;color:var(--text-secondary);margin-bottom:1.3rem}
+.article-body p strong{color:var(--text-primary);font-weight:500}
+.article-body p em.t{font-style:italic;color:var(--copper);font-family:'Cormorant Garamond',serif;font-size:1.02em}
+.sep{width:50px;height:1px;background:linear-gradient(to right,var(--cold-blue),var(--hara-gold),var(--crema));margin:3.5rem auto;opacity:.5}
+
+.series-nav{margin:3rem -2rem;padding:2rem 2.5rem;background:rgba(201,168,76,.04);border:1px solid rgba(201,168,76,.12);border-radius:16px;display:flex;align-items:center;gap:1.5rem}
+.sn-badge{font-family:'JetBrains Mono',monospace;font-size:.5rem;letter-spacing:.2em;color:var(--hara-gold);background:var(--espresso);padding:.4rem .8rem;border-radius:5px;white-space:nowrap}
+.sn-steps{display:flex;gap:.5rem;align-items:center;flex-wrap:wrap}
+.sn-step{font-size:.7rem;padding:.35rem .7rem;border-radius:5px;border:1px solid var(--border-light);color:var(--text-light);text-decoration:none;transition:all .3s}
+.sn-step.active{background:var(--espresso);color:var(--cream);border-color:var(--espresso)}
+.sn-step:not(.active):hover{border-color:var(--crema);color:var(--text-primary)}
+.sn-arrow{color:var(--text-light);font-size:.6rem}
+
+/* CHAIN VISUAL */
+.chain-visual{margin:3rem -2rem;padding:3rem 2.5rem;background:var(--espresso);border-radius:20px;color:var(--cream);position:relative;overflow:hidden}
+.chain-visual::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 80%,rgba(201,168,76,.06),transparent 55%)}
+.ch-inner{position:relative;z-index:1}
+.ch-label{font-family:'JetBrains Mono',monospace;font-size:.55rem;letter-spacing:.3em;color:var(--hara-gold);margin-bottom:2rem}
+.chain-flow{display:flex;align-items:stretch;gap:0;overflow-x:auto;padding-bottom:.5rem}
+.chain-step{flex:1;min-width:140px;padding:1.5rem 1rem;text-align:center;position:relative;border:1px solid rgba(255,255,255,.06);border-radius:14px;margin:0 .25rem;background:rgba(255,255,255,.02)}
+.chain-step.step-gold{border-color:rgba(201,168,76,.2);background:rgba(201,168,76,.04)}
+.cs-temp{font-family:'JetBrains Mono',monospace;font-size:1.4rem;font-weight:400;margin-bottom:.2rem}
+.cs-temp.temp-cold{color:var(--ice-blue)}
+.cs-temp.temp-zero{color:var(--hara-gold)}
+.cs-temp.temp-neg{color:var(--cold-blue)}
+.cs-name{font-family:'Cormorant Garamond',serif;font-size:.95rem;margin-bottom:.3rem}
+.cs-detail{font-size:.65rem;color:rgba(245,239,230,.35);line-height:1.5}
+.cs-arrow{position:absolute;right:-12px;top:50%;transform:translateY(-50%);color:rgba(245,239,230,.15);font-size:.8rem;z-index:2}
+.ch-note{font-size:.72rem;color:rgba(245,239,230,.35);line-height:1.7;margin-top:1.5rem;text-align:center}
+.ch-note strong{color:var(--hara-gold)}
+
+/* PHILOSOPHY CARDS */
+.phil-grid{margin:3rem -2rem;display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem}
+.phil-card{padding:2rem;border-radius:16px;border:1px solid var(--border-light);background:white;text-align:center}
+.phil-card .pc-num{font-family:'Cormorant Garamond',serif;font-size:2.5rem;font-weight:300;color:var(--hara-gold);line-height:1;margin-bottom:.5rem}
+.phil-card h4{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:500;margin-bottom:.5rem}
+.phil-card p{font-size:.78rem;line-height:1.75;color:var(--text-secondary);margin-bottom:0}
+
+/* GELATO BRIDGE */
+.gelato-card{margin:3rem -2rem;padding:3rem 2.5rem;background:white;border:1px solid var(--border-light);border-radius:20px;position:relative;overflow:hidden}
+.gelato-card::before{content:'';position:absolute;top:-50%;right:-30%;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,var(--hara-glow),transparent);pointer-events:none}
+.gc-inner{position:relative;z-index:1}
+.gc-label{font-family:'JetBrains Mono',monospace;font-size:.55rem;letter-spacing:.3em;color:var(--hara-gold);margin-bottom:1.5rem}
+.gc-flow{display:grid;grid-template-columns:1fr auto 1fr auto 1fr;gap:1rem;align-items:center;margin:1.5rem 0}
+.gc-node{text-align:center;padding:1.5rem;border-radius:14px;border:1px solid var(--border-light)}
+.gc-node.node-highlight{border-color:rgba(201,168,76,.3);background:rgba(201,168,76,.03)}
+.gc-node .gn-icon{font-size:1.5rem;margin-bottom:.5rem}
+.gc-node h5{font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:500;margin-bottom:.2rem}
+.gc-node .gn-temp{font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--cold-blue);margin-bottom:.4rem}
+.gc-node p{font-size:.7rem;color:var(--text-secondary);line-height:1.5;margin-bottom:0}
+.gc-arrow{color:var(--text-light);font-size:1rem;text-align:center}
+
+/* MARKET VISION */
+.market-card{margin:3rem -2rem;padding:3rem 2.5rem;background:var(--espresso);border-radius:20px;color:var(--cream);position:relative;overflow:hidden}
+.market-card::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 50%,rgba(201,168,76,.08),transparent 55%)}
+.mk-inner{position:relative;z-index:1}
+.mk-label{font-family:'JetBrains Mono',monospace;font-size:.55rem;letter-spacing:.3em;color:var(--hara-gold);margin-bottom:2rem}
+.mk-hero-stat{text-align:center;margin-bottom:2rem}
+.mk-big{font-family:'Cormorant Garamond',serif;font-size:clamp(4rem,10vw,7rem);font-weight:300;color:var(--hara-gold);line-height:1}
+.mk-big-sub{font-family:'JetBrains Mono',monospace;font-size:.65rem;letter-spacing:.2em;color:rgba(245,239,230,.35);margin-top:.3rem}
+.mk-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin-top:2rem}
+.mk-item{text-align:center;padding:1.5rem;border:1px solid rgba(255,255,255,.06);border-radius:14px;background:rgba(255,255,255,.02)}
+.mk-item .mi-val{font-family:'JetBrains Mono',monospace;font-size:1.3rem;color:var(--crema);margin-bottom:.3rem}
+.mk-item .mi-label{font-size:.65rem;color:rgba(245,239,230,.35);line-height:1.5}
+.mk-note{font-size:.75rem;color:rgba(245,239,230,.4);line-height:1.8;margin-top:2rem;text-align:center}
+
+/* MEANING BLOCK */
+.meaning-block{margin:3rem -2rem;padding:2.5rem;background:white;border:1px solid var(--border-light);border-radius:20px}
+.mb-label{font-family:'JetBrains Mono',monospace;font-size:.55rem;letter-spacing:.3em;color:var(--hara-gold);margin-bottom:1.5rem}
+.mb-decode{display:grid;grid-template-columns:auto 1fr;gap:1rem .8rem;align-items:baseline}
+.mb-abbr{font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:500;color:var(--espresso);text-align:right}
+.mb-full{font-size:.88rem;color:var(--text-secondary);line-height:1.6;padding:.3rem 0}
+.mb-full strong{color:var(--text-primary)}
+
+/* CALLOUT */
+.callout{background:var(--espresso);color:var(--cream);border-radius:16px;padding:2.5rem;margin:2.5rem -2rem;position:relative;overflow:hidden}
+.callout::before{content:'';position:absolute;top:-40%;right:-20%;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,rgba(201,168,76,.08),transparent)}
+.callout .callout-label{font-family:'JetBrains Mono',monospace;font-size:.55rem;letter-spacing:.3em;color:var(--hara-gold);margin-bottom:1rem}
+.callout p{font-size:.85rem;line-height:1.9;color:rgba(245,239,230,.6);margin-bottom:0}
+.callout p strong{color:var(--crema)}
+
+/* MANIFESTO */
+.manifesto{margin:3rem -2rem;padding:4rem 3rem;background:var(--espresso);border-radius:24px;color:var(--cream);text-align:center;position:relative;overflow:hidden}
+.manifesto::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 50%,rgba(201,168,76,.06),transparent 50%)}
+.manifesto-inner{position:relative;z-index:1}
+.manifesto blockquote{font-family:'Cormorant Garamond',serif;font-size:clamp(1.3rem,3vw,2.2rem);font-weight:300;font-style:italic;line-height:1.5;color:var(--cream);max-width:600px;margin:0 auto 2rem;quotes:none}
+.manifesto .mf-sig{font-family:'JetBrains Mono',monospace;font-size:.55rem;letter-spacing:.3em;color:var(--hara-gold)}
+
+/* SERIES COMPLETE */
+.series-complete{margin:3rem -2rem;padding:2.5rem;background:rgba(201,168,76,.04);border:1px solid rgba(201,168,76,.15);border-radius:20px}
+.sc-label{font-family:'JetBrains Mono',monospace;font-size:.5rem;letter-spacing:.3em;color:var(--hara-gold);margin-bottom:1.5rem;text-align:center}
+.sc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}
+.sc-item{text-align:center;padding:1.2rem;border-radius:12px;border:1px solid var(--border-light);text-decoration:none;transition:all .3s}
+.sc-item:hover{border-color:var(--crema);background:rgba(212,165,116,.03)}
+.sc-num{font-family:'JetBrains Mono',monospace;font-size:.5rem;color:var(--hara-gold);letter-spacing:.15em;margin-bottom:.3rem}
+.sc-title{font-family:'Cormorant Garamond',serif;font-size:.95rem;color:var(--text-primary);font-weight:500}
+
+.author-card{max-width:720px;margin:0 auto 4rem;padding:2rem 2rem 0;display:flex;align-items:center;gap:1.5rem;border-top:1px solid var(--border-light)}
+.author-avatar{width:56px;height:56px;border-radius:50%;background:var(--espresso);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.author-avatar span{font-family:'Cormorant Garamond',serif;font-size:1.2rem;color:var(--crema);font-weight:500}
+.author-info h4{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:500;margin-bottom:.15rem}
+.author-info p{font-size:.78rem;color:var(--text-secondary);line-height:1.5}
+footer{padding:3rem 2rem;text-align:center}
+.footer-brand{font-family:'JetBrains Mono',monospace;font-size:.58rem;letter-spacing:.25em;color:var(--text-light)}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@media(max-width:768px){nav{padding:1rem 1.5rem}.post-hero{height:80vh;min-height:520px}.article-body{padding:3.5rem 1.5rem 3rem}.chain-visual,.phil-grid,.gelato-card,.market-card,.meaning-block,.callout,.manifesto,.series-nav,.series-complete{margin-left:-.5rem;margin-right:-.5rem}.phil-grid,.mk-grid,.sc-grid{grid-template-columns:1fr}.gc-flow{grid-template-columns:1fr;gap:.8rem}.gc-arrow{transform:rotate(90deg)}.chain-flow{flex-direction:column}.chain-step{min-width:auto}.cs-arrow{display:none}.chain-visual,.gelato-card,.market-card,.meaning-block,.callout,.manifesto{padding:2rem 1.5rem}.author-card{flex-direction:column;text-align:center;padding:1.5rem}.series-nav{flex-direction:column;align-items:flex-start}.hero-drop-anim{display:none}}
+</style>
+</head>
+<body>
+<div class="progress-bar" id="progressBar"></div>
+<nav id="mainNav"><div class="nav-left"><a href="/" class="nav-logo">HARA<small>COFFEE LAB</small></a><a href="blog-index.html" class="nav-back"><span>←</span> Blog</a></div><div class="lang-switcher"><button class="lang-btn active" data-lang="es">ES</button><button class="lang-btn" data-lang="ko">KO</button><button class="lang-btn" data-lang="en">EN</button></div></nav>
+
+<div class="post-hero">
+  <div class="hero-content">
+    <div class="hero-overline"><span class="series-tag">CdGF SERIES</span><span class="series-num">03 / 03 — FINAL</span></div>
+    <h1 class="hero-title" data-i18n="ht"><span class="accent">CdGF1%</span></h1>
+    <div class="hero-subtitle" data-i18n="hst">la filosofía de HARA</div>
+    <p class="hero-sub" data-i18n="hs">De la gota al gelato. De Salta a Sudamérica. Cada decisión diseñada para que la molécula de aroma llegue intacta.</p>
+    <div class="hero-meta"><span class="hero-badge" data-i18n="hb">FILOSOFÍA</span><span class="hero-date">17 FEB 2026</span><span class="hero-read" data-i18n="hr">11 min lectura</span></div>
+  </div>
+  <div class="hero-drop-anim"></div>
+</div>
+
+<article class="article-body" id="articleBody">
+
+<!-- ══ SPANISH ══ -->
+<div class="lang-content" data-lang="es">
+
+<div class="series-nav"><div class="sn-badge">CdGF SERIES</div><div class="sn-steps"><a class="sn-step" href="blog-post-cdgf-01.html">01 · T, P, t</a><span class="sn-arrow">→</span><a class="sn-step" href="blog-post-cdgf-02.html">02 · Goteo vs Inmersión</a><span class="sn-arrow">→</span><span class="sn-step active">03 · CdGF1%</span></div></div>
+
+<h2>Decodificando CdGF1%</h2>
+
+<p>A lo largo de esta serie hemos construido un argumento científico paso a paso: la temperatura determina qué compuestos se extraen. La presión define el estado físico del extracto. El tiempo modula la profundidad de la extracción. Y dentro del cold brew, el goteo lento supera a la inmersión en selectividad molecular, retención de terpenos y pureza aromática.</p>
+
+<p>Ahora es momento de reunir todo esto en una sola declaración de principios — la razón por la que HARA existe y la visión que guía cada decisión que tomamos.</p>
+
+<div class="meaning-block">
+  <div class="mb-label">DECODIFICACIÓN</div>
+  <div class="mb-decode">
+    <div class="mb-abbr">C</div><div class="mb-full"><strong>Café</strong> — de especialidad, seleccionado por su perfil de terroir</div>
+    <div class="mb-abbr">d</div><div class="mb-full"><strong>de</strong></div>
+    <div class="mb-abbr">G</div><div class="mb-full"><strong>Goteo</strong> — extracción por goteo lento, 1 gota cada 1–2 segundos</div>
+    <div class="mb-abbr">F</div><div class="mb-full"><strong>en Frío</strong> — temperatura constante de 2–8°C, sin contacto con calor en ningún momento</div>
+    <div class="mb-abbr">1%</div><div class="mb-full"><strong>1% de cuota de mercado</strong> — el objetivo de HARA en el mercado de cold brew de especialidad en Sudamérica</div>
+  </div>
+</div>
+
+<p><em class="t">Café de Goteo en Frío</em>. No es solo el nombre de un producto — es un protocolo completo que describe exactamente cómo debe tratarse el grano desde la extracción hasta el paladar del consumidor. Y el "1%" es la medida de nuestra ambición: capturar el 1% del mercado de cold brew de especialidad en Sudamérica.</p>
+
+<div class="sep"></div>
+
+<h2>El principio de cero calor</h2>
+
+<p>La pregunta que motivó todo el diseño de HARA es simple: <strong>¿cómo hacemos llegar la molécula de aroma del grano al paladar del consumidor con la mínima degradación posible?</strong></p>
+
+<p>Cada vez que un compuesto aromático entra en contacto con calor, ocurren tres cosas: <strong>volatilización</strong> (se evapora al aire), <strong>oxidación</strong> (reacciona con oxígeno disuelto, perdiendo su identidad aromática) y <strong>transformación térmica</strong> (se descompone o se recombina en moléculas diferentes). Estas tres vías de degradación son dependientes de la temperatura — a mayor temperatura, mayor velocidad de degradación.</p>
+
+<p>Nuestra respuesta es radical: <strong>eliminar completamente el calor de la cadena</strong>. Desde el momento en que el agua toca el café hasta el momento en que el producto llega a la boca del consumidor, la temperatura nunca supera los 8°C. Nunca.</p>
+
+<div class="chain-visual">
+  <div class="ch-inner">
+    <div class="ch-label">LA CADENA DE FRÍO ABSOLUTA</div>
+    <div class="chain-flow">
+      <div class="chain-step">
+        <div class="cs-temp temp-cold">4°C</div>
+        <div class="cs-name">Agua</div>
+        <div class="cs-detail">Agua filtrada enfriada a 4°C antes de iniciar el goteo.</div>
+        <div class="cs-arrow">→</div>
+      </div>
+      <div class="chain-step step-gold">
+        <div class="cs-temp temp-cold">4–6°C</div>
+        <div class="cs-name">Goteo</div>
+        <div class="cs-detail">Extracción por goteo lento. 3–4 horas. ΔC máximo constante.</div>
+        <div class="cs-arrow">→</div>
+      </div>
+      <div class="chain-step">
+        <div class="cs-temp temp-cold">4°C</div>
+        <div class="cs-name">Recolección</div>
+        <div class="cs-detail">El extracto cae directamente a un recipiente refrigerado.</div>
+        <div class="cs-arrow">→</div>
+      </div>
+      <div class="chain-step step-gold">
+        <div class="cs-temp temp-cold">2–4°C</div>
+        <div class="cs-name">Almacenaje</div>
+        <div class="cs-detail">Maduración en frío 24h. Estabilización molecular.</div>
+        <div class="cs-arrow">→</div>
+      </div>
+      <div class="chain-step">
+        <div class="cs-temp temp-neg">−18°C</div>
+        <div class="cs-name">Gelato</div>
+        <div class="cs-detail">Incorporación directa a la base de gelato. Congelación.</div>
+      </div>
+    </div>
+    <div class="ch-note">Temperatura máxima en toda la cadena: <strong>6°C</strong>. Temperatura del agua en la extracción convencional: 93°C. Factor de reducción térmica: <strong>15x</strong>.</div>
+  </div>
+</div>
+
+<p>Esta cadena de frío absoluta tiene una consecuencia molecular directa. Los terpenos (linalol, geraniol) que dan al café sus notas florales y cítricas tienen puntos de ebullición entre 198–230°C, pero su presión de vapor a 4°C es prácticamente nula. A esta temperatura, <strong>no se evaporan</strong>. Los ésteres y aldehídos aromáticos volátiles que normalmente se pierden en el vapor de un espresso permanecen atrapados en la fase líquida. La oxidación se ralentiza exponencialmente (la regla empírica es que cada 10°C de descenso reduce la velocidad de oxidación a la mitad).</p>
+
+<p>El resultado: cuando el cold brew por goteo se incorpora a la base del gelato y se congela a −18°C, los compuestos aromáticos quedan <strong>criopreservados</strong> en la matriz de hielo, protegidos de la volatilización, la oxidación y la transformación térmica. Es la versión gastronómica de una cápsula del tiempo molecular.</p>
+
+<div class="sep"></div>
+
+<h2>Los tres pilares de CdGF</h2>
+
+<div class="phil-grid">
+  <div class="phil-card">
+    <div class="pc-num">I</div>
+    <h4>Selectividad</h4>
+    <p>Extraer solo los compuestos deseables. El goteo lento en frío actúa como un filtro molecular que separa ácidos suaves, azúcares, terpenos y microvolátiles de los polifenoles amargos y taninos astringentes. Menos es más: lo que no se extrae es tan importante como lo que sí.</p>
+  </div>
+  <div class="phil-card">
+    <div class="pc-num">II</div>
+    <h4>Preservación</h4>
+    <p>Cero calor, cero volatilización. Desde la primera gota hasta la última cucharada de gelato, la cadena de frío se mantiene intacta. La molécula que sale del grano es la misma que llega al paladar — sin desvíos térmicos, sin pérdidas al aire, sin oxidación.</p>
+  </div>
+  <div class="phil-card">
+    <div class="pc-num">III</div>
+    <h4>Fidelidad</h4>
+    <p>El producto final debe ser fiel al origen. Un gelato de café hecho con CdGF debe saber al terroir del grano — a la altitud, al suelo, a la variedad — no a un genérico "sabor a café". La fidelidad aromática es nuestro estándar de calidad.</p>
+  </div>
+</div>
+
+<div class="sep"></div>
+
+<h2>Del goteo al gelato: la aplicación</h2>
+
+<p>¿Por qué gelato? Porque el gelato artesanal es el <strong>vehículo perfecto</strong> para la cadena de frío absoluta. Es el único formato de consumo masivo donde el producto permanece frío desde la producción hasta el momento exacto en que toca la lengua del consumidor. No hay recalentamiento, no hay servido en taza caliente, no hay exposición al vapor.</p>
+
+<div class="gelato-card">
+  <div class="gc-inner">
+    <div class="gc-label">DE LA GOTA AL PALADAR</div>
+    <div class="gc-flow">
+      <div class="gc-node node-highlight">
+        <div class="gn-icon">💧</div>
+        <h5>Goteo en frío</h5>
+        <div class="gn-temp">4°C · 3–4 h</div>
+        <p>Extracto de máxima pureza aromática. Terpenos intactos.</p>
+      </div>
+      <div class="gc-arrow">→</div>
+      <div class="gc-node">
+        <div class="gn-icon">🥛</div>
+        <h5>Base de gelato</h5>
+        <div class="gn-temp">4°C · Mezcla en frío</div>
+        <p>Incorporación directa sin pasteurización separada del extracto.</p>
+      </div>
+      <div class="gc-arrow">→</div>
+      <div class="gc-node node-highlight">
+        <div class="gn-icon">🍨</div>
+        <h5>Gelato servido</h5>
+        <div class="gn-temp">−14°C · Tu paladar</div>
+        <p>Los terpenos se liberan al derretirse en la boca. Aroma fiel al origen.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<p>El momento de verdad ocurre cuando el gelato se derrite en la boca. La temperatura pasa de −14°C a 37°C (temperatura corporal) en segundos. Este gradiente térmico libera los compuestos volátiles criopreservados <strong>directamente en la cavidad oral y nasal</strong>, donde los receptores olfativos los detectan con máxima eficiencia. Es como abrir una cápsula del tiempo: los terpenos, ésteres y aldehídos que fueron capturados por el goteo frío y preservados por la congelación se liberan exactamente donde deben — en tu nariz, no en el aire de la cocina.</p>
+
+<p>Esto es algo que ningún otro método de preparación puede lograr. Un café caliente pierde sus volátiles al aire antes de llegar a tu boca. Un cold brew líquido los preserva mejor, pero al servirlo a temperatura ambiente ya comienza la volatilización. Solo el gelato mantiene la cadena de frío perfecta hasta el instante preciso de la liberación sensorial.</p>
+
+<div class="sep"></div>
+
+<h2>CdGF1%: la visión de mercado</h2>
+
+<p>El "1%" de CdGF1% no es arbitrario. Es un objetivo calculado basado en la convicción de que el cold brew de especialidad por goteo es una categoría con enorme potencial de crecimiento en Sudamérica — un continente que produce algunos de los mejores cafés del mundo pero que aún no ha desarrollado plenamente su cultura de cold brew de especialidad.</p>
+
+<div class="market-card">
+  <div class="mk-inner">
+    <div class="mk-label">LA VISIÓN</div>
+    <div class="mk-hero-stat">
+      <div class="mk-big">1%</div>
+      <div class="mk-big-sub">CUOTA DE MERCADO · COLD BREW ESPECIALIDAD · SUDAMÉRICA</div>
+    </div>
+    <div class="mk-grid">
+      <div class="mk-item">
+        <div class="mi-val">Café</div>
+        <div class="mi-label">Cold brew de especialidad por goteo lento. CdGF como producto base.</div>
+      </div>
+      <div class="mk-item">
+        <div class="mi-val">Gelato</div>
+        <div class="mi-label">Gelato artesanal de café con cadena de frío absoluta. HARA gelato.</div>
+      </div>
+      <div class="mk-item">
+        <div class="mi-val">Método</div>
+        <div class="mi-label">Consultoría y licenciamiento del protocolo CdGF a cafeterías y heladerías.</div>
+      </div>
+    </div>
+    <div class="mk-note">HARA busca posicionar el Café de Goteo en Frío como la referencia de calidad en cold brew de especialidad en Sudamérica — comenzando desde Salta, Argentina, y expandiendo a las principales ciudades del continente.</div>
+  </div>
+</div>
+
+<p>La oportunidad es real. El mercado de cold brew en Latinoamérica está en etapa temprana de crecimiento, dominado por productos de inmersión masiva. La categoría de cold brew por goteo de especialidad — con trazabilidad, perfil de terroir y cadena de frío certificada — prácticamente no existe a escala comercial. HARA no compite con el cold brew genérico; crea una categoría nueva.</p>
+
+<div class="callout">
+  <div class="callout-label">POR QUÉ SALTA</div>
+  <p>Salta está en la intersección exacta. A 26°S de latitud, en la zona de superposición entre el cinturón del café y el cinturón del vino. Con acceso a granos de origen de Bolivia, Perú y Colombia. Con una tradición vinícola en Cafayate que ha educado al paladar local en la apreciación de terroir y complejidad aromática. Y con un clima árido de altitud que es ideal para la producción y conservación de gelato artesanal. HARA nació aquí porque <strong>aquí converge todo</strong> — la materia prima, el clima, la cultura sensorial y la geografía logística para servir al mercado sudamericano.</p>
+</div>
+
+<div class="sep"></div>
+
+<h2>Cada gota cuenta</h2>
+
+<p>Esta frase — <em class="t">Cada Gota Cuenta</em> — es el eslogan de HARA, pero también es una declaración técnica precisa. Cada gota de agua que cae sobre el lecho de café extrae con ΔC máximo. Cada gota que sale lleva terpenos, ácidos suaves y azúcares que ningún otro método preservaría con tanta fidelidad. Cada gota se incorpora a una cadena de frío que nunca se rompe. Y cada gota que llega al paladar del consumidor lleva disuelto el terroir completo del grano de origen.</p>
+
+<p>CdGF1% no es solo una meta de negocio. Es una ecuación que dice: si controlamos cada variable — temperatura, presión, tiempo, método de contacto, cadena de frío — podemos hacer que una molécula de linalol nacida en un cafeto de montaña llegue intacta a la lengua de alguien en Buenos Aires, São Paulo o Bogotá, dentro de una cucharada de gelato que sabe exactamente a lo que la tierra quiso decir.</p>
+
+<div class="manifesto">
+  <div class="manifesto-inner">
+    <blockquote data-i18n="mq">Creemos que el café merece el mismo respeto que el vino. Que el terroir debe sentirse en la taza. Que la ciencia es la herramienta para lograrlo. Y que cada gota — desde la primera que toca el grano hasta la última que toca tu paladar — cuenta.</blockquote>
+    <div class="mf-sig">HARA COFFEE LAB · SALTA, ARGENTINA</div>
+  </div>
+</div>
+
+<div class="series-complete">
+  <div class="sc-label">SERIE COMPLETA</div>
+  <div class="sc-grid">
+    <a class="sc-item" href="blog-post-cdgf-01.html"><div class="sc-num">01 / 03</div><div class="sc-title">Temperatura, Presión, Tiempo</div></a>
+    <a class="sc-item" href="blog-post-cdgf-02.html"><div class="sc-num">02 / 03</div><div class="sc-title">Goteo vs Inmersión</div></a>
+    <a class="sc-item" href="blog-post-cdgf-03.html"><div class="sc-num">03 / 03</div><div class="sc-title">CdGF1% · Filosofía HARA</div></a>
+  </div>
+</div>
+
+</div>
+
+<!-- ══ KOREAN ══ -->
+<div class="lang-content" data-lang="ko" style="display:none;">
+
+<div class="series-nav"><div class="sn-badge">CdGF 시리즈</div><div class="sn-steps"><a class="sn-step" href="blog-post-cdgf-01.html">01 · T, P, t</a><span class="sn-arrow">→</span><a class="sn-step" href="blog-post-cdgf-02.html">02 · 점적 vs 침출</a><span class="sn-arrow">→</span><span class="sn-step active">03 · CdGF1%</span></div></div>
+
+<h2>CdGF1% 해독하기</h2>
+
+<p>이 시리즈를 통해 우리는 단계별로 과학적 논증을 구축했습니다: 온도가 어떤 화합물이 추출되는지를 결정합니다. 압력이 추출물의 물리적 상태를 정의합니다. 시간이 추출의 깊이를 조절합니다. 그리고 콜드브루 내에서 점적식이 침출식을 분자 선택성, 테르펜 보존, 향미 순도에서 압도합니다.</p>
+
+<p>이제 이 모든 것을 하나의 원칙 선언으로 모을 때입니다 — HARA가 존재하는 이유와 모든 결정을 이끄는 비전.</p>
+
+<div class="meaning-block">
+  <div class="mb-label">해독</div>
+  <div class="mb-decode">
+    <div class="mb-abbr">C</div><div class="mb-full"><strong>Café</strong> — 테루아 프로파일로 선별된 스페셜티 커피</div>
+    <div class="mb-abbr">d</div><div class="mb-full"><strong>de</strong> — (~의)</div>
+    <div class="mb-abbr">G</div><div class="mb-full"><strong>Goteo</strong> — 1–2초에 1방울의 점적식 추출</div>
+    <div class="mb-abbr">F</div><div class="mb-full"><strong>en Frío</strong> — 2–8°C 항온, 어떤 시점에서도 열과 접촉 없음</div>
+    <div class="mb-abbr">1%</div><div class="mb-full"><strong>시장점유율 1%</strong> — 남미 스페셜티 콜드브루 시장에서 HARA의 목표</div>
+  </div>
+</div>
+
+<p><em class="t">Café de Goteo en Frío</em> — 냉점적 커피. 이것은 단순한 제품명이 아닙니다. 추출에서 소비자의 미각까지 원두가 어떻게 다루어져야 하는지를 정확히 기술하는 완전한 프로토콜입니다. 그리고 "1%"는 우리 야심의 척도: 남미 스페셜티 콜드브루 시장의 1%를 점유하는 것.</p>
+
+<div class="sep"></div>
+
+<h2>제로 히트 원칙</h2>
+
+<p>HARA의 모든 설계를 이끈 질문은 단순합니다: <strong>원두의 향기 분자를 최소한의 분해로 소비자의 미각까지 어떻게 전달할 것인가?</strong></p>
+
+<p>향기 화합물이 열과 접촉할 때마다 세 가지 일이 일어납니다: <strong>휘발</strong>(공기 중으로 증발), <strong>산화</strong>(용존 산소와 반응하여 향미 정체성 상실), <strong>열적 변환</strong>(분해되거나 다른 분자로 재결합). 이 세 가지 분해 경로는 모두 온도 의존적입니다 — 온도가 높을수록 분해 속도가 빨라집니다.</p>
+
+<p>우리의 답은 급진적입니다: <strong>체인에서 열을 완전히 제거하는 것</strong>. 물이 커피에 닿는 순간부터 제품이 소비자의 입에 도달하는 순간까지, 온도는 8°C를 넘지 않습니다. 단 한 번도.</p>
+
+<div class="chain-visual">
+  <div class="ch-inner">
+    <div class="ch-label">절대 콜드체인</div>
+    <div class="chain-flow">
+      <div class="chain-step">
+        <div class="cs-temp temp-cold">4°C</div>
+        <div class="cs-name">물</div>
+        <div class="cs-detail">점적 시작 전 4°C로 냉각된 여과수.</div>
+        <div class="cs-arrow">→</div>
+      </div>
+      <div class="chain-step step-gold">
+        <div class="cs-temp temp-cold">4–6°C</div>
+        <div class="cs-name">점적</div>
+        <div class="cs-detail">냉점적 추출. 3–4시간. 일정한 최대 ΔC.</div>
+        <div class="cs-arrow">→</div>
+      </div>
+      <div class="chain-step">
+        <div class="cs-temp temp-cold">4°C</div>
+        <div class="cs-name">수집</div>
+        <div class="cs-detail">추출물이 냉장 용기에 직접 낙하.</div>
+        <div class="cs-arrow">→</div>
+      </div>
+      <div class="chain-step step-gold">
+        <div class="cs-temp temp-cold">2–4°C</div>
+        <div class="cs-name">저장</div>
+        <div class="cs-detail">24시간 냉숙성. 분자 안정화.</div>
+        <div class="cs-arrow">→</div>
+      </div>
+      <div class="chain-step">
+        <div class="cs-temp temp-neg">−18°C</div>
+        <div class="cs-name">젤라또</div>
+        <div class="cs-detail">젤라또 베이스에 직접 투입. 냉동.</div>
+      </div>
+    </div>
+    <div class="ch-note">전 체인 최고온도: <strong>6°C</strong>. 일반 추출 수온: 93°C. 열적 감소 계수: <strong>15배</strong>.</div>
+  </div>
+</div>
+
+<p>이 절대 콜드체인은 직접적인 분자적 결과를 가집니다. 커피에 꽃향과 시트러스 노트를 부여하는 테르펜(리날룰, 게라니올)의 끓는점은 198–230°C이지만, 4°C에서의 증기압은 사실상 영입니다. 이 온도에서 <strong>증발하지 않습니다</strong>. 에스프레소의 증기에서 보통 손실되는 휘발성 에스터와 알데히드가 액상에 잡혀 있습니다. 산화는 지수적으로 둔화됩니다(경험칙: 10°C 하강마다 산화 속도 절반).</p>
+
+<p>결과: 점적 콜드브루가 젤라또 베이스에 투입되어 −18°C에서 냉동되면, 향기 화합물이 얼음 매트릭스에 <strong>동결보존</strong>됩니다 — 휘발, 산화, 열적 변환으로부터 보호된 상태로. 분자적 타임캡슐의 미식 버전입니다.</p>
+
+<div class="sep"></div>
+
+<h2>CdGF의 세 기둥</h2>
+
+<div class="phil-grid">
+  <div class="phil-card">
+    <div class="pc-num">I</div>
+    <h4>선택성</h4>
+    <p>바람직한 화합물만 추출합니다. 냉점적은 부드러운 산, 당류, 테르펜, 미세 휘발성 물질을 쓴 폴리페놀과 수렴성 탄닌으로부터 분리하는 분자 필터로 작용합니다. 적은 것이 많은 것입니다: 추출하지 않는 것이 추출하는 것만큼 중요합니다.</p>
+  </div>
+  <div class="phil-card">
+    <div class="pc-num">II</div>
+    <h4>보존</h4>
+    <p>제로 히트, 제로 휘발. 첫 방울부터 젤라또의 마지막 한 숟갈까지 콜드체인이 유지됩니다. 원두에서 나온 분자가 미각에 도달하는 분자와 동일합니다 — 열적 우회도, 공기 손실도, 산화도 없이.</p>
+  </div>
+  <div class="phil-card">
+    <div class="pc-num">III</div>
+    <h4>충실도</h4>
+    <p>최종 제품은 원산지에 충실해야 합니다. CdGF로 만든 커피 젤라또는 원두의 테루아를 — 고도, 토양, 품종을 — 맛으로 보여야 합니다. 일반적인 "커피 맛"이 아니라. 향미 충실도가 우리의 품질 기준입니다.</p>
+  </div>
+</div>
+
+<div class="sep"></div>
+
+<h2>점적에서 젤라또로: 응용</h2>
+
+<p>왜 젤라또인가? 아르티산 젤라또는 절대 콜드체인을 위한 <strong>완벽한 운반체</strong>이기 때문입니다. 생산부터 소비자의 혀에 닿는 정확한 순간까지 제품이 차갑게 유지되는 유일한 대량소비 형태입니다. 재가열도, 뜨거운 컵에 서빙도, 증기 노출도 없습니다.</p>
+
+<div class="gelato-card">
+  <div class="gc-inner">
+    <div class="gc-label">방울에서 미각까지</div>
+    <div class="gc-flow">
+      <div class="gc-node node-highlight">
+        <div class="gn-icon">💧</div>
+        <h5>냉점적</h5>
+        <div class="gn-temp">4°C · 3–4시간</div>
+        <p>최고 향미 순도의 추출물. 테르펜 온전.</p>
+      </div>
+      <div class="gc-arrow">→</div>
+      <div class="gc-node">
+        <div class="gn-icon">🥛</div>
+        <h5>젤라또 베이스</h5>
+        <div class="gn-temp">4°C · 냉혼합</div>
+        <p>추출물의 별도 가열살균 없이 직접 투입.</p>
+      </div>
+      <div class="gc-arrow">→</div>
+      <div class="gc-node node-highlight">
+        <div class="gn-icon">🍨</div>
+        <h5>서빙된 젤라또</h5>
+        <div class="gn-temp">−14°C · 당신의 미각</div>
+        <p>입에서 녹으며 테르펜 방출. 원산지에 충실한 향.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<p>진실의 순간은 젤라또가 입에서 녹을 때 일어납니다. 온도가 −14°C에서 37°C(체온)로 수초 만에 상승합니다. 이 온도 기울기가 동결보존된 휘발성 화합물을 <strong>구강과 비강에 직접</strong> 방출합니다 — 후각 수용체가 최대 효율로 감지하는 곳. 타임캡슐을 여는 것과 같습니다: 냉점적으로 포획되고 냉동으로 보존된 테르펜, 에스터, 알데히드가 정확히 있어야 할 곳에서 — 주방의 공기가 아닌 당신의 코에서 — 방출됩니다.</p>
+
+<div class="sep"></div>
+
+<h2>CdGF1%: 시장 비전</h2>
+
+<p>CdGF1%의 "1%"는 자의적이지 않습니다. 남미에서 점적식 스페셜티 콜드브루가 거대한 성장 잠재력을 가진 카테고리라는 확신에 기반한 계산된 목표입니다 — 세계 최고의 커피를 생산하면서도 아직 스페셜티 콜드브루 문화를 완전히 발전시키지 못한 대륙.</p>
+
+<div class="market-card">
+  <div class="mk-inner">
+    <div class="mk-label">비전</div>
+    <div class="mk-hero-stat">
+      <div class="mk-big">1%</div>
+      <div class="mk-big-sub">시장점유율 · 스페셜티 콜드브루 · 남미</div>
+    </div>
+    <div class="mk-grid">
+      <div class="mk-item">
+        <div class="mi-val">커피</div>
+        <div class="mi-label">점적식 스페셜티 콜드브루. CdGF를 기본 제품으로.</div>
+      </div>
+      <div class="mk-item">
+        <div class="mi-val">젤라또</div>
+        <div class="mi-label">절대 콜드체인의 아르티산 커피 젤라또. HARA 젤라또.</div>
+      </div>
+      <div class="mk-item">
+        <div class="mi-val">방법론</div>
+        <div class="mi-label">카페와 젤라또 전문점에 CdGF 프로토콜 컨설팅 및 라이선싱.</div>
+      </div>
+    </div>
+    <div class="mk-note">HARA는 Café de Goteo en Frío를 남미 스페셜티 콜드브루의 품질 기준으로 포지셔닝하고자 합니다 — 아르헨티나 살타에서 시작하여 대륙 주요 도시로 확장.</div>
+  </div>
+</div>
+
+<div class="callout">
+  <div class="callout-label">왜 살타인가</div>
+  <p>살타는 정확한 교차점에 있습니다. 남위 26°, 커피 벨트와 와인 벨트의 중첩지대. 볼리비아, 페루, 콜롬비아의 원산지 원두에 대한 접근성. 카파야테의 와인 전통이 테루아와 향미 복합성의 감상을 위해 지역 미각을 교육한 곳. 그리고 아르티산 젤라또의 생산과 보존에 이상적인 고도 건조 기후. HARA가 여기서 태어난 것은 <strong>여기서 모든 것이 수렴</strong>하기 때문입니다 — 원료, 기후, 감각 문화, 그리고 남미 시장을 위한 물류적 지리.</p>
+</div>
+
+<div class="sep"></div>
+
+<h2>매 한 방울이 의미를 갖는다</h2>
+
+<p>이 문구 — <em class="t">Cada Gota Cuenta</em> — 는 HARA의 슬로건이지만, 정밀한 기술적 선언이기도 합니다. 커피 베드 위에 떨어지는 모든 물방울은 최대 ΔC로 추출합니다. 빠져나오는 모든 방울은 다른 어떤 방법도 이 정도 충실도로 보존하지 못할 테르펜, 부드러운 산, 당류를 담고 있습니다. 모든 방울은 결코 끊어지지 않는 콜드체인에 합류합니다. 그리고 소비자의 미각에 도달하는 모든 방울에는 원산지 원두의 완전한 테루아가 녹아 있습니다.</p>
+
+<p>CdGF1%는 단순한 사업 목표가 아닙니다. 모든 변수를 — 온도, 압력, 시간, 접촉 방식, 콜드체인을 — 통제한다면, 산지 커피나무에서 태어난 리날룰 분자를 부에노스아이레스, 상파울루, 보고타의 누군가의 혀에 온전히 도달시킬 수 있다는 방정식입니다 — 대지가 말하고자 한 바로 그 맛이 나는 한 숟갈의 젤라또 안에서.</p>
+
+<div class="manifesto">
+  <div class="manifesto-inner">
+    <blockquote>우리는 커피가 와인과 같은 존중을 받을 자격이 있다고 믿습니다. 테루아가 잔에서 느껴져야 한다고. 과학이 그것을 실현하는 도구라고. 그리고 모든 방울이 — 원두에 닿는 첫 방울부터 당신의 미각에 닿는 마지막 방울까지 — 의미를 갖는다고.</blockquote>
+    <div class="mf-sig">HARA COFFEE LAB · 아르헨티나 살타</div>
+  </div>
+</div>
+
+<div class="series-complete">
+  <div class="sc-label">시리즈 완결</div>
+  <div class="sc-grid">
+    <a class="sc-item" href="blog-post-cdgf-01.html"><div class="sc-num">01 / 03</div><div class="sc-title">온도, 압력, 시간</div></a>
+    <a class="sc-item" href="blog-post-cdgf-02.html"><div class="sc-num">02 / 03</div><div class="sc-title">점적 vs 침출</div></a>
+    <a class="sc-item" href="blog-post-cdgf-03.html"><div class="sc-num">03 / 03</div><div class="sc-title">CdGF1% · HARA의 철학</div></a>
+  </div>
+</div>
+
+</div>
+
+<!-- ══ ENGLISH ══ -->
+<div class="lang-content" data-lang="en" style="display:none;">
+
+<div class="series-nav"><div class="sn-badge">CdGF SERIES</div><div class="sn-steps"><a class="sn-step" href="blog-post-cdgf-01.html">01 · T, P, t</a><span class="sn-arrow">→</span><a class="sn-step" href="blog-post-cdgf-02.html">02 · Drip vs Immersion</a><span class="sn-arrow">→</span><span class="sn-step active">03 · CdGF1%</span></div></div>
+
+<h2>Decoding CdGF1%</h2>
+
+<p>Throughout this series we've built a scientific argument step by step: temperature determines which compounds are extracted. Pressure defines the physical state of the extract. Time modulates extraction depth. And within cold brew, slow drip outperforms immersion in molecular selectivity, terpene retention, and aromatic purity.</p>
+
+<p>Now it's time to bring it all together in a single declaration of principles — the reason HARA exists and the vision guiding every decision we make.</p>
+
+<div class="meaning-block">
+  <div class="mb-label">DECODED</div>
+  <div class="mb-decode">
+    <div class="mb-abbr">C</div><div class="mb-full"><strong>Café</strong> — specialty coffee, selected for its terroir profile</div>
+    <div class="mb-abbr">d</div><div class="mb-full"><strong>de</strong> — (of)</div>
+    <div class="mb-abbr">G</div><div class="mb-full"><strong>Goteo</strong> — slow drip extraction, 1 drop every 1–2 seconds</div>
+    <div class="mb-abbr">F</div><div class="mb-full"><strong>en Frío</strong> — constant 2–8°C, zero heat contact at any point</div>
+    <div class="mb-abbr">1%</div><div class="mb-full"><strong>1% market share</strong> — HARA's target in the South American specialty cold brew market</div>
+  </div>
+</div>
+
+<p><em class="t">Café de Goteo en Frío</em>. It's not just a product name — it's a complete protocol describing exactly how the bean should be treated from extraction to the consumer's palate. And "1%" is the measure of our ambition: capturing 1% of the specialty cold brew market in South America.</p>
+
+<div class="sep"></div>
+
+<h2>The zero-heat principle</h2>
+
+<p>The question that drove HARA's entire design is simple: <strong>how do we deliver the bean's aroma molecule to the consumer's palate with the minimum possible degradation?</strong></p>
+
+<p>Every time an aromatic compound contacts heat, three things occur: <strong>volatilization</strong> (evaporation), <strong>oxidation</strong> (reaction with dissolved oxygen), and <strong>thermal transformation</strong> (decomposition or recombination). All three degradation pathways are temperature-dependent — higher temperature means faster degradation.</p>
+
+<p>Our answer is radical: <strong>eliminate heat entirely from the chain</strong>. From the moment water touches coffee to the moment the product reaches the consumer's mouth, temperature never exceeds 8°C. Ever.</p>
+
+<div class="chain-visual">
+  <div class="ch-inner">
+    <div class="ch-label">THE ABSOLUTE COLD CHAIN</div>
+    <div class="chain-flow">
+      <div class="chain-step">
+        <div class="cs-temp temp-cold">4°C</div>
+        <div class="cs-name">Water</div>
+        <div class="cs-detail">Filtered water chilled to 4°C before drip begins.</div>
+        <div class="cs-arrow">→</div>
+      </div>
+      <div class="chain-step step-gold">
+        <div class="cs-temp temp-cold">4–6°C</div>
+        <div class="cs-name">Drip</div>
+        <div class="cs-detail">Slow drip extraction. 3–4 hours. Constant maximum ΔC.</div>
+        <div class="cs-arrow">→</div>
+      </div>
+      <div class="chain-step">
+        <div class="cs-temp temp-cold">4°C</div>
+        <div class="cs-name">Collection</div>
+        <div class="cs-detail">Extract falls directly into a refrigerated vessel.</div>
+        <div class="cs-arrow">→</div>
+      </div>
+      <div class="chain-step step-gold">
+        <div class="cs-temp temp-cold">2–4°C</div>
+        <div class="cs-name">Storage</div>
+        <div class="cs-detail">24h cold maturation. Molecular stabilization.</div>
+        <div class="cs-arrow">→</div>
+      </div>
+      <div class="chain-step">
+        <div class="cs-temp temp-neg">−18°C</div>
+        <div class="cs-name">Gelato</div>
+        <div class="cs-detail">Direct incorporation into gelato base. Freezing.</div>
+      </div>
+    </div>
+    <div class="ch-note">Maximum temperature across the entire chain: <strong>6°C</strong>. Conventional extraction water temp: 93°C. Thermal reduction factor: <strong>15×</strong>.</div>
+  </div>
+</div>
+
+<p>This absolute cold chain has direct molecular consequences. Terpenes (linalool, geraniol) have boiling points of 198–230°C, but their vapor pressure at 4°C is virtually zero — they <strong>don't evaporate</strong>. Volatile esters and aldehydes that normally escape as espresso steam remain trapped in the liquid phase. Oxidation slows exponentially (each 10°C decrease halves oxidation rate).</p>
+
+<p>The result: when drip cold brew is incorporated into gelato base and frozen at −18°C, aromatic compounds become <strong>cryopreserved</strong> in the ice matrix — protected from volatilization, oxidation, and thermal transformation. A gastronomic time capsule.</p>
+
+<div class="sep"></div>
+
+<h2>The three pillars of CdGF</h2>
+
+<div class="phil-grid">
+  <div class="phil-card">
+    <div class="pc-num">I</div>
+    <h4>Selectivity</h4>
+    <p>Extract only desirable compounds. Cold slow drip acts as a molecular filter separating gentle acids, sugars, terpenes, and micro-volatiles from bitter polyphenols and astringent tannins. Less is more: what isn't extracted matters as much as what is.</p>
+  </div>
+  <div class="phil-card">
+    <div class="pc-num">II</div>
+    <h4>Preservation</h4>
+    <p>Zero heat, zero volatilization. From the first drop to the last spoonful of gelato, the cold chain stays intact. The molecule that leaves the bean is the same one reaching your palate — no thermal detours, no airborne losses, no oxidation.</p>
+  </div>
+  <div class="phil-card">
+    <div class="pc-num">III</div>
+    <h4>Fidelity</h4>
+    <p>The final product must be faithful to origin. A CdGF coffee gelato should taste of the bean's terroir — altitude, soil, variety — not generic "coffee flavor." Aromatic fidelity is our quality standard.</p>
+  </div>
+</div>
+
+<div class="sep"></div>
+
+<h2>From drip to gelato: the application</h2>
+
+<p>Why gelato? Because artisan gelato is the <strong>perfect vehicle</strong> for the absolute cold chain. It's the only mass-consumption format where the product stays cold from production to the exact moment it touches the consumer's tongue.</p>
+
+<div class="gelato-card">
+  <div class="gc-inner">
+    <div class="gc-label">FROM DROP TO PALATE</div>
+    <div class="gc-flow">
+      <div class="gc-node node-highlight">
+        <div class="gn-icon">💧</div>
+        <h5>Cold drip</h5>
+        <div class="gn-temp">4°C · 3–4 h</div>
+        <p>Maximum aromatic purity extract. Terpenes intact.</p>
+      </div>
+      <div class="gc-arrow">→</div>
+      <div class="gc-node">
+        <div class="gn-icon">🥛</div>
+        <h5>Gelato base</h5>
+        <div class="gn-temp">4°C · Cold mixing</div>
+        <p>Direct incorporation without separate pasteurization of the extract.</p>
+      </div>
+      <div class="gc-arrow">→</div>
+      <div class="gc-node node-highlight">
+        <div class="gn-icon">🍨</div>
+        <h5>Served gelato</h5>
+        <div class="gn-temp">−14°C · Your palate</div>
+        <p>Terpenes release as it melts in the mouth. Aroma faithful to origin.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<p>The moment of truth occurs when gelato melts in the mouth. Temperature rises from −14°C to 37°C in seconds. This thermal gradient releases cryopreserved volatiles <strong>directly into the oral and nasal cavity</strong> — like opening a time capsule. The terpenes, esters, and aldehydes captured by cold drip and preserved by freezing release exactly where they should — in your nose, not the kitchen air.</p>
+
+<div class="sep"></div>
+
+<h2>CdGF1%: the market vision</h2>
+
+<div class="market-card">
+  <div class="mk-inner">
+    <div class="mk-label">THE VISION</div>
+    <div class="mk-hero-stat">
+      <div class="mk-big">1%</div>
+      <div class="mk-big-sub">MARKET SHARE · SPECIALTY COLD BREW · SOUTH AMERICA</div>
+    </div>
+    <div class="mk-grid">
+      <div class="mk-item">
+        <div class="mi-val">Coffee</div>
+        <div class="mi-label">Specialty slow drip cold brew. CdGF as base product.</div>
+      </div>
+      <div class="mk-item">
+        <div class="mi-val">Gelato</div>
+        <div class="mi-label">Artisan coffee gelato with absolute cold chain. HARA gelato.</div>
+      </div>
+      <div class="mk-item">
+        <div class="mi-val">Method</div>
+        <div class="mi-label">CdGF protocol consulting and licensing to cafés and gelaterias.</div>
+      </div>
+    </div>
+    <div class="mk-note">HARA aims to position Café de Goteo en Frío as the quality reference in South American specialty cold brew — starting from Salta, Argentina, expanding to major cities across the continent.</div>
+  </div>
+</div>
+
+<div class="callout">
+  <div class="callout-label">WHY SALTA</div>
+  <p>Salta sits at the exact intersection. At 26°S latitude, in the overlap zone between the coffee belt and wine belt. With access to origin beans from Bolivia, Peru, and Colombia. With a wine tradition in Cafayate that has educated local palates in terroir appreciation. And with an arid highland climate ideal for artisan gelato production. HARA was born here because <strong>everything converges here</strong> — raw materials, climate, sensory culture, and logistics geography for serving the South American market.</p>
+</div>
+
+<div class="sep"></div>
+
+<h2>Every drop counts</h2>
+
+<p><em class="t">Cada Gota Cuenta</em> is HARA's slogan, but it's also a precise technical statement. Every drop extracts at maximum ΔC. Every drop carries terpenes no other method would preserve this faithfully. Every drop joins an unbroken cold chain. And every drop reaching the consumer's palate carries the complete terroir of the origin bean dissolved within.</p>
+
+<p>CdGF1% isn't just a business target. It's an equation that says: if we control every variable — temperature, pressure, time, contact method, cold chain — we can deliver a linalool molecule born on a mountain coffee tree intact to someone's tongue in Buenos Aires, São Paulo, or Bogotá, inside a spoonful of gelato that tastes exactly like what the earth meant to say.</p>
+
+<div class="manifesto">
+  <div class="manifesto-inner">
+    <blockquote>We believe coffee deserves the same respect as wine. That terroir should be felt in the cup. That science is the tool to achieve it. And that every drop — from the first to touch the bean to the last to touch your palate — counts.</blockquote>
+    <div class="mf-sig">HARA COFFEE LAB · SALTA, ARGENTINA</div>
+  </div>
+</div>
+
+<div class="series-complete">
+  <div class="sc-label">SERIES COMPLETE</div>
+  <div class="sc-grid">
+    <a class="sc-item" href="blog-post-cdgf-01.html"><div class="sc-num">01 / 03</div><div class="sc-title">Temperature, Pressure, Time</div></a>
+    <a class="sc-item" href="blog-post-cdgf-02.html"><div class="sc-num">02 / 03</div><div class="sc-title">Drip vs Immersion</div></a>
+    <a class="sc-item" href="blog-post-cdgf-03.html"><div class="sc-num">03 / 03</div><div class="sc-title">CdGF1% · HARA Philosophy</div></a>
+  </div>
+</div>
+
+</div>
+
+</article>
+<div class="author-card"><div class="author-avatar"><span>H</span></div><div class="author-info"><h4>HARA Coffee Lab</h4><p data-i18n="ab">Ciencia, precisión y pasión por el café de especialidad. Salta, Argentina.</p></div></div>
+<footer><div class="footer-brand">© 2026 HARA COFFEE LAB · SALTA, ARGENTINA · CADA GOTA CUENTA</div></footer>
+<script>
+let currentLang='es';
+const ui={es:{ht:'<span class="accent">CdGF1%</span>',hst:'la filosofía de HARA',hs:'De la gota al gelato. De Salta a Sudamérica. Cada decisión diseñada para que la molécula de aroma llegue intacta.',hb:'FILOSOFÍA',hr:'11 min lectura',ab:'Ciencia, precisión y pasión por el café de especialidad. Salta, Argentina.',mq:'Creemos que el café merece el mismo respeto que el vino. Que el terroir debe sentirse en la taza. Que la ciencia es la herramienta para lograrlo. Y que cada gota — desde la primera que toca el grano hasta la última que toca tu paladar — cuenta.'},ko:{ht:'<span class="accent">CdGF1%</span>',hst:'HARA의 철학',hs:'방울에서 젤라또로. 살타에서 남미로. 향기 분자를 온전히 전달하기 위해 설계된 모든 결정.',hb:'철학',hr:'11분 소요',ab:'과학, 정밀함, 그리고 스페셜티 커피에 대한 열정. 아르헨티나 살타.',mq:'우리는 커피가 와인과 같은 존중을 받을 자격이 있다고 믿습니다. 테루아가 잔에서 느껴져야 한다고. 과학이 그것을 실현하는 도구라고. 그리고 모든 방울이 — 원두에 닿는 첫 방울부터 당신의 미각에 닿는 마지막 방울까지 — 의미를 갖는다고.'},en:{ht:'<span class="accent">CdGF1%</span>',hst:'the HARA philosophy',hs:'From the drop to the gelato. From Salta to South America. Every decision designed to deliver the aroma molecule intact.',hb:'PHILOSOPHY',hr:'11 min read',ab:'Science, precision, and passion for specialty coffee. Salta, Argentina.',mq:'We believe coffee deserves the same respect as wine. That terroir should be felt in the cup. That science is the tool to achieve it. And that every drop — from the first to touch the bean to the last to touch your palate — counts.'}};
+function switchLang(l){currentLang=l;document.documentElement.lang=l==='ko'?'ko':l==='en'?'en':'es';document.querySelectorAll('[data-i18n]').forEach(e=>{const k=e.dataset.i18n;if(ui[l][k])e.innerHTML=ui[l][k]});document.querySelectorAll('.lang-content').forEach(e=>{e.style.display=e.dataset.lang===l?'block':'none'});document.querySelectorAll('.lang-btn').forEach(b=>b.classList.toggle('active',b.dataset.lang===l))}
+document.querySelectorAll('.lang-btn').forEach(b=>{b.addEventListener('click',()=>switchLang(b.dataset.lang))});
+window.addEventListener('scroll',()=>{const d=document.documentElement;document.getElementById('progressBar').style.width=(d.scrollTop/(d.scrollHeight-d.clientHeight))*100+'%';document.getElementById('mainNav').classList.toggle('scrolled',d.scrollTop>60)});
+</script>
+</body>
+</html>

@@ -1,0 +1,1102 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HARA Blog — Fuego y Fermento: la química compartida del tueste y la fermentación</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Noto+Sans+KR:wght@200;300;400;500;600&family=Noto+Sans:wght@200;300;400;500;600&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --espresso: #1a1210;
+  --crema: #d4a574;
+  --cream: #f5efe6;
+  --warm-white: #faf8f4;
+  --roast-dark: #2c1f1a;
+  --roast-mid: #6b4226;
+  --copper: #b87333;
+  --sage: #8a9a7b;
+  --water-blue: #7ba0b8;
+  --wine: #8b3a4a;
+  --wine-light: #c47a82;
+  --ember: #c45d3e;
+  --ember-light: #e8956e;
+  --ferment: #7b6b8a;
+  --ferment-light: #a898b5;
+  --gold: #c9a84c;
+  --text-primary: #1a1210;
+  --text-secondary: #6b5b50;
+  --text-light: #a09080;
+  --border-light: rgba(212,165,116,0.15);
+}
+
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;font-size:16px}
+body{background:var(--warm-white);color:var(--text-primary);font-family:'Noto Sans','Noto Sans KR',sans-serif;font-weight:300;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+::-webkit-scrollbar{width:5px}
+::-webkit-scrollbar-track{background:var(--warm-white)}
+::-webkit-scrollbar-thumb{background:var(--crema);border-radius:3px}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:200;padding:1.2rem 3rem;display:flex;justify-content:space-between;align-items:center;transition:all .5s ease}
+nav.scrolled{background:rgba(250,248,244,.92);backdrop-filter:blur(24px);padding:.9rem 3rem;box-shadow:0 1px 0 rgba(26,18,16,.06)}
+.nav-left{display:flex;align-items:center;gap:2.5rem}
+.nav-logo{font-family:'Cormorant Garamond',serif;font-weight:500;letter-spacing:.15em;color:var(--text-primary);text-decoration:none;font-size:1.3rem;line-height:1}
+.nav-logo small{display:block;font-weight:300;font-size:.55rem;letter-spacing:.3em;color:var(--text-secondary);margin-top:2px}
+.nav-back{font-size:.72rem;font-weight:400;letter-spacing:.08em;color:var(--text-secondary);text-decoration:none;display:flex;align-items:center;gap:.4rem;transition:color .3s}
+.nav-back:hover{color:var(--espresso)}
+.lang-switcher{display:flex;border:1px solid var(--border-light);border-radius:6px;overflow:hidden}
+.lang-btn{font-family:'JetBrains Mono',monospace;font-size:.6rem;letter-spacing:.1em;padding:.4rem .65rem;border:none;background:transparent;color:var(--text-light);cursor:pointer;transition:all .3s}
+.lang-btn:not(:last-child){border-right:1px solid var(--border-light)}
+.lang-btn.active{background:var(--espresso);color:var(--cream)}
+.lang-btn:hover:not(.active){background:rgba(212,165,116,.08);color:var(--roast-mid)}
+
+/* PROGRESS */
+.progress-bar{position:fixed;top:0;left:0;height:2px;z-index:300;width:0%;background:linear-gradient(to right,var(--ember),var(--gold),var(--ferment));transition:width .1s linear}
+
+/* HERO */
+.post-hero{height:85vh;min-height:550px;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;background:var(--espresso)}
+.post-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 30% 70%,rgba(196,93,62,.12),transparent 55%),radial-gradient(ellipse at 70% 30%,rgba(123,107,138,.1),transparent 55%),radial-gradient(ellipse at 50% 50%,rgba(201,168,76,.06),transparent 50%)}
+
+/* Heat shimmer lines */
+.hero-heat{position:absolute;inset:0;overflow:hidden;opacity:.06}
+.hero-heat .wave{position:absolute;left:0;right:0;height:1px;background:white}
+
+.hero-content{position:relative;z-index:2;text-align:center;padding:2rem;max-width:800px}
+.hero-overline{font-family:'JetBrains Mono',monospace;font-size:.6rem;letter-spacing:.5em;color:var(--ember-light);margin-bottom:2rem;opacity:0;animation:fadeUp .8s ease .3s forwards}
+.hero-title{font-family:'Cormorant Garamond',serif;font-size:clamp(2.5rem,6vw,5rem);font-weight:300;line-height:1.1;color:var(--cream);margin-bottom:1.5rem;opacity:0;animation:fadeUp 1s ease .5s forwards}
+.hero-title .fire{color:var(--ember-light);font-style:italic}
+.hero-title .ferm{color:var(--ferment-light);font-style:italic}
+.hero-sub{font-size:1rem;line-height:1.8;color:rgba(245,239,230,.55);max-width:520px;margin:0 auto;opacity:0;animation:fadeUp .8s ease .8s forwards}
+.hero-meta{margin-top:2.5rem;display:flex;justify-content:center;align-items:center;gap:1.5rem;opacity:0;animation:fadeUp .8s ease 1s forwards}
+.hero-badge{font-family:'JetBrains Mono',monospace;font-size:.55rem;letter-spacing:.2em;padding:.35rem .8rem;border-radius:4px;background:rgba(123,160,184,.15);color:var(--water-blue)}
+.hero-date,.hero-read{font-family:'JetBrains Mono',monospace;font-size:.6rem;color:rgba(245,239,230,.35);letter-spacing:.1em}
+
+.hero-symbols{position:absolute;bottom:4rem;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:2rem;opacity:0;animation:fadeUp .8s ease 1.2s forwards}
+.hero-sym{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1rem}
+.sym-fire{border:1px solid rgba(196,93,62,.35);color:var(--ember-light)}
+.sym-bubble{border:1px solid rgba(123,107,138,.35);color:var(--ferment-light)}
+.sym-eq{font-family:'Cormorant Garamond',serif;font-size:.9rem;font-style:italic;color:rgba(245,239,230,.2)}
+
+/* ARTICLE */
+.article-body{max-width:720px;margin:0 auto;padding:5rem 2rem 4rem}
+.article-body h2{font-family:'Cormorant Garamond',serif;font-size:1.9rem;font-weight:400;color:var(--espresso);margin:4rem 0 1.2rem;line-height:1.25}
+.article-body h2:first-child{margin-top:0}
+.article-body h3{font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:500;color:var(--roast-mid);margin:2.5rem 0 .8rem}
+.article-body p{font-size:.92rem;line-height:2.05;color:var(--text-secondary);margin-bottom:1.3rem}
+.article-body p strong{color:var(--text-primary);font-weight:500}
+.article-body p em.t{font-style:italic;color:var(--copper);font-family:'Cormorant Garamond',serif;font-size:1.02em}
+
+.sep{width:50px;height:1px;background:linear-gradient(to right,var(--ember-light),var(--gold),var(--ferment-light));margin:3.5rem auto;opacity:.5}
+
+/* DUAL PANELS */
+.dual{margin:3rem -2rem;display:grid;grid-template-columns:1fr 1fr;gap:0;border-radius:20px;overflow:hidden;border:1px solid var(--border-light)}
+.dual-panel{padding:2.5rem}
+.dual-fire{background:linear-gradient(135deg,#1e1412,#2a1c18);color:var(--cream)}
+.dual-ferm{background:linear-gradient(135deg,#1a1520,#221c28);color:var(--cream)}
+.dual-label{font-family:'JetBrains Mono',monospace;font-size:.5rem;letter-spacing:.3em;margin-bottom:1.2rem;display:flex;align-items:center;gap:.5rem}
+.dual-fire .dual-label{color:var(--ember-light)}
+.dual-ferm .dual-label{color:var(--ferment-light)}
+.dual-panel h4{font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:400;margin-bottom:.8rem}
+.dual-panel p{font-size:.8rem;line-height:1.8;color:rgba(245,239,230,.5);margin-bottom:.8rem}
+.dual-panel p:last-child{margin-bottom:0}
+.dual-panel p strong{color:rgba(245,239,230,.8)}
+.dual-compound{font-family:'JetBrains Mono',monospace;font-size:.6rem;letter-spacing:.1em;padding:.25rem .6rem;border-radius:4px;display:inline-block;margin-bottom:.6rem}
+.cmp-fire{background:rgba(196,93,62,.15);color:var(--ember-light)}
+.cmp-ferm{background:rgba(123,107,138,.15);color:var(--ferment-light)}
+
+/* REACTION CARD */
+.reaction-card{margin:3rem -2rem;background:var(--espresso);border-radius:20px;padding:3rem;color:var(--cream);position:relative;overflow:hidden}
+.reaction-card::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 30% 80%,rgba(201,168,76,.08),transparent 55%)}
+.rc-inner{position:relative;z-index:1}
+.rc-label{font-family:'JetBrains Mono',monospace;font-size:.55rem;letter-spacing:.3em;color:var(--gold);margin-bottom:1.5rem}
+.rc-equation{font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:300;text-align:center;padding:1.5rem 0;color:var(--cream);line-height:1.8}
+.rc-equation .reactant{color:var(--ember-light)}
+.rc-equation .product{color:var(--gold)}
+.rc-equation .catalyst{color:var(--ferment-light);font-size:.85em}
+.rc-equation .arrow{color:rgba(245,239,230,.25);margin:0 .5rem}
+.rc-note{font-size:.78rem;color:rgba(245,239,230,.4);line-height:1.8;text-align:center;margin-top:1rem}
+
+/* TIMELINE COMPARE */
+.timeline-compare{margin:3rem -2rem;background:white;border:1px solid var(--border-light);border-radius:20px;padding:2.5rem;overflow:hidden}
+.tc-label{font-family:'JetBrains Mono',monospace;font-size:.55rem;letter-spacing:.3em;color:var(--crema);margin-bottom:2rem}
+.tc-grid{display:grid;grid-template-columns:1fr 1fr;gap:2rem}
+.tc-col h4{font-family:'Cormorant Garamond',serif;font-size:1.15rem;font-weight:500;margin-bottom:1.2rem;display:flex;align-items:center;gap:.5rem}
+.tc-col h4 .dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.dot-fire{background:var(--ember)}
+.dot-ferm{background:var(--ferment)}
+
+.tc-step{display:flex;gap:.8rem;margin-bottom:1rem;align-items:flex-start}
+.tc-time{font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--text-light);min-width:55px;padding-top:3px;text-align:right;letter-spacing:.05em}
+.tc-event{flex:1}
+.tc-event-name{font-size:.82rem;font-weight:400;color:var(--text-primary);margin-bottom:.15rem}
+.tc-event-desc{font-size:.72rem;color:var(--text-secondary);line-height:1.5}
+.tc-bar{width:100%;height:3px;border-radius:2px;margin-bottom:1.2rem;opacity:.3}
+.bar-fire-grad{background:linear-gradient(to right,var(--gold),var(--ember-light),var(--ember),var(--roast-dark))}
+.bar-ferm-grad{background:linear-gradient(to right,var(--sage),var(--gold),var(--ferment-light),var(--wine))}
+
+/* SHARED MOLECULES */
+.shared-mol{margin:3rem -2rem;padding:2.5rem;background:var(--espresso);border-radius:20px;color:var(--cream);position:relative;overflow:hidden}
+.shared-mol::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 70% 30%,rgba(212,165,116,.06),transparent 50%)}
+.sm-inner{position:relative;z-index:1}
+.sm-label{font-family:'JetBrains Mono',monospace;font-size:.55rem;letter-spacing:.3em;color:var(--crema);margin-bottom:2rem}
+.sm-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem}
+.sm-item{text-align:center;padding:1.5rem 1rem;border:1px solid rgba(255,255,255,.06);border-radius:14px;background:rgba(255,255,255,.02);transition:all .3s}
+.sm-item:hover{background:rgba(255,255,255,.04);border-color:rgba(212,165,116,.15)}
+.sm-molecule{font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:400;margin-bottom:.3rem}
+.sm-name{font-family:'JetBrains Mono',monospace;font-size:.55rem;letter-spacing:.15em;color:var(--gold);margin-bottom:.6rem}
+.sm-aroma{font-size:.7rem;color:rgba(245,239,230,.35);margin-bottom:.6rem;font-style:italic}
+.sm-where{display:flex;justify-content:center;gap:.3rem;flex-wrap:wrap}
+.sm-tag{font-size:.5rem;letter-spacing:.05em;padding:.15rem .45rem;border-radius:3px}
+.tag-c{background:rgba(212,165,116,.15);color:var(--crema)}
+.tag-w{background:rgba(139,58,74,.15);color:var(--wine-light)}
+
+/* CALLOUT */
+.callout{background:var(--espresso);color:var(--cream);border-radius:16px;padding:2.5rem;margin:2.5rem -2rem;position:relative;overflow:hidden}
+.callout::before{content:'';position:absolute;top:-40%;right:-20%;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,rgba(201,168,76,.08),transparent)}
+.callout .callout-label{font-family:'JetBrains Mono',monospace;font-size:.55rem;letter-spacing:.3em;color:var(--gold);margin-bottom:1rem}
+.callout p{font-size:.85rem;line-height:1.9;color:rgba(245,239,230,.6);margin-bottom:0}
+.callout p strong{color:var(--crema)}
+
+/* PHENOL COMPARE */
+.phenol-dual{margin:3rem -2rem;display:grid;grid-template-columns:1fr 1fr;gap:1.5rem}
+.ph-card{padding:2rem;border-radius:16px;border:1px solid var(--border-light);background:white}
+.ph-card .ph-label{font-family:'JetBrains Mono',monospace;font-size:.5rem;letter-spacing:.2em;padding:.2rem .5rem;border-radius:3px;display:inline-block;margin-bottom:.8rem}
+.ph-fire-label{background:rgba(196,93,62,.1);color:var(--ember)}
+.ph-ferm-label{background:rgba(123,107,138,.1);color:var(--ferment)}
+.ph-card h4{font-family:'Cormorant Garamond',serif;font-size:1.15rem;font-weight:500;margin-bottom:.5rem}
+.ph-card p{font-size:.78rem;line-height:1.75;color:var(--text-secondary);margin-bottom:0}
+
+/* AUTHOR */
+.author-card{max-width:720px;margin:0 auto 4rem;padding:2rem 2rem 0;display:flex;align-items:center;gap:1.5rem;border-top:1px solid var(--border-light)}
+.author-avatar{width:56px;height:56px;border-radius:50%;background:var(--espresso);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.author-avatar span{font-family:'Cormorant Garamond',serif;font-size:1.2rem;color:var(--crema);font-weight:500}
+.author-info h4{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:500;margin-bottom:.15rem}
+.author-info p{font-size:.78rem;color:var(--text-secondary);line-height:1.5}
+
+footer{padding:3rem 2rem;text-align:center}
+.footer-brand{font-family:'JetBrains Mono',monospace;font-size:.58rem;letter-spacing:.25em;color:var(--text-light)}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+
+@media(max-width:768px){
+  nav{padding:1rem 1.5rem}
+  .post-hero{height:75vh;min-height:480px}
+  .article-body{padding:3.5rem 1.5rem 3rem}
+  .dual,.reaction-card,.timeline-compare,.shared-mol,.callout,.phenol-dual{margin-left:-.5rem;margin-right:-.5rem}
+  .dual{grid-template-columns:1fr}
+  .tc-grid{grid-template-columns:1fr}
+  .sm-grid{grid-template-columns:1fr}
+  .phenol-dual{grid-template-columns:1fr}
+  .reaction-card,.shared-mol,.callout{padding:2rem 1.5rem}
+  .dual-panel{padding:2rem 1.5rem}
+  .timeline-compare{padding:2rem 1.5rem}
+  .author-card{flex-direction:column;text-align:center;padding:1.5rem}
+  .hero-symbols{bottom:2.5rem}
+  .rc-equation{font-size:1.1rem}
+}
+</style>
+</head>
+<body>
+
+<div class="progress-bar" id="progressBar"></div>
+
+<nav id="mainNav">
+  <div class="nav-left">
+    <a href="/" class="nav-logo">HARA<small>COFFEE LAB</small></a>
+    <a href="blog-index.html" class="nav-back"><span>←</span> Blog</a>
+  </div>
+  <div class="lang-switcher">
+    <button class="lang-btn active" data-lang="es">ES</button>
+    <button class="lang-btn" data-lang="ko">KO</button>
+    <button class="lang-btn" data-lang="en">EN</button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="post-hero">
+  <div class="hero-heat">
+    <div class="wave" style="top:20%;opacity:.5"></div>
+    <div class="wave" style="top:35%"></div>
+    <div class="wave" style="top:50%;background:linear-gradient(to right,transparent,rgba(201,168,76,.3),transparent)"></div>
+    <div class="wave" style="top:65%"></div>
+    <div class="wave" style="top:80%;opacity:.5"></div>
+  </div>
+  <div class="hero-content">
+    <div class="hero-overline" data-i18n="ho">CIENCIA × TRANSFORMACIÓN</div>
+    <h1 class="hero-title" data-i18n="ht"><span class="fire">Fuego</span> y <span class="ferm">Fermento</span><br>la misma química, dos caminos</h1>
+    <p class="hero-sub" data-i18n="hs">Maillard, caramelización, transformación fenólica — cómo el tueste del café y la fermentación del vino comparten las mismas reacciones fundamentales.</p>
+    <div class="hero-meta">
+      <span class="hero-badge" data-i18n="hb">CIENCIA</span>
+      <span class="hero-date">16 FEB 2026</span>
+      <span class="hero-read" data-i18n="hr">14 min lectura</span>
+    </div>
+  </div>
+  <div class="hero-symbols">
+    <div class="hero-sym sym-fire">🔥</div>
+    <span class="sym-eq">≡</span>
+    <div class="hero-sym sym-bubble">🫧</div>
+  </div>
+</div>
+
+<!-- ARTICLE -->
+<article class="article-body" id="articleBody">
+
+<!-- ══════ SPANISH ══════ -->
+<div class="lang-content" data-lang="es">
+
+<h2>Dos transformaciones, una gramática</h2>
+
+<p>El grano verde de café no sabe a café. La uva recién exprimida no sabe a vino. Ambos son materia prima silenciosa que necesita una <strong>transformación química profunda</strong> para revelar lo que llevan dentro. En el café, esa transformación la impulsa el calor: 200°C durante 10–14 minutos. En el vino, la impulsan los microorganismos: levaduras y bacterias durante días, semanas, meses.</p>
+
+<p>Parece que no tienen nada en común. Pero cuando descendemos al nivel molecular, lo que encontramos es extraordinario: <strong>las mismas reacciones fundamentales</strong> ocurren en ambos procesos. Maillard, caramelización, degradación de ácidos, polimerización fenólica — la gramática química es compartida; solo cambia la energía que la activa: térmica en el tueste, biológica en la fermentación.</p>
+
+<div class="sep"></div>
+
+<h2>I. La reacción de Maillard: el motor compartido</h2>
+
+<p>Si existe una reacción que define la transformación del sabor en la cocina, la panadería, la cervecería, el tueste del café y el envejecimiento del vino, es la <em class="t">reacción de Maillard</em>. Descrita por Louis-Camille Maillard en 1912, es la interacción entre un aminoácido y un azúcar reductor que genera cientos de compuestos aromáticos, pigmentos pardos y polímeros de sabor.</p>
+
+<div class="dual">
+  <div class="dual-panel dual-fire">
+    <div class="dual-label">🔥 TUESTE DEL CAFÉ</div>
+    <div class="dual-compound cmp-fire">MAILLARD TÉRMICA · 150–200°C</div>
+    <h4>Explosiva y rápida</h4>
+    <p>A partir de los 150°C, los aminoácidos libres del grano (asparagina, glutamina, prolina) reaccionan con azúcares reductores (glucosa, fructosa) generando intermediarios de <strong>Amadori</strong> que se fragmentan en cientos de volátiles.</p>
+    <p>Productos clave: <strong>pirazinas</strong> (notas tostadas, a nuez), <strong>furanos</strong> (caramelo), <strong>pirroles</strong> (terroso), <strong>tiofenos</strong> (umami). Todo en 10–14 minutos.</p>
+  </div>
+  <div class="dual-panel dual-ferm">
+    <div class="dual-label">🫧 VINIFICACIÓN</div>
+    <div class="dual-compound cmp-ferm">MAILLARD ENZIMÁTICA · 15–30°C</div>
+    <h4>Lenta y acumulativa</h4>
+    <p>En el vino, la misma reacción ocurre a temperatura ambiente durante el <strong>envejecimiento</strong>, especialmente en barrica. Los aminoácidos de la uva (prolina, arginina) reaccionan con los azúcares residuales a lo largo de meses y años.</p>
+    <p>Productos clave: <strong>melanoidinas</strong> (color ámbar), <strong>sotolon</strong> (nuez, curry — firma de los vinos rancios y Jerez), <strong>furfural</strong> (almendra tostada). La misma química, multiplicada por el tiempo.</p>
+  </div>
+</div>
+
+<p>La diferencia es cinética, no química. El tueste comprime en minutos lo que el envejecimiento del vino extiende en años. La temperatura es un catalizador brutal que acelera las mismas rutas de reacción. Cuando un catador de café detecta "notas a nuez y caramelo" y un sommelier describe "aromas terciarios de frutos secos y toffee", están percibiendo los mismos productos de Maillard generados por la misma reacción — solo que uno fue activado por fuego y el otro por paciencia.</p>
+
+<div class="reaction-card">
+  <div class="rc-inner">
+    <div class="rc-label">LA REACCIÓN DE MAILLARD</div>
+    <div class="rc-equation">
+      <span class="reactant">Aminoácido</span> <span class="arrow">+</span> <span class="reactant">Azúcar reductor</span><br>
+      <span class="arrow">─── <span class="catalyst">Δ calor</span> ó <span class="catalyst">tiempo</span> ───→</span><br>
+      <span class="product">Melanoidinas</span> <span class="arrow">+</span> <span class="product">Volátiles aromáticos</span> <span class="arrow">+</span> <span class="product">CO₂</span>
+    </div>
+    <div class="rc-note">En el café, Δ = 150–200°C durante 10–14 min.<br>En el vino, Δ = 15–20°C durante meses a años.<br>Los productos son homólogos. La cinética es la única diferencia.</div>
+  </div>
+</div>
+
+<div class="sep"></div>
+
+<h2>II. El destino de los azúcares</h2>
+
+<p>La sacarosa representa hasta el 8% del peso seco del grano verde de café. La glucosa y fructosa representan el 20–25% del mosto de uva. En ambos casos, los azúcares son el <strong>combustible central</strong> de la transformación — pero siguen caminos espectacularmente diferentes que convergen en resultados sorprendentemente similares.</p>
+
+<div class="dual">
+  <div class="dual-panel dual-fire">
+    <div class="dual-label">🔥 CARAMELIZACIÓN</div>
+    <div class="dual-compound cmp-fire">PIRÓLISIS TÉRMICA · 170–200°C</div>
+    <h4>Del azúcar al aroma por fuego</h4>
+    <p>La sacarosa se hidroliza en glucosa y fructosa, que luego sufren <strong>caramelización</strong>: deshidratación, ciclación y fragmentación térmica. Productos: <strong>diacetilo</strong> (mantequilla), <strong>maltol</strong> (algodón de azúcar), <strong>furaneol</strong> (fresa, caramelo).</p>
+    <p>A temperaturas más altas, la <strong>degradación de Strecker</strong> genera aldehídos de bajo peso molecular que son los principales portadores del aroma "a café tostado".</p>
+  </div>
+  <div class="dual-panel dual-ferm">
+    <div class="dual-label">🫧 FERMENTACIÓN ALCOHÓLICA</div>
+    <div class="dual-compound cmp-ferm">GLUCÓLISIS BIOLÓGICA · 15–30°C</div>
+    <h4>Del azúcar al aroma por levadura</h4>
+    <p><em class="t" style="color:var(--ferment-light)">Saccharomyces cerevisiae</em> convierte glucosa en etanol + CO₂ mediante glucólisis y el ciclo de Embden-Meyerhof. Pero el etanol es solo el producto principal; los <strong>subproductos</strong> son el verdadero tesoro.</p>
+    <p>Productos secundarios: <strong>ésteres</strong> (acetato de isoamilo = banana; acetato de etilo = manzana), <strong>glicerol</strong> (viscosidad, dulzura), <strong>alcoholes superiores</strong> (complejidad). La levadura es el "horno" biológico.</p>
+  </div>
+</div>
+
+<p>Aquí aparece una conexión molecular fascinante. El <em class="t">furaneol</em> (4-hidroxi-2,5-dimetil-3(2H)-furanona) — esa molécula con aroma a fresa madura y caramelo — se genera en el café por caramelización térmica, pero también aparece en el vino tinto durante la fermentación maloláctica y el envejecimiento. Es uno de los "puentes moleculares" más directos entre ambas bebidas.</p>
+
+<div class="sep"></div>
+
+<h2>III. La transformación de los ácidos</h2>
+
+<p>Tanto el café como el vino necesitan reequilibrar su acidez durante la transformación. El grano verde y la uva fresca comparten un exceso de ácidos que, sin modificar, produciría bebidas agresivamente ácidas. La solución, en ambos casos, es la <strong>degradación selectiva</strong>.</p>
+
+<div class="dual">
+  <div class="dual-panel dual-fire">
+    <div class="dual-label">🔥 DEGRADACIÓN TÉRMICA</div>
+    <div class="dual-compound cmp-fire">ÁCIDOS CLOROGÉNICOS → QUINOLACTONAS</div>
+    <h4>De ácido a cuerpo</h4>
+    <p>Los ácidos clorogénicos (CGA), que representan el 6–8% del grano verde, se descomponen por termólisis en <strong>ácido quínico</strong> + <strong>ácido cafeico</strong>. El ácido quínico produce un amargor limpio y definido; las <strong>quinolactonas</strong> formadas aportan cuerpo y textura.</p>
+    <p>El ácido cítrico se degrada a partir de 175°C, reduciendo la acidez percibida. El ácido málico desaparece casi por completo. El resultado es un reequilibrio donde la acidez pasa de aguda a integrada.</p>
+  </div>
+  <div class="dual-panel dual-ferm">
+    <div class="dual-label">🫧 FERMENTACIÓN MALOLÁCTICA</div>
+    <div class="dual-compound cmp-ferm">ÁCIDO MÁLICO → ÁCIDO LÁCTICO</div>
+    <h4>De ácido a suavidad</h4>
+    <p>Tras la fermentación alcohólica, <em class="t" style="color:var(--ferment-light)">Oenococcus oeni</em> convierte el ácido málico (agudo, a manzana verde) en <strong>ácido láctico</strong> (suave, lácteo). Un diácido se transforma en un monoácido, reduciendo literalmente la acidez a la mitad.</p>
+    <p>Subproducto clave: <strong>diacetilo</strong> — la misma molécula de mantequilla que aparece en el café. En el Chardonnay con malo completa, esa nota mantecosa es diacetilo puro. En un café con tueste medio, también.</p>
+  </div>
+</div>
+
+<p>El diacetilo merece atención especial. En el café, se forma por degradación térmica de aminoácidos (vía Strecker) y por caramelización de la sacarosa. En el vino, lo produce la bacteria <em class="t">Oenococcus oeni</em> como subproducto de la fermentación maloláctica. Dos organismos diferentes (fuego y bacteria), dos caminos diferentes, la misma molécula, el mismo aroma a mantequilla. Cuando un barista dice "este café tiene notas de mantequilla" y un sommelier dice "este Chardonnay tiene notas mantecosas", están oliendo exactamente la misma molécula.</p>
+
+<div class="sep"></div>
+
+<h2>IV. El reloj de la transformación</h2>
+
+<p>Quizás la diferencia más visible entre tueste y fermentación es la escala temporal. Pero ambos procesos siguen una curva de desarrollo con fases análogas.</p>
+
+<div class="timeline-compare">
+  <div class="tc-label">LÍNEAS DE TIEMPO PARALELAS</div>
+  <div class="tc-grid">
+    <div class="tc-col">
+      <h4><span class="dot dot-fire"></span> Tueste del café</h4>
+      <div class="tc-bar bar-fire-grad"></div>
+      <div class="tc-step">
+        <div class="tc-time">0–5 min</div>
+        <div class="tc-event">
+          <div class="tc-event-name">Fase de secado</div>
+          <div class="tc-event-desc">Evaporación de agua libre. El grano cambia de verde a amarillo. Aromas herbáceos y a pan.</div>
+        </div>
+      </div>
+      <div class="tc-step">
+        <div class="tc-time">5–9 min</div>
+        <div class="tc-event">
+          <div class="tc-event-name">Reacciones de Maillard</div>
+          <div class="tc-event-desc">Pardeamiento intenso. Formación de pirazinas, furanos, aldehídos. El color pasa a marrón claro.</div>
+        </div>
+      </div>
+      <div class="tc-step">
+        <div class="tc-time">9–11 min</div>
+        <div class="tc-event">
+          <div class="tc-event-name">Primer crack</div>
+          <div class="tc-event-desc">La presión interna de CO₂ y vapor fractura el grano. Explosión de volátiles. Caramelización activa.</div>
+        </div>
+      </div>
+      <div class="tc-step">
+        <div class="tc-time">11–14 min</div>
+        <div class="tc-event">
+          <div class="tc-event-name">Desarrollo</div>
+          <div class="tc-event-desc">Equilibrio entre acidez y cuerpo. Polimerización de melanoidinas. Cada segundo cuenta.</div>
+        </div>
+      </div>
+    </div>
+    <div class="tc-col">
+      <h4><span class="dot dot-ferm"></span> Vinificación</h4>
+      <div class="tc-bar bar-ferm-grad"></div>
+      <div class="tc-step">
+        <div class="tc-time">0–2 días</div>
+        <div class="tc-event">
+          <div class="tc-event-name">Fase de latencia</div>
+          <div class="tc-event-desc">Las levaduras se adaptan al mosto. Actividad enzimática inicial. Aromas primarios de fruta fresca.</div>
+        </div>
+      </div>
+      <div class="tc-step">
+        <div class="tc-time">2–7 días</div>
+        <div class="tc-event">
+          <div class="tc-event-name">Fermentación tumultuosa</div>
+          <div class="tc-event-desc">Pico de actividad. Conversión masiva de azúcar → etanol + CO₂. Formación de ésteres y alcoholes superiores.</div>
+        </div>
+      </div>
+      <div class="tc-step">
+        <div class="tc-time">1–4 sem.</div>
+        <div class="tc-event">
+          <div class="tc-event-name">Fermentación maloláctica</div>
+          <div class="tc-event-desc">Oenococcus oeni convierte málico → láctico. Diacetilo. Suavización de la estructura ácida.</div>
+        </div>
+      </div>
+      <div class="tc-step">
+        <div class="tc-time">6–24 mes.</div>
+        <div class="tc-event">
+          <div class="tc-event-name">Crianza</div>
+          <div class="tc-event-desc">Maillard lenta en barrica. Polimerización de taninos. Integración. Aromas terciarios. Cada mes cuenta.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<p>Hay una analogía estructural profunda. La <strong>fase de secado</strong> del café y la <strong>latencia</strong> del vino son preparación: el sistema se organiza antes de la transformación activa. El <strong>primer crack</strong> y la <strong>fermentación tumultuosa</strong> son el clímax: la máxima velocidad de reacción, la mayor generación de compuestos. El <strong>desarrollo post-crack</strong> y la <strong>crianza</strong> son integración: las reacciones se moderan, los compuestos se polimerizan, la complejidad se ensambla. En ambos casos, el punto exacto donde se detiene el proceso determina el estilo final de la bebida.</p>
+
+<div class="sep"></div>
+
+<h2>V. La polimerización fenólica: estructura y envejecimiento</h2>
+
+<p>Los compuestos fenólicos son los arquitectos de la estructura en ambas bebidas. Y en ambos casos, la transformación los obliga a <strong>polimerizarse</strong> — unirse en cadenas más largas que cambian radicalmente su comportamiento sensorial.</p>
+
+<div class="phenol-dual">
+  <div class="ph-card">
+    <div class="ph-label ph-fire-label">TUESTE</div>
+    <h4>Melanoidinas</h4>
+    <p>Los ácidos clorogénicos, degradados por el calor, se recombinan con proteínas y azúcares para formar <strong>melanoidinas</strong> — polímeros pardos de alto peso molecular que representan hasta el 25% del café tostado. Son responsables del color pardo, del cuerpo en taza, y funcionan como antioxidantes. A mayor grado de tueste, mayor polimerización, más cuerpo, menos acidez.</p>
+  </div>
+  <div class="ph-card">
+    <div class="ph-label ph-ferm-label">VINIFICACIÓN</div>
+    <h4>Complejos tanino-antocianina</h4>
+    <p>Durante la fermentación y crianza, los taninos proantocianidínicos de la piel de la uva se unen con las antocianinas (pigmentos rojos) formando <strong>polímeros pigmentados</strong> estables. Esta polimerización suaviza la astringencia (los polímeros grandes no interactúan con la saliva como los monómeros), estabiliza el color y aporta la textura sedosa de los grandes vinos envejecidos.</p>
+  </div>
+</div>
+
+<p>El principio es el mismo: <strong>los monómeros fenólicos son agresivos; los polímeros son suaves</strong>. En el café, la astringencia del grano verde desaparece durante el tueste porque los CGA se polimerizan en melanoidinas. En el vino, la astringencia del tanino joven se suaviza durante la crianza porque los monómeros se polimerizan en cadenas largas. Es la misma lógica molecular aplicada a matrices diferentes.</p>
+
+<div class="sep"></div>
+
+<h2>VI. Los puentes moleculares</h2>
+
+<p>La conexión más directa entre el tueste y la fermentación son las moléculas que ambos procesos comparten — compuestos idénticos, generados por rutas diferentes, reconocibles en ambas tazas y copas.</p>
+
+<div class="shared-mol">
+  <div class="sm-inner">
+    <div class="sm-label">MOLÉCULAS COMPARTIDAS</div>
+    <div class="sm-grid">
+      <div class="sm-item">
+        <div class="sm-molecule">Furaneol</div>
+        <div class="sm-name">C₆H₈O₃</div>
+        <div class="sm-aroma">fresa, caramelo, algodón de azúcar</div>
+        <div class="sm-where">
+          <span class="sm-tag tag-c">Caramelización</span>
+          <span class="sm-tag tag-w">Fermentación MLF</span>
+        </div>
+      </div>
+      <div class="sm-item">
+        <div class="sm-molecule">Diacetilo</div>
+        <div class="sm-name">C₄H₆O₂</div>
+        <div class="sm-aroma">mantequilla, crema, butterscotch</div>
+        <div class="sm-where">
+          <span class="sm-tag tag-c">Strecker / Maillard</span>
+          <span class="sm-tag tag-w">O. oeni MLF</span>
+        </div>
+      </div>
+      <div class="sm-item">
+        <div class="sm-molecule">Guaiacol</div>
+        <div class="sm-name">C₇H₈O₂</div>
+        <div class="sm-aroma">ahumado, especiado, clavo</div>
+        <div class="sm-where">
+          <span class="sm-tag tag-c">Pirólisis fenólica</span>
+          <span class="sm-tag tag-w">Crianza en barrica</span>
+        </div>
+      </div>
+      <div class="sm-item">
+        <div class="sm-molecule">Vainillina</div>
+        <div class="sm-name">C₈H₈O₃</div>
+        <div class="sm-aroma">vainilla, dulce, balsámico</div>
+        <div class="sm-where">
+          <span class="sm-tag tag-c">Degradación de lignina</span>
+          <span class="sm-tag tag-w">Extracción del roble</span>
+        </div>
+      </div>
+      <div class="sm-item">
+        <div class="sm-molecule">Linalol</div>
+        <div class="sm-name">C₁₀H₁₈O</div>
+        <div class="sm-aroma">lavanda, bergamota, cítrico</div>
+        <div class="sm-where">
+          <span class="sm-tag tag-c">Terpeno del grano</span>
+          <span class="sm-tag tag-w">Terpeno de la uva</span>
+        </div>
+      </div>
+      <div class="sm-item">
+        <div class="sm-molecule">Furfural</div>
+        <div class="sm-name">C₅H₄O₂</div>
+        <div class="sm-aroma">almendra, tostado, pan</div>
+        <div class="sm-where">
+          <span class="sm-tag tag-c">Maillard térmica</span>
+          <span class="sm-tag tag-w">Maillard en barrica</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="callout">
+  <div class="callout-label">EL PRINCIPIO UNIFICADOR</div>
+  <p>El fuego y el fermento son dos dialectos de la misma lengua. Uno habla rápido, en minutos, con la energía cinética del calor. El otro habla despacio, en meses, con la precisión catalítica de las enzimas. Pero ambos dicen lo mismo: <strong>transformar azúcares y aminoácidos en complejidad aromática, reorganizar ácidos en equilibrio, y polimerizar fenoles en estructura</strong>. El maestro tostador y el enólogo son, en esencia, gestores de las mismas reacciones — separados por la temperatura, unidos por la química.</p>
+</div>
+
+<h2>Lo que esto significa en tu taza</h2>
+
+<p>La próxima vez que bebas un espresso en HARA y percibas notas de caramelo, mantequilla y un toque ahumado, recordá que esas mismas moléculas viven en una copa de Chardonnay con crianza, en un Malbec de Cafayate añejado en barrica de roble francés. No es una metáfora: es la misma molécula de diacetilo, el mismo guaiacol, la misma vainillina.</p>
+
+<p>El café y el vino no son primos lejanos. Son hermanos criados por padres diferentes — uno por el fuego del tostador, el otro por las levaduras del fermento — pero con el mismo ADN químico. Entender esta conexión es entender que la calidad en la taza y en la copa nacen del mismo lugar: un terroir que da la materia prima, y una transformación controlada que la traduce en algo que podemos saborear.</p>
+
+<p>Cada gota cuenta — porque en cada gota hay fuego y fermento.</p>
+
+</div>
+
+<!-- ══════ KOREAN ══════ -->
+<div class="lang-content" data-lang="ko" style="display:none;">
+
+<h2>두 가지 변환, 하나의 문법</h2>
+
+<p>생두는 커피 맛이 나지 않습니다. 갓 짠 포도즙은 와인 맛이 나지 않습니다. 둘 다 내면에 품고 있는 것을 드러내기 위해 <strong>깊은 화학적 변환</strong>이 필요한 침묵의 원료입니다. 커피에서 그 변환의 동력은 열입니다: 200°C에서 10–14분. 와인에서는 미생물입니다: 효모와 박테리아가 며칠, 몇 주, 몇 달에 걸쳐.</p>
+
+<p>공통점이 없어 보입니다. 그러나 분자 수준으로 내려가면 놀라운 것을 발견합니다: <strong>같은 근본 반응</strong>이 두 과정 모두에서 일어납니다. 마이야르, 캐러멜화, 산 분해, 페놀 중합 — 화학적 문법은 공유되고, 활성화 에너지만 다릅니다: 로스팅에서는 열, 발효에서는 생물학적 에너지.</p>
+
+<div class="sep"></div>
+
+<h2>I. 마이야르 반응: 공유된 엔진</h2>
+
+<p>요리, 제빵, 양조, 커피 로스팅, 와인 숙성에서 맛의 변환을 정의하는 단 하나의 반응이 있다면, 그것은 <em class="t">마이야르 반응</em>입니다. 1912년 Louis-Camille Maillard가 기술한 이 반응은 아미노산과 환원당의 상호작용으로 수백 가지 향기 화합물, 갈색 색소, 맛의 폴리머를 생성합니다.</p>
+
+<div class="dual">
+  <div class="dual-panel dual-fire">
+    <div class="dual-label">🔥 커피 로스팅</div>
+    <div class="dual-compound cmp-fire">열적 마이야르 · 150–200°C</div>
+    <h4>폭발적이고 빠른</h4>
+    <p>150°C부터 생두의 유리 아미노산(아스파라긴, 글루타민, 프롤린)이 환원당(포도당, 과당)과 반응하여 <strong>아마도리(Amadori)</strong> 중간체를 형성하고, 이것이 수백 가지 휘발성 물질로 분해됩니다.</p>
+    <p>핵심 생성물: <strong>피라진</strong>(고소한, 견과류), <strong>퓨란</strong>(캐러멜), <strong>피롤</strong>(흙냄새), <strong>티오펜</strong>(감칠맛). 모두 10–14분 안에.</p>
+  </div>
+  <div class="dual-panel dual-ferm">
+    <div class="dual-label">🫧 와인 양조</div>
+    <div class="dual-compound cmp-ferm">효소적 마이야르 · 15–30°C</div>
+    <h4>느리고 누적적인</h4>
+    <p>와인에서 같은 반응이 <strong>숙성</strong> 과정, 특히 오크통에서 상온으로 진행됩니다. 포도의 아미노산(프롤린, 아르기닌)이 잔당과 수개월에서 수년에 걸쳐 반응합니다.</p>
+    <p>핵심 생성물: <strong>멜라노이딘</strong>(호박색), <strong>소톨론</strong>(견과류, 카레 — 랜시오 와인과 셰리의 시그니처), <strong>퍼퓨랄</strong>(볶은 아몬드). 같은 화학, 시간이 곱한 결과.</p>
+  </div>
+</div>
+
+<p>차이는 동역학이지 화학이 아닙니다. 로스팅은 와인 숙성이 수년에 걸쳐 펼치는 것을 분 단위로 압축합니다. 온도는 같은 반응 경로를 가속시키는 강력한 촉매입니다. 커피 테이스터가 "견과류와 캐러멜 노트"를 감지하고 소믈리에가 "볶은 견과와 토피의 3차 아로마"를 묘사할 때, 그들은 같은 반응이 만든 같은 마이야르 생성물을 인지하고 있는 것입니다 — 하나는 불이, 다른 하나는 인내가 활성화했을 뿐.</p>
+
+<div class="reaction-card">
+  <div class="rc-inner">
+    <div class="rc-label">마이야르 반응</div>
+    <div class="rc-equation">
+      <span class="reactant">아미노산</span> <span class="arrow">+</span> <span class="reactant">환원당</span><br>
+      <span class="arrow">─── <span class="catalyst">Δ 열</span> 또는 <span class="catalyst">시간</span> ───→</span><br>
+      <span class="product">멜라노이딘</span> <span class="arrow">+</span> <span class="product">휘발성 향기 물질</span> <span class="arrow">+</span> <span class="product">CO₂</span>
+    </div>
+    <div class="rc-note">커피: Δ = 150–200°C, 10–14분<br>와인: Δ = 15–20°C, 수개월~수년<br>생성물은 동류(homologue). 동역학만 다릅니다.</div>
+  </div>
+</div>
+
+<div class="sep"></div>
+
+<h2>II. 당의 운명</h2>
+
+<p>자당은 생두 건조중량의 최대 8%를 차지합니다. 포도당과 과당은 포도 머스트의 20–25%를 차지합니다. 두 경우 모두 당은 변환의 <strong>중심 연료</strong>이지만, 극적으로 다른 경로를 따르면서 놀랍도록 유사한 결과에 수렴합니다.</p>
+
+<div class="dual">
+  <div class="dual-panel dual-fire">
+    <div class="dual-label">🔥 캐러멜화</div>
+    <div class="dual-compound cmp-fire">열분해 · 170–200°C</div>
+    <h4>불로 만드는 당의 향</h4>
+    <p>자당이 포도당과 과당으로 가수분해된 뒤 <strong>캐러멜화</strong>를 거칩니다: 탈수, 고리화, 열분해. 생성물: <strong>디아세틸</strong>(버터), <strong>말톨</strong>(솜사탕), <strong>퓨라네올</strong>(딸기, 캐러멜).</p>
+    <p>더 높은 온도에서 <strong>스트레커 분해</strong>가 "로스팅 향"의 주요 운반체인 저분자 알데히드를 생성합니다.</p>
+  </div>
+  <div class="dual-panel dual-ferm">
+    <div class="dual-label">🫧 알코올 발효</div>
+    <div class="dual-compound cmp-ferm">생물학적 해당작용 · 15–30°C</div>
+    <h4>효모로 만드는 당의 향</h4>
+    <p><em class="t" style="color:var(--ferment-light)">Saccharomyces cerevisiae</em>가 해당작용과 Embden-Meyerhof 경로를 통해 포도당을 에탄올 + CO₂로 전환합니다. 하지만 진정한 보물은 <strong>부산물</strong>입니다.</p>
+    <p>2차 생성물: <strong>에스터</strong>(이소아밀 아세테이트 = 바나나; 에틸 아세테이트 = 사과), <strong>글리세롤</strong>(점도, 단맛), <strong>고급알코올</strong>(복합성). 효모는 생물학적 "용광로".</p>
+  </div>
+</div>
+
+<p>흥미로운 분자적 연결이 여기서 등장합니다. <em class="t">퓨라네올</em>(4-하이드록시-2,5-디메틸-3(2H)-퓨라논) — 잘 익은 딸기와 캐러멜 향의 그 분자 — 은 커피에서 열적 캐러멜화로 생성되지만, 레드 와인에서도 말로락틱 발효와 숙성 중에 나타납니다. 두 음료 사이의 가장 직접적인 "분자적 다리" 중 하나입니다.</p>
+
+<div class="sep"></div>
+
+<h2>III. 산의 변환</h2>
+
+<p>커피와 와인 모두 변환 과정에서 산도를 재조정해야 합니다. 생두와 신선한 포도는 수정 없이는 공격적으로 산미가 강한 음료를 만들 과잉의 산을 공유합니다. 해법은 두 경우 모두 <strong>선택적 분해</strong>입니다.</p>
+
+<div class="dual">
+  <div class="dual-panel dual-fire">
+    <div class="dual-label">🔥 열분해</div>
+    <div class="dual-compound cmp-fire">클로로겐산 → 퀴노락톤</div>
+    <h4>산에서 바디로</h4>
+    <p>생두의 6–8%를 차지하는 클로로겐산(CGA)이 열분해로 <strong>퀸산</strong> + <strong>카페인산</strong>으로 분해됩니다. 퀸산은 깨끗하고 정제된 쓴맛을; 형성된 <strong>퀴노락톤</strong>은 바디와 질감을 부여합니다.</p>
+    <p>시트르산은 175°C부터 분해되어 인지 산미가 감소합니다. 말산은 거의 완전히 사라집니다. 결과적으로 산미가 날카로운 것에서 통합된 것으로 재균형을 이룹니다.</p>
+  </div>
+  <div class="dual-panel dual-ferm">
+    <div class="dual-label">🫧 말로락틱 발효</div>
+    <div class="dual-compound cmp-ferm">말산 → 젖산</div>
+    <h4>산에서 부드러움으로</h4>
+    <p>알코올 발효 후, <em class="t" style="color:var(--ferment-light)">Oenococcus oeni</em>가 말산(날카로운, 풋사과)을 <strong>젖산</strong>(부드러운, 유제품)으로 전환합니다. 이산(dicarboxylic acid)이 일산(monocarboxylic acid)으로 변하며, 산도가 문자 그대로 절반으로 줄어듭니다.</p>
+    <p>핵심 부산물: <strong>디아세틸</strong> — 커피에서도 나타나는 바로 그 버터 분자. 말로 완료된 샤르도네의 버터 노트가 순수한 디아세틸입니다. 미디엄 로스트 커피에서도 마찬가지입니다.</p>
+  </div>
+</div>
+
+<div class="sep"></div>
+
+<h2>IV. 변환의 시계</h2>
+
+<p>로스팅과 발효 사이의 가장 눈에 띄는 차이는 시간 규모일 것입니다. 하지만 두 과정 모두 유사한 단계를 가진 발전 곡선을 따릅니다.</p>
+
+<div class="timeline-compare">
+  <div class="tc-label">병렬 타임라인</div>
+  <div class="tc-grid">
+    <div class="tc-col">
+      <h4><span class="dot dot-fire"></span> 커피 로스팅</h4>
+      <div class="tc-bar bar-fire-grad"></div>
+      <div class="tc-step">
+        <div class="tc-time">0–5분</div>
+        <div class="tc-event">
+          <div class="tc-event-name">건조 단계</div>
+          <div class="tc-event-desc">자유수 증발. 생두가 녹색에서 노란색으로. 풀향과 빵 향.</div>
+        </div>
+      </div>
+      <div class="tc-step">
+        <div class="tc-time">5–9분</div>
+        <div class="tc-event">
+          <div class="tc-event-name">마이야르 반응</div>
+          <div class="tc-event-desc">강렬한 갈변. 피라진, 퓨란, 알데히드 형성. 밝은 갈색으로 전환.</div>
+        </div>
+      </div>
+      <div class="tc-step">
+        <div class="tc-time">9–11분</div>
+        <div class="tc-event">
+          <div class="tc-event-name">1차 크랙</div>
+          <div class="tc-event-desc">CO₂와 수증기의 내부 압력이 생두를 파열. 휘발성 물질 폭발. 캐러멜화 활성화.</div>
+        </div>
+      </div>
+      <div class="tc-step">
+        <div class="tc-time">11–14분</div>
+        <div class="tc-event">
+          <div class="tc-event-name">발전 단계</div>
+          <div class="tc-event-desc">산미와 바디의 균형. 멜라노이딘 중합. 1초가 중요합니다.</div>
+        </div>
+      </div>
+    </div>
+    <div class="tc-col">
+      <h4><span class="dot dot-ferm"></span> 와인 양조</h4>
+      <div class="tc-bar bar-ferm-grad"></div>
+      <div class="tc-step">
+        <div class="tc-time">0–2일</div>
+        <div class="tc-event">
+          <div class="tc-event-name">지연 단계</div>
+          <div class="tc-event-desc">효모가 머스트에 적응. 초기 효소 활동. 신선한 과일의 1차 아로마.</div>
+        </div>
+      </div>
+      <div class="tc-step">
+        <div class="tc-time">2–7일</div>
+        <div class="tc-event">
+          <div class="tc-event-name">격렬한 발효</div>
+          <div class="tc-event-desc">활동 절정. 당 → 에탄올 + CO₂ 대량 전환. 에스터와 고급알코올 형성.</div>
+        </div>
+      </div>
+      <div class="tc-step">
+        <div class="tc-time">1–4주</div>
+        <div class="tc-event">
+          <div class="tc-event-name">말로락틱 발효</div>
+          <div class="tc-event-desc">O. oeni가 말산 → 젖산 전환. 디아세틸. 산미 구조 연화.</div>
+        </div>
+      </div>
+      <div class="tc-step">
+        <div class="tc-time">6–24개월</div>
+        <div class="tc-event">
+          <div class="tc-event-name">숙성</div>
+          <div class="tc-event-desc">오크통에서의 느린 마이야르. 탄닌 중합. 통합. 3차 아로마. 매달이 중요합니다.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<p>깊은 구조적 유비가 있습니다. 커피의 <strong>건조 단계</strong>와 와인의 <strong>지연 단계</strong>는 준비: 능동적 변환 전에 시스템이 정돈됩니다. <strong>1차 크랙</strong>과 <strong>격렬한 발효</strong>는 클라이맥스: 최대 반응 속도, 최대 화합물 생성. <strong>크랙 후 발전</strong>과 <strong>숙성</strong>은 통합: 반응이 완화되고, 화합물이 중합되며, 복합성이 조립됩니다. 두 경우 모두 과정을 멈추는 정확한 지점이 음료의 최종 스타일을 결정합니다.</p>
+
+<div class="sep"></div>
+
+<h2>V. 페놀의 중합: 구조와 숙성</h2>
+
+<p>페놀 화합물은 두 음료 모두에서 구조의 설계자입니다. 그리고 두 경우 모두 변환은 이들을 <strong>중합</strong>시킵니다 — 더 긴 사슬로 결합시켜 관능적 행동을 근본적으로 바꿉니다.</p>
+
+<div class="phenol-dual">
+  <div class="ph-card">
+    <div class="ph-label ph-fire-label">로스팅</div>
+    <h4>멜라노이딘</h4>
+    <p>열에 의해 분해된 클로로겐산이 단백질·당과 재결합하여 <strong>멜라노이딘</strong> — 로스팅 커피의 최대 25%를 차지하는 고분자량 갈색 폴리머를 형성합니다. 갈색, 컵의 바디감, 항산화 기능을 담당합니다. 로스팅 정도가 깊을수록 중합도가 높아져 바디는 증가하고 산미는 감소합니다.</p>
+  </div>
+  <div class="ph-card">
+    <div class="ph-label ph-ferm-label">와인 양조</div>
+    <h4>탄닌-안토시아닌 복합체</h4>
+    <p>발효와 숙성 중 포도 껍질의 프로안토시아니딘 탄닌이 안토시아닌(적색 색소)과 결합하여 안정적인 <strong>색소 폴리머</strong>를 형성합니다. 이 중합이 수렴미를 연화하고(큰 폴리머는 단량체처럼 타액 단백질과 반응하지 않음), 색상을 안정시키며, 위대한 숙성 와인의 실크 같은 질감을 부여합니다.</p>
+  </div>
+</div>
+
+<div class="sep"></div>
+
+<h2>VI. 분자적 다리</h2>
+
+<p>로스팅과 발효 사이의 가장 직접적인 연결은 두 과정이 공유하는 분자들 — 다른 경로로 생성되었지만 두 잔과 두 잔 모두에서 인식 가능한 동일한 화합물입니다.</p>
+
+<div class="shared-mol">
+  <div class="sm-inner">
+    <div class="sm-label">공유 분자</div>
+    <div class="sm-grid">
+      <div class="sm-item">
+        <div class="sm-molecule">퓨라네올</div>
+        <div class="sm-name">C₆H₈O₃</div>
+        <div class="sm-aroma">딸기, 캐러멜, 솜사탕</div>
+        <div class="sm-where">
+          <span class="sm-tag tag-c">캐러멜화</span>
+          <span class="sm-tag tag-w">MLF 발효</span>
+        </div>
+      </div>
+      <div class="sm-item">
+        <div class="sm-molecule">디아세틸</div>
+        <div class="sm-name">C₄H₆O₂</div>
+        <div class="sm-aroma">버터, 크림, 버터스카치</div>
+        <div class="sm-where">
+          <span class="sm-tag tag-c">스트레커 / 마이야르</span>
+          <span class="sm-tag tag-w">O. oeni MLF</span>
+        </div>
+      </div>
+      <div class="sm-item">
+        <div class="sm-molecule">구아이아콜</div>
+        <div class="sm-name">C₇H₈O₂</div>
+        <div class="sm-aroma">훈연, 정향, 스파이시</div>
+        <div class="sm-where">
+          <span class="sm-tag tag-c">페놀 열분해</span>
+          <span class="sm-tag tag-w">오크통 숙성</span>
+        </div>
+      </div>
+      <div class="sm-item">
+        <div class="sm-molecule">바닐린</div>
+        <div class="sm-name">C₈H₈O₃</div>
+        <div class="sm-aroma">바닐라, 달콤한, 발사믹</div>
+        <div class="sm-where">
+          <span class="sm-tag tag-c">리그닌 분해</span>
+          <span class="sm-tag tag-w">오크 추출</span>
+        </div>
+      </div>
+      <div class="sm-item">
+        <div class="sm-molecule">리날룰</div>
+        <div class="sm-name">C₁₀H₁₈O</div>
+        <div class="sm-aroma">라벤더, 베르가못, 시트러스</div>
+        <div class="sm-where">
+          <span class="sm-tag tag-c">원두 테르펜</span>
+          <span class="sm-tag tag-w">포도 테르펜</span>
+        </div>
+      </div>
+      <div class="sm-item">
+        <div class="sm-molecule">퍼퓨랄</div>
+        <div class="sm-name">C₅H₄O₂</div>
+        <div class="sm-aroma">아몬드, 토스트, 빵</div>
+        <div class="sm-where">
+          <span class="sm-tag tag-c">열적 마이야르</span>
+          <span class="sm-tag tag-w">오크통 마이야르</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="callout">
+  <div class="callout-label">통합 원리</div>
+  <p>불과 발효는 같은 언어의 두 방언입니다. 하나는 빠르게, 분 단위로, 열의 운동에너지로 말합니다. 다른 하나는 느리게, 월 단위로, 효소의 촉매적 정밀함으로 말합니다. 그러나 둘 다 같은 것을 말합니다: <strong>당과 아미노산을 향미 복합성으로 변환하고, 산을 균형으로 재배열하며, 페놀을 구조로 중합하는 것</strong>. 마스터 로스터와 양조가는 본질적으로 같은 반응의 관리자입니다 — 온도로 나뉘고, 화학으로 하나.</p>
+</div>
+
+<h2>당신의 잔에서 이것이 의미하는 것</h2>
+
+<p>다음에 HARA에서 에스프레소를 마시며 캐러멜, 버터, 스모키한 터치를 감지할 때, 바로 그 분자들이 오크통에서 숙성된 샤르도네에, 카파야테의 프렌치 오크 말벡에도 살고 있음을 기억하세요. 은유가 아닙니다: 같은 디아세틸, 같은 구아이아콜, 같은 바닐린입니다.</p>
+
+<p>커피와 와인은 먼 사촌이 아닙니다. 다른 부모에게 키워진 형제입니다 — 하나는 로스터의 불에, 다른 하나는 발효의 효모에 — 그러나 같은 화학적 DNA를 가진. 이 연결을 이해하는 것은 잔과 잔 속의 품질이 같은 곳에서 태어난다는 것을 이해하는 것입니다: 원료를 주는 테루아, 그리고 그것을 맛볼 수 있는 것으로 번역하는 통제된 변환.</p>
+
+<p>매 한 방울이 의미를 갖습니다 — 모든 방울 안에 불과 발효가 있기 때문입니다.</p>
+
+</div>
+
+<!-- ══════ ENGLISH ══════ -->
+<div class="lang-content" data-lang="en" style="display:none;">
+
+<h2>Two transformations, one grammar</h2>
+
+<p>A green coffee bean doesn't taste like coffee. Freshly crushed grapes don't taste like wine. Both are silent raw materials that need a <strong>profound chemical transformation</strong> to reveal what they carry inside. In coffee, that transformation is driven by heat: 200°C for 10–14 minutes. In wine, by microorganisms: yeasts and bacteria over days, weeks, months.</p>
+
+<p>They seem to have nothing in common. But when we descend to the molecular level, what we find is extraordinary: <strong>the same fundamental reactions</strong> occur in both processes. Maillard, caramelization, acid degradation, phenolic polymerization — the chemical grammar is shared; only the energy that activates it changes: thermal in roasting, biological in fermentation.</p>
+
+<div class="sep"></div>
+
+<h2>I. The Maillard reaction: the shared engine</h2>
+
+<p>If there is one reaction that defines flavor transformation across cooking, baking, brewing, coffee roasting, and wine aging, it is the <em class="t">Maillard reaction</em>. Described by Louis-Camille Maillard in 1912, it is the interaction between an amino acid and a reducing sugar that generates hundreds of aromatic compounds, brown pigments, and flavor polymers.</p>
+
+<div class="dual">
+  <div class="dual-panel dual-fire">
+    <div class="dual-label">🔥 COFFEE ROASTING</div>
+    <div class="dual-compound cmp-fire">THERMAL MAILLARD · 150–200°C</div>
+    <h4>Explosive and fast</h4>
+    <p>From 150°C, the bean's free amino acids (asparagine, glutamine, proline) react with reducing sugars (glucose, fructose) generating <strong>Amadori</strong> intermediates that fragment into hundreds of volatiles.</p>
+    <p>Key products: <strong>pyrazines</strong> (roasted, nutty), <strong>furans</strong> (caramel), <strong>pyrroles</strong> (earthy), <strong>thiophenes</strong> (umami). All within 10–14 minutes.</p>
+  </div>
+  <div class="dual-panel dual-ferm">
+    <div class="dual-label">🫧 WINEMAKING</div>
+    <div class="dual-compound cmp-ferm">ENZYMATIC MAILLARD · 15–30°C</div>
+    <h4>Slow and cumulative</h4>
+    <p>In wine, the same reaction occurs at ambient temperature during <strong>aging</strong>, especially in barrel. The grape's amino acids (proline, arginine) react with residual sugars over months and years.</p>
+    <p>Key products: <strong>melanoidins</strong> (amber color), <strong>sotolon</strong> (walnut, curry — signature of rancio and Sherry wines), <strong>furfural</strong> (toasted almond). Same chemistry, multiplied by time.</p>
+  </div>
+</div>
+
+<p>The difference is kinetic, not chemical. Roasting compresses into minutes what wine aging extends across years. Temperature is a brutal catalyst that accelerates the same reaction pathways. When a coffee taster detects "nutty and caramel notes" and a sommelier describes "tertiary aromas of dried fruit and toffee," they are perceiving the same Maillard products — one activated by fire, the other by patience.</p>
+
+<div class="reaction-card">
+  <div class="rc-inner">
+    <div class="rc-label">THE MAILLARD REACTION</div>
+    <div class="rc-equation">
+      <span class="reactant">Amino Acid</span> <span class="arrow">+</span> <span class="reactant">Reducing Sugar</span><br>
+      <span class="arrow">─── <span class="catalyst">Δ heat</span> or <span class="catalyst">time</span> ───→</span><br>
+      <span class="product">Melanoidins</span> <span class="arrow">+</span> <span class="product">Aromatic Volatiles</span> <span class="arrow">+</span> <span class="product">CO₂</span>
+    </div>
+    <div class="rc-note">In coffee: Δ = 150–200°C for 10–14 min.<br>In wine: Δ = 15–20°C for months to years.<br>Products are homologous. Kinetics is the only difference.</div>
+  </div>
+</div>
+
+<div class="sep"></div>
+
+<h2>II. The fate of sugars</h2>
+
+<p>Sucrose makes up to 8% of green coffee's dry weight. Glucose and fructose represent 20–25% of grape must. In both cases, sugars are the <strong>central fuel</strong> of transformation — yet they follow spectacularly different paths that converge on surprisingly similar results.</p>
+
+<div class="dual">
+  <div class="dual-panel dual-fire">
+    <div class="dual-label">🔥 CARAMELIZATION</div>
+    <div class="dual-compound cmp-fire">THERMAL PYROLYSIS · 170–200°C</div>
+    <h4>From sugar to aroma by fire</h4>
+    <p>Sucrose hydrolyzes into glucose and fructose, which then undergo <strong>caramelization</strong>: dehydration, cyclization, and thermal fragmentation. Products: <strong>diacetyl</strong> (butter), <strong>maltol</strong> (cotton candy), <strong>furaneol</strong> (strawberry, caramel).</p>
+    <p>At higher temperatures, <strong>Strecker degradation</strong> generates low-molecular-weight aldehydes that are the main carriers of the "roasted coffee" aroma.</p>
+  </div>
+  <div class="dual-panel dual-ferm">
+    <div class="dual-label">🫧 ALCOHOLIC FERMENTATION</div>
+    <div class="dual-compound cmp-ferm">BIOLOGICAL GLYCOLYSIS · 15–30°C</div>
+    <h4>From sugar to aroma by yeast</h4>
+    <p><em class="t" style="color:var(--ferment-light)">Saccharomyces cerevisiae</em> converts glucose to ethanol + CO₂ via glycolysis and the Embden-Meyerhof pathway. But ethanol is just the main product; the <strong>byproducts</strong> are the real treasure.</p>
+    <p>Secondary products: <strong>esters</strong> (isoamyl acetate = banana; ethyl acetate = apple), <strong>glycerol</strong> (viscosity, sweetness), <strong>higher alcohols</strong> (complexity). Yeast is the biological "furnace."</p>
+  </div>
+</div>
+
+<div class="sep"></div>
+
+<h2>III. The transformation of acids</h2>
+
+<p>Both coffee and wine need to rebalance their acidity during transformation. The green bean and fresh grape share an excess of acids that, unmodified, would produce aggressively sour beverages. The solution in both cases is <strong>selective degradation</strong>.</p>
+
+<div class="dual">
+  <div class="dual-panel dual-fire">
+    <div class="dual-label">🔥 THERMAL DEGRADATION</div>
+    <div class="dual-compound cmp-fire">CHLOROGENIC ACIDS → QUINOLACTONES</div>
+    <h4>From acid to body</h4>
+    <p>Chlorogenic acids (CGA), representing 6–8% of the green bean, decompose via thermolysis into <strong>quinic acid</strong> + <strong>caffeic acid</strong>. Quinic acid produces a clean, defined bitterness; the <strong>quinolactones</strong> formed contribute body and texture.</p>
+    <p>Citric acid degrades from 175°C, reducing perceived acidity. Malic acid nearly vanishes. The result is a rebalancing where acidity shifts from sharp to integrated.</p>
+  </div>
+  <div class="dual-panel dual-ferm">
+    <div class="dual-label">🫧 MALOLACTIC FERMENTATION</div>
+    <div class="dual-compound cmp-ferm">MALIC ACID → LACTIC ACID</div>
+    <h4>From acid to softness</h4>
+    <p>After alcoholic fermentation, <em class="t" style="color:var(--ferment-light)">Oenococcus oeni</em> converts malic acid (sharp, green apple) to <strong>lactic acid</strong> (soft, dairy). A dicarboxylic acid becomes a monocarboxylic acid, literally halving the acidity.</p>
+    <p>Key byproduct: <strong>diacetyl</strong> — the same butter molecule found in coffee. The buttery note in a fully malolactic Chardonnay is pure diacetyl. In medium-roast coffee, too.</p>
+  </div>
+</div>
+
+<div class="sep"></div>
+
+<h2>IV. The clock of transformation</h2>
+
+<p>Perhaps the most visible difference between roasting and fermentation is the timescale. But both processes follow a development curve with analogous phases.</p>
+
+<div class="timeline-compare">
+  <div class="tc-label">PARALLEL TIMELINES</div>
+  <div class="tc-grid">
+    <div class="tc-col">
+      <h4><span class="dot dot-fire"></span> Coffee Roasting</h4>
+      <div class="tc-bar bar-fire-grad"></div>
+      <div class="tc-step">
+        <div class="tc-time">0–5 min</div>
+        <div class="tc-event">
+          <div class="tc-event-name">Drying phase</div>
+          <div class="tc-event-desc">Free water evaporation. Bean shifts from green to yellow. Grassy, bread-like aromas.</div>
+        </div>
+      </div>
+      <div class="tc-step">
+        <div class="tc-time">5–9 min</div>
+        <div class="tc-event">
+          <div class="tc-event-name">Maillard reactions</div>
+          <div class="tc-event-desc">Intense browning. Pyrazine, furan, aldehyde formation. Color shifts to light brown.</div>
+        </div>
+      </div>
+      <div class="tc-step">
+        <div class="tc-time">9–11 min</div>
+        <div class="tc-event">
+          <div class="tc-event-name">First crack</div>
+          <div class="tc-event-desc">Internal CO₂ and steam pressure fractures the bean. Volatile explosion. Active caramelization.</div>
+        </div>
+      </div>
+      <div class="tc-step">
+        <div class="tc-time">11–14 min</div>
+        <div class="tc-event">
+          <div class="tc-event-name">Development</div>
+          <div class="tc-event-desc">Acidity-body balance. Melanoidin polymerization. Every second matters.</div>
+        </div>
+      </div>
+    </div>
+    <div class="tc-col">
+      <h4><span class="dot dot-ferm"></span> Winemaking</h4>
+      <div class="tc-bar bar-ferm-grad"></div>
+      <div class="tc-step">
+        <div class="tc-time">0–2 days</div>
+        <div class="tc-event">
+          <div class="tc-event-name">Lag phase</div>
+          <div class="tc-event-desc">Yeasts adapt to must. Initial enzymatic activity. Primary fresh-fruit aromas.</div>
+        </div>
+      </div>
+      <div class="tc-step">
+        <div class="tc-time">2–7 days</div>
+        <div class="tc-event">
+          <div class="tc-event-name">Tumultuous fermentation</div>
+          <div class="tc-event-desc">Peak activity. Massive sugar → ethanol + CO₂ conversion. Ester and higher alcohol formation.</div>
+        </div>
+      </div>
+      <div class="tc-step">
+        <div class="tc-time">1–4 wks</div>
+        <div class="tc-event">
+          <div class="tc-event-name">Malolactic fermentation</div>
+          <div class="tc-event-desc">O. oeni converts malic → lactic. Diacetyl. Acid structure softening.</div>
+        </div>
+      </div>
+      <div class="tc-step">
+        <div class="tc-time">6–24 mo.</div>
+        <div class="tc-event">
+          <div class="tc-event-name">Aging</div>
+          <div class="tc-event-desc">Slow barrel Maillard. Tannin polymerization. Integration. Tertiary aromas. Every month counts.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="sep"></div>
+
+<h2>V. Phenolic polymerization: structure and aging</h2>
+
+<p>Phenolic compounds are the architects of structure in both beverages. And in both cases, transformation forces them to <strong>polymerize</strong> — joining into longer chains that radically change their sensory behavior.</p>
+
+<div class="phenol-dual">
+  <div class="ph-card">
+    <div class="ph-label ph-fire-label">ROASTING</div>
+    <h4>Melanoidins</h4>
+    <p>Chlorogenic acids, degraded by heat, recombine with proteins and sugars to form <strong>melanoidins</strong> — high-molecular-weight brown polymers making up to 25% of roasted coffee. They create the brown color, cup body, and function as antioxidants. Deeper roast = more polymerization = more body, less acidity.</p>
+  </div>
+  <div class="ph-card">
+    <div class="ph-label ph-ferm-label">WINEMAKING</div>
+    <h4>Tannin-anthocyanin complexes</h4>
+    <p>During fermentation and aging, proanthocyanidin tannins from grape skin bind with anthocyanins (red pigments) forming stable <strong>pigmented polymers</strong>. This polymerization softens astringency (large polymers don't interact with saliva like monomers), stabilizes color, and creates the silky texture of great aged wines.</p>
+  </div>
+</div>
+
+<div class="sep"></div>
+
+<h2>VI. The molecular bridges</h2>
+
+<p>The most direct connection between roasting and fermentation is the molecules both processes share — identical compounds, generated by different routes, recognizable in both cups and glasses.</p>
+
+<div class="shared-mol">
+  <div class="sm-inner">
+    <div class="sm-label">SHARED MOLECULES</div>
+    <div class="sm-grid">
+      <div class="sm-item">
+        <div class="sm-molecule">Furaneol</div>
+        <div class="sm-name">C₆H₈O₃</div>
+        <div class="sm-aroma">strawberry, caramel, cotton candy</div>
+        <div class="sm-where">
+          <span class="sm-tag tag-c">Caramelization</span>
+          <span class="sm-tag tag-w">MLF fermentation</span>
+        </div>
+      </div>
+      <div class="sm-item">
+        <div class="sm-molecule">Diacetyl</div>
+        <div class="sm-name">C₄H₆O₂</div>
+        <div class="sm-aroma">butter, cream, butterscotch</div>
+        <div class="sm-where">
+          <span class="sm-tag tag-c">Strecker / Maillard</span>
+          <span class="sm-tag tag-w">O. oeni MLF</span>
+        </div>
+      </div>
+      <div class="sm-item">
+        <div class="sm-molecule">Guaiacol</div>
+        <div class="sm-name">C₇H₈O₂</div>
+        <div class="sm-aroma">smoky, clove, spicy</div>
+        <div class="sm-where">
+          <span class="sm-tag tag-c">Phenolic pyrolysis</span>
+          <span class="sm-tag tag-w">Barrel aging</span>
+        </div>
+      </div>
+      <div class="sm-item">
+        <div class="sm-molecule">Vanillin</div>
+        <div class="sm-name">C₈H₈O₃</div>
+        <div class="sm-aroma">vanilla, sweet, balsamic</div>
+        <div class="sm-where">
+          <span class="sm-tag tag-c">Lignin degradation</span>
+          <span class="sm-tag tag-w">Oak extraction</span>
+        </div>
+      </div>
+      <div class="sm-item">
+        <div class="sm-molecule">Linalool</div>
+        <div class="sm-name">C₁₀H₁₈O</div>
+        <div class="sm-aroma">lavender, bergamot, citrus</div>
+        <div class="sm-where">
+          <span class="sm-tag tag-c">Bean terpene</span>
+          <span class="sm-tag tag-w">Grape terpene</span>
+        </div>
+      </div>
+      <div class="sm-item">
+        <div class="sm-molecule">Furfural</div>
+        <div class="sm-name">C₅H₄O₂</div>
+        <div class="sm-aroma">almond, toast, bread</div>
+        <div class="sm-where">
+          <span class="sm-tag tag-c">Thermal Maillard</span>
+          <span class="sm-tag tag-w">Barrel Maillard</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="callout">
+  <div class="callout-label">THE UNIFYING PRINCIPLE</div>
+  <p>Fire and ferment are two dialects of the same language. One speaks fast, in minutes, with the kinetic energy of heat. The other speaks slowly, over months, with the catalytic precision of enzymes. But both say the same thing: <strong>transform sugars and amino acids into aromatic complexity, reorganize acids into balance, and polymerize phenols into structure</strong>. The master roaster and the winemaker are, in essence, managers of the same reactions — separated by temperature, united by chemistry.</p>
+</div>
+
+<h2>What this means in your cup</h2>
+
+<p>Next time you drink an espresso at HARA and perceive notes of caramel, butter, and a smoky touch, remember that those same molecules live in an oaked Chardonnay, in a Cafayate Malbec aged in French oak barrels. It's not a metaphor: it's the same diacetyl, the same guaiacol, the same vanillin.</p>
+
+<p>Coffee and wine aren't distant cousins. They're siblings raised by different parents — one by the roaster's fire, the other by fermentation's yeasts — but sharing the same chemical DNA. Understanding this connection means understanding that quality in the cup and in the glass is born from the same place: a terroir that provides the raw material, and a controlled transformation that translates it into something we can taste.</p>
+
+<p>Every drop counts — because in every drop there is fire and ferment.</p>
+
+</div>
+
+</article>
+
+<div class="author-card">
+  <div class="author-avatar"><span>H</span></div>
+  <div class="author-info">
+    <h4>HARA Coffee Lab</h4>
+    <p data-i18n="ab">Ciencia, precisión y pasión por el café de especialidad. Salta, Argentina.</p>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-brand">© 2026 HARA COFFEE LAB · SALTA, ARGENTINA · CADA GOTA CUENTA</div>
+</footer>
+
+<script>
+let currentLang='es';
+const ui={
+  es:{ho:'CIENCIA × TRANSFORMACIÓN',ht:'<span class="fire">Fuego</span> y <span class="ferm">Fermento</span><br>la misma química, dos caminos',hs:'Maillard, caramelización, transformación fenólica — cómo el tueste del café y la fermentación del vino comparten las mismas reacciones fundamentales.',hb:'CIENCIA',hr:'14 min lectura',ab:'Ciencia, precisión y pasión por el café de especialidad. Salta, Argentina.'},
+  ko:{ho:'과학 × 변환',ht:'<span class="fire">불</span>과 <span class="ferm">발효</span><br>같은 화학, 두 갈래 길',hs:'마이야르, 캐러멜화, 페놀 변환 — 커피 로스팅과 와인 발효가 공유하는 근본 반응들.',hb:'과학',hr:'14분 소요',ab:'과학, 정밀함, 그리고 스페셜티 커피에 대한 열정. 아르헨티나 살타.'},
+  en:{ho:'SCIENCE × TRANSFORMATION',ht:'<span class="fire">Fire</span> and <span class="ferm">Ferment</span><br>same chemistry, two paths',hs:'Maillard, caramelization, phenolic transformation — how coffee roasting and wine fermentation share the same fundamental reactions.',hb:'SCIENCE',hr:'14 min read',ab:'Science, precision, and passion for specialty coffee. Salta, Argentina.'}
+};
+function switchLang(l){
+  currentLang=l;
+  document.documentElement.lang=l==='ko'?'ko':l==='en'?'en':'es';
+  document.querySelectorAll('[data-i18n]').forEach(e=>{const k=e.dataset.i18n;if(ui[l][k])e.innerHTML=ui[l][k]});
+  document.querySelectorAll('.lang-content').forEach(e=>{e.style.display=e.dataset.lang===l?'block':'none'});
+  document.querySelectorAll('.lang-btn').forEach(b=>b.classList.toggle('active',b.dataset.lang===l));
+}
+document.querySelectorAll('.lang-btn').forEach(b=>{b.addEventListener('click',()=>switchLang(b.dataset.lang))});
+window.addEventListener('scroll',()=>{
+  const d=document.documentElement;
+  document.getElementById('progressBar').style.width=(d.scrollTop/(d.scrollHeight-d.clientHeight))*100+'%';
+  document.getElementById('mainNav').classList.toggle('scrolled',d.scrollTop>60);
+});
+</script>
+</body>
+</html>

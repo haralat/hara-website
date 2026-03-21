@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HARA Blog — Cada Gota Cuenta</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Noto+Sans+KR:wght@200;300;400;500;600&family=Noto+Sans:wght@200;300;400;500;600&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+:root{--espresso:#1a1210;--crema:#d4a574;--cream:#f5efe6;--warm-white:#faf8f4;--roast-mid:#6b4226;--copper:#b87333;--amber:#c9a84c;--water-blue:#7ba0b8;--ice-blue:#a8c8d8;--text-primary:#1a1210;--text-secondary:#6b5b50;--text-light:#a09080;--border-light:rgba(212,165,116,.15)}
+*{margin:0;padding:0;box-sizing:border-box}html{scroll-behavior:smooth;font-size:16px}
+body{background:var(--warm-white);color:var(--text-primary);font-family:'Noto Sans','Noto Sans KR',sans-serif;font-weight:300;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:var(--warm-white)}::-webkit-scrollbar-thumb{background:var(--crema);border-radius:3px}
+nav{position:fixed;top:0;left:0;right:0;z-index:200;padding:1.2rem 3rem;display:flex;justify-content:space-between;align-items:center;transition:all .5s ease}
+nav.scrolled{background:rgba(250,248,244,.92);backdrop-filter:blur(24px);padding:.9rem 3rem;box-shadow:0 1px 0 rgba(26,18,16,.06)}
+.nav-left{display:flex;align-items:center;gap:2.5rem}
+.nav-logo{font-family:'Cormorant Garamond',serif;font-weight:500;letter-spacing:.15em;color:var(--text-primary);text-decoration:none;font-size:1.3rem;line-height:1}
+.nav-logo small{display:block;font-weight:300;font-size:.55rem;letter-spacing:.3em;color:var(--text-secondary);margin-top:2px}
+.nav-back{font-size:.72rem;font-weight:400;letter-spacing:.08em;color:var(--text-secondary);text-decoration:none;display:flex;align-items:center;gap:.4rem;transition:color .3s}
+.nav-back:hover{color:var(--espresso)}
+.lang-switcher{display:flex;border:1px solid var(--border-light);border-radius:6px;overflow:hidden}
+.lang-btn{font-family:'JetBrains Mono',monospace;font-size:.6rem;letter-spacing:.1em;padding:.4rem .65rem;border:none;background:transparent;color:var(--text-light);cursor:pointer;transition:all .3s}
+.lang-btn:not(:last-child){border-right:1px solid var(--border-light)}
+.lang-btn.active{background:var(--espresso);color:var(--cream)}
+.lang-btn:hover:not(.active){background:rgba(212,165,116,.08);color:var(--roast-mid)}
+.progress-bar{position:fixed;top:0;left:0;height:2px;z-index:300;width:0%;background:var(--crema);transition:width .1s linear}
+
+/* ═══ HERO ═══ */
+.post-hero{height:100vh;min-height:600px;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;background:var(--espresso)}
+.post-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 65%,rgba(212,165,116,.07),transparent 50%)}
+
+/* Falling drops animation */
+.drops-bg{position:absolute;inset:0;overflow:hidden;pointer-events:none}
+.drop-line{position:absolute;width:1px;background:linear-gradient(to bottom,transparent,rgba(212,165,116,.08),transparent);animation:dropLine linear infinite}
+@keyframes dropLine{0%{transform:translateY(-100%)}100%{transform:translateY(100vh)}}
+
+.hero-content{position:relative;z-index:2;text-align:center;padding:2rem;max-width:700px}
+.hero-overline{font-family:'JetBrains Mono',monospace;font-size:.55rem;letter-spacing:.5em;color:rgba(245,239,230,.25);margin-bottom:3rem;opacity:0;animation:fadeUp .8s ease .3s forwards}
+.hero-title{font-family:'Cormorant Garamond',serif;font-size:clamp(3rem,7vw,6rem);font-weight:300;line-height:1;color:var(--cream);margin-bottom:.5rem;opacity:0;animation:fadeUp 1.2s ease .6s forwards;letter-spacing:.02em}
+.hero-title em{font-style:italic;color:var(--crema)}
+.hero-subtitle{font-family:'Cormorant Garamond',serif;font-size:clamp(1rem,2vw,1.35rem);font-weight:300;font-style:italic;color:rgba(245,239,230,.3);margin-bottom:3rem;opacity:0;animation:fadeUp .8s ease .9s forwards}
+.hero-drop-symbol{font-size:2rem;opacity:0;animation:fadeUp .8s ease 1.2s forwards,pulseGlow 3s ease-in-out 2s infinite}
+@keyframes pulseGlow{0%,100%{opacity:.6;filter:brightness(1)}50%{opacity:1;filter:brightness(1.3)}}
+
+.hero-meta{margin-top:3rem;display:flex;justify-content:center;gap:1.5rem;opacity:0;animation:fadeUp .8s ease 1.5s forwards}
+.hero-badge{font-family:'JetBrains Mono',monospace;font-size:.55rem;letter-spacing:.2em;padding:.35rem .8rem;border-radius:4px;background:rgba(212,165,116,.12);color:var(--crema)}
+.hero-date,.hero-read{font-family:'JetBrains Mono',monospace;font-size:.6rem;color:rgba(245,239,230,.25);letter-spacing:.1em}
+
+/* ═══ ARTICLE ═══ */
+.article-body{max-width:660px;margin:0 auto;padding:5rem 2rem 4rem}
+.article-body h2{font-family:'Cormorant Garamond',serif;font-size:1.7rem;font-weight:400;color:var(--espresso);margin:3.5rem 0 1rem;line-height:1.35}
+.article-body h2:first-child{margin-top:0}
+.article-body p{font-size:.95rem;line-height:2.15;color:var(--text-secondary);margin-bottom:1.4rem}
+.article-body p strong{color:var(--text-primary);font-weight:500}
+.article-body p em.t{font-style:italic;color:var(--copper);font-family:'Cormorant Garamond',serif;font-size:1.05em}
+.sep{width:6px;height:6px;border-radius:50%;background:var(--crema);margin:3rem auto;opacity:.4}
+
+/* ═══ DROP TIMELINE ═══ */
+.drop-timeline{margin:3rem -1rem;padding:0;position:relative}
+.dt-line{position:absolute;left:30px;top:0;bottom:0;width:1px;background:linear-gradient(to bottom,var(--crema),rgba(212,165,116,.1))}
+.dt-item{display:flex;gap:1.5rem;align-items:flex-start;padding:1.5rem 0;position:relative}
+.dt-dot{width:12px;height:12px;border-radius:50%;flex-shrink:0;margin-top:.3rem;position:relative;z-index:1;margin-left:24px}
+.dt-dot-1{background:var(--crema);box-shadow:0 0 8px rgba(212,165,116,.3)}
+.dt-dot-2{background:var(--copper);box-shadow:0 0 8px rgba(184,115,51,.2)}
+.dt-dot-3{background:var(--roast-mid);box-shadow:0 0 8px rgba(107,66,38,.2)}
+.dt-dot-4{background:var(--text-light);box-shadow:0 0 8px rgba(160,144,128,.15)}
+.dt-content{}
+.dt-label{font-family:'JetBrains Mono',monospace;font-size:.55rem;letter-spacing:.15em;margin-bottom:.3rem}
+.dt-label-1{color:var(--crema)}
+.dt-label-2{color:var(--copper)}
+.dt-label-3{color:var(--roast-mid)}
+.dt-label-4{color:var(--text-light)}
+.dt-text{font-size:.85rem;line-height:1.75;color:var(--text-secondary)}
+.dt-text strong{color:var(--text-primary)}
+
+/* ═══ POEM BLOCK ═══ */
+.poem-block{margin:3rem -1rem;padding:3rem;background:var(--espresso);border-radius:20px;color:var(--cream);text-align:center;position:relative;overflow:hidden}
+.poem-block::before{content:'';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,rgba(212,165,116,.06),transparent);pointer-events:none}
+.poem-inner{position:relative;z-index:1}
+.poem-block .poem-line{font-family:'Cormorant Garamond',serif;font-size:clamp(1rem,2.5vw,1.25rem);font-weight:300;font-style:italic;line-height:2.2;color:rgba(245,239,230,.6);display:block}
+.poem-block .poem-line strong{color:var(--crema);font-weight:400}
+.poem-block .poem-break{display:block;height:1.2rem}
+
+/* ═══ PARALLEL CARD ═══ */
+.parallel{margin:3rem -1rem;display:grid;grid-template-columns:1fr 1fr;gap:0;border-radius:20px;overflow:hidden;border:1px solid var(--border-light)}
+.par-side{padding:2.5rem}
+.par-coffee{background:rgba(212,165,116,.03)}
+.par-life{background:rgba(26,18,16,.015)}
+.par-label{font-family:'JetBrains Mono',monospace;font-size:.5rem;letter-spacing:.3em;margin-bottom:1.2rem}
+.par-coffee .par-label{color:var(--crema)}
+.par-life .par-label{color:var(--text-light)}
+.par-side h4{font-family:'Cormorant Garamond',serif;font-size:1.15rem;font-weight:400;margin-bottom:.6rem;color:var(--espresso)}
+.par-side p{font-size:.82rem;line-height:1.85;color:var(--text-secondary);margin-bottom:0}
+
+/* ═══ COMMUNITY SECTION ═══ */
+.community-block{margin:3rem -1rem;padding:2.5rem;background:white;border:1px solid var(--border-light);border-radius:20px;position:relative;overflow:hidden}
+.community-block::before{content:'';position:absolute;top:-30%;right:-20%;width:250px;height:250px;border-radius:50%;background:radial-gradient(circle,rgba(212,165,116,.05),transparent);pointer-events:none}
+.cb-inner{position:relative;z-index:1}
+.cb-label{font-family:'JetBrains Mono',monospace;font-size:.55rem;letter-spacing:.3em;color:var(--crema);margin-bottom:1.5rem}
+.drops-row{display:flex;justify-content:center;gap:.15rem;margin:1.5rem 0;flex-wrap:wrap}
+.mini-drop{width:8px;height:8px;border-radius:50%;transition:all .3s}
+.mini-drop:nth-child(odd){background:var(--crema)}
+.mini-drop:nth-child(even){background:var(--copper)}
+.mini-drop:nth-child(3n){background:var(--roast-mid)}
+.mini-drop:nth-child(5n){background:var(--amber)}
+.mini-drop:nth-child(7n){background:var(--water-blue)}
+.cb-text{font-size:.88rem;line-height:2;color:var(--text-secondary);text-align:center;max-width:520px;margin:0 auto}
+.cb-text strong{color:var(--text-primary)}
+
+/* ═══ MANIFESTO ═══ */
+.manifesto{margin:3rem -1rem;padding:4rem 3rem;background:var(--espresso);border-radius:24px;color:var(--cream);text-align:center;position:relative;overflow:hidden}
+.manifesto::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 50%,rgba(212,165,116,.05),transparent 50%)}
+.manifesto-inner{position:relative;z-index:1}
+.manifesto blockquote{font-family:'Cormorant Garamond',serif;font-size:clamp(1.6rem,4vw,2.8rem);font-weight:300;font-style:italic;line-height:1.3;color:var(--cream);max-width:550px;margin:0 auto 1rem;quotes:none}
+.manifesto blockquote em{color:var(--crema);font-style:italic}
+.manifesto .mf-sub{font-size:.88rem;color:rgba(245,239,230,.35);line-height:1.7;max-width:420px;margin:0 auto 2rem}
+.manifesto .mf-sig{font-family:'JetBrains Mono',monospace;font-size:.55rem;letter-spacing:.3em;color:var(--crema)}
+
+/* ═══ CALLOUT ═══ */
+.callout{background:var(--espresso);color:var(--cream);border-radius:16px;padding:2.5rem;margin:2.5rem -1rem;position:relative;overflow:hidden}
+.callout::before{content:'';position:absolute;top:-40%;right:-20%;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,rgba(212,165,116,.06),transparent)}
+.callout .callout-label{font-family:'JetBrains Mono',monospace;font-size:.55rem;letter-spacing:.3em;color:var(--crema);margin-bottom:1rem}
+.callout p{font-size:.88rem;line-height:1.95;color:rgba(245,239,230,.55);margin-bottom:0}
+.callout p strong{color:var(--crema)}
+
+.author-card{max-width:660px;margin:0 auto 4rem;padding:2rem 2rem 0;display:flex;align-items:center;gap:1.5rem;border-top:1px solid var(--border-light)}
+.author-avatar{width:56px;height:56px;border-radius:50%;background:var(--espresso);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.author-avatar span{font-family:'Cormorant Garamond',serif;font-size:1.2rem;color:var(--crema);font-weight:500}
+.author-info h4{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:500;margin-bottom:.15rem}
+.author-info p{font-size:.78rem;color:var(--text-secondary);line-height:1.5}
+footer{padding:3rem 2rem;text-align:center}
+.footer-brand{font-family:'JetBrains Mono',monospace;font-size:.58rem;letter-spacing:.25em;color:var(--text-light)}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@media(max-width:768px){nav{padding:1rem 1.5rem}.post-hero{height:85vh;min-height:520px}.article-body{padding:3.5rem 1.5rem 3rem}.parallel,.poem-block,.community-block,.manifesto,.callout,.drop-timeline{margin-left:-.5rem;margin-right:-.5rem}.parallel{grid-template-columns:1fr}.par-side{padding:2rem 1.5rem}.poem-block,.community-block,.manifesto,.callout{padding:2rem 1.5rem}.author-card{flex-direction:column;text-align:center;padding:1.5rem}}
+</style>
+</head>
+<body>
+<div class="progress-bar" id="progressBar"></div>
+<nav id="mainNav"><div class="nav-left"><a href="/" class="nav-logo">HARA<small>COFFEE LAB</small></a><a href="blog-index.html" class="nav-back"><span>←</span> Blog</a></div><div class="lang-switcher"><button class="lang-btn active" data-lang="es">ES</button><button class="lang-btn" data-lang="ko">KO</button><button class="lang-btn" data-lang="en">EN</button></div></nav>
+
+<div class="post-hero">
+  <div class="drops-bg">
+    <div class="drop-line" style="left:15%;height:40%;animation-duration:4.5s;animation-delay:0s"></div>
+    <div class="drop-line" style="left:35%;height:55%;animation-duration:5.2s;animation-delay:1.2s"></div>
+    <div class="drop-line" style="left:50%;height:45%;animation-duration:4s;animation-delay:.5s"></div>
+    <div class="drop-line" style="left:68%;height:50%;animation-duration:5.8s;animation-delay:2s"></div>
+    <div class="drop-line" style="left:85%;height:35%;animation-duration:4.8s;animation-delay:.8s"></div>
+  </div>
+  <div class="hero-content">
+    <div class="hero-overline" data-i18n="ho">HARA COFFEE LAB</div>
+    <h1 class="hero-title" data-i18n="ht"><em>Cada Gota</em><br>Cuenta</h1>
+    <div class="hero-subtitle" data-i18n="hst">매 한 방울이 의미를 갖는다</div>
+    <div class="hero-drop-symbol">💧</div>
+    <div class="hero-meta"><span class="hero-badge" data-i18n="hb">FILOSOFÍA</span><span class="hero-date">17 FEB 2026</span><span class="hero-read" data-i18n="hr">7 min lectura</span></div>
+  </div>
+</div>
+
+<article class="article-body" id="articleBody">
+
+<!-- ══════ SPANISH ══════ -->
+<div class="lang-content" data-lang="es">
+
+<h2>Lo que se ve cuando cae una gota</h2>
+
+<p>Si alguna vez preparaste un espresso, sabés que dura menos de 30 segundos. Un hilo continuo de café cae en la taza. No hay tiempo para detenerse a mirar. El filtrado es un poco más largo — tres, cuatro minutos — pero el flujo también es constante, continuo, urgente. En ambos casos, el café llega como un río. No como lluvia.</p>
+
+<p>Pero cuando preparás un <em class="t">Café de Goteo en Frío</em>, algo diferente ocurre. El agua cae sobre el café una gota a la vez. Una gota cada uno o dos segundos. Durante horas. Y si te quedás mirando — y tarde o temprano todos nos quedamos mirando — empezás a notar algo que no se puede notar en ningún otro método de preparación:</p>
+
+<p><strong>Cada gota que sale es diferente a la anterior.</strong></p>
+
+<div class="sep"></div>
+
+<h2>El color que cambia</h2>
+
+<p>Las primeras gotas que caen son oscuras, densas, casi negras. Llevan concentrada la esencia más accesible del grano: los ácidos suaves, los azúcares simples, los terpenos aromáticos que estaban esperando en la superficie de la partícula. Esas primeras gotas son frescas, vibrantes, llenas de carácter. Si las probaras solas, sentirías una explosión de fruta y dulzura.</p>
+
+<p>A medida que pasan los minutos, las gotas se aclaran. El color se vuelve ámbar, luego dorado, luego casi transparente. Los compuestos de la superficie ya se fueron. Ahora el agua está llegando más profundo, extrayendo lo que está adentro de la célula: compuestos más pesados, más lentos, algunos ya menos agradables. Las últimas gotas pueden traer un amargor tenue, una astringencia que no estaba al principio.</p>
+
+<div class="drop-timeline">
+  <div class="dt-line"></div>
+  <div class="dt-item">
+    <div class="dt-dot dt-dot-1"></div>
+    <div class="dt-content">
+      <div class="dt-label dt-label-1" data-i18n="tl1">PRIMERAS GOTAS</div>
+      <div class="dt-text" data-i18n="tt1">Oscuras, concentradas, vibrantes. <strong>Ácidos frutales, azúcares, terpenos florales.</strong> La esencia más fresca y accesible del grano. Pura vitalidad.</div>
+    </div>
+  </div>
+  <div class="dt-item">
+    <div class="dt-dot dt-dot-2"></div>
+    <div class="dt-content">
+      <div class="dt-label dt-label-2" data-i18n="tl2">GOTAS INTERMEDIAS</div>
+      <div class="dt-text" data-i18n="tt2">Ámbar dorado. <strong>Cuerpo, dulzura redonda, chocolate suave.</strong> El corazón de la extracción. La madurez del grano revelándose con calma.</div>
+    </div>
+  </div>
+  <div class="dt-item">
+    <div class="dt-dot dt-dot-3"></div>
+    <div class="dt-content">
+      <div class="dt-label dt-label-3" data-i18n="tl3">GOTAS TARDÍAS</div>
+      <div class="dt-text" data-i18n="tt3">Más claras, más tenues. <strong>Notas terrosas, un toque de amargura, complejidad profunda.</strong> Los compuestos que necesitaron más tiempo para salir.</div>
+    </div>
+  </div>
+  <div class="dt-item">
+    <div class="dt-dot dt-dot-4"></div>
+    <div class="dt-content">
+      <div class="dt-label dt-label-4" data-i18n="tl4">ÚLTIMAS GOTAS</div>
+      <div class="dt-text" data-i18n="tt4">Casi transparentes. <strong>Poco sabor, un eco de lo que fue.</strong> La señal de que el grano ya entregó todo lo que tenía para dar.</div>
+    </div>
+  </div>
+</div>
+
+<p>Mirando esta progresión — esta transición lenta de lo oscuro a lo claro, de lo vibrante a lo tenue — uno no puede evitar pensar que está viendo algo más que café.</p>
+
+<div class="sep"></div>
+
+<h2>Una gota, una vida</h2>
+
+<p>Las primeras gotas del café son como la juventud. Llenas de energía, de frescura, de promesa. Todo lo que contienen es intenso y vibrante. El mundo es dulce y las posibilidades parecen infinitas.</p>
+
+<p>Las gotas intermedias son la madurez. El color cambia, la intensidad se redondea, aparece una profundidad que no estaba al principio. Ya no es pura explosión — es sabiduría, equilibrio, la riqueza que solo el tiempo puede dar.</p>
+
+<p>Las gotas tardías traen complejidad. Algunas notas son hermosas — terrosas, profundas, con una historia adentro. Otras son más difíciles — la amargura que llega con los años, las experiencias que no elegimos pero que nos forman. Y las últimas gotas son el eco: un susurro de lo que fue, una transparencia que dice "ya entregué todo".</p>
+
+<div class="parallel">
+  <div class="par-side par-coffee">
+    <div class="par-label" data-i18n="pl1">CAFÉ</div>
+    <h4 data-i18n="ph1">Cada gota lleva compuestos diferentes</h4>
+    <p data-i18n="pp1">La primera gota no es igual a la centésima. Cada una extrae de una capa diferente del grano, con una composición única. El café que tomamos es la suma de todas estas gotas — las dulces, las ácidas, las amargas — mezcladas en una sola taza.</p>
+  </div>
+  <div class="par-side par-life">
+    <div class="par-label" data-i18n="pl2">VIDA</div>
+    <h4 data-i18n="ph2">Cada momento lleva experiencias diferentes</h4>
+    <p data-i18n="pp2">El primer día no es igual al milésimo. Cada uno trae una lección diferente, una emoción distinta. La persona que somos es la suma de todos estos momentos — los dulces, los difíciles, los que nos marcaron — entrelazados en una sola historia.</p>
+  </div>
+</div>
+
+<p>Y acá está lo que más conmueve de esta analogía: <strong>no podés elegir tomar solo las primeras gotas</strong>. El café que amamos es la mezcla de todas ellas — la frescura de las primeras, la profundidad de las intermedias, incluso la complejidad de las tardías. Si sacaras cualquiera de esas capas, el café sería incompleto. Le faltaría algo.</p>
+
+<p>Con la vida pasa lo mismo. Somos la suma de todos nuestros momentos. No solo los brillantes y dulces — también los amargos, los difíciles, los que no hubiera elegido. Cada momento, como cada gota, contribuye al sabor final de lo que somos. Y cada uno, por lo tanto, <em class="t">cuenta</em>.</p>
+
+<div class="poem-block">
+  <div class="poem-inner">
+    <span class="poem-line" data-i18n="p1">La primera gota lleva <strong>la promesa</strong>.</span>
+    <span class="poem-line" data-i18n="p2">La del medio lleva <strong>la historia</strong>.</span>
+    <span class="poem-line" data-i18n="p3">La última lleva <strong>la sabiduría</strong>.</span>
+    <span class="poem-break"></span>
+    <span class="poem-line" data-i18n="p4">Y el café que tomamos</span>
+    <span class="poem-line" data-i18n="p5">es <strong>todas ellas juntas</strong>.</span>
+  </div>
+</div>
+
+<div class="sep"></div>
+
+<h2>Cada gota, cada persona</h2>
+
+<p>Hasta ahora hablamos de una vida. Pero la metáfora de la gota va más allá de lo individual.</p>
+
+<p>Pensá en una comunidad, una ciudad, un país. Su historia no la escribe un solo héroe ni la define un solo momento. La historia de cualquier sociedad es la <strong>suma de vidas individuales</strong> — cada una con su color, su densidad, su sabor particular. Algunas vidas son como las primeras gotas: explosivas, visibles, llenas de energía. Otras son como las gotas del medio: constantes, profundas, sosteniendo todo desde adentro. Y otras son como las últimas: sutiles, casi invisibles, pero sin las cuales el todo estaría incompleto.</p>
+
+<div class="community-block">
+  <div class="cb-inner">
+    <div class="cb-label" data-i18n="cbl">UNA COMUNIDAD ES ESTO</div>
+    <div class="drops-row">
+      <div class="mini-drop"></div><div class="mini-drop"></div><div class="mini-drop"></div><div class="mini-drop"></div><div class="mini-drop"></div><div class="mini-drop"></div><div class="mini-drop"></div><div class="mini-drop"></div><div class="mini-drop"></div><div class="mini-drop"></div><div class="mini-drop"></div><div class="mini-drop"></div><div class="mini-drop"></div><div class="mini-drop"></div><div class="mini-drop"></div><div class="mini-drop"></div><div class="mini-drop"></div><div class="mini-drop"></div><div class="mini-drop"></div><div class="mini-drop"></div><div class="mini-drop"></div><div class="mini-drop"></div><div class="mini-drop"></div><div class="mini-drop"></div><div class="mini-drop"></div><div class="mini-drop"></div><div class="mini-drop"></div><div class="mini-drop"></div><div class="mini-drop"></div><div class="mini-drop"></div><div class="mini-drop"></div><div class="mini-drop"></div><div class="mini-drop"></div><div class="mini-drop"></div><div class="mini-drop"></div><div class="mini-drop"></div><div class="mini-drop"></div><div class="mini-drop"></div><div class="mini-drop"></div><div class="mini-drop"></div><div class="mini-drop"></div><div class="mini-drop"></div><div class="mini-drop"></div><div class="mini-drop"></div><div class="mini-drop"></div>
+    </div>
+    <div class="cb-text" data-i18n="cbt">Cada punto de color es una vida. Cada vida tiene un matiz diferente, un aporte distinto. Ninguna es prescindible. <strong>La riqueza del todo depende de que cada parte exista.</strong></div>
+  </div>
+</div>
+
+<p>Cuando decimos <em class="t">Cada Gota Cuenta</em>, no estamos hablando solo de café. Estamos diciendo que cada persona, cada vida, cada historia individual <strong>importa</strong>. Que la textura de nuestra comunidad se teje gota a gota, persona a persona. Que no hay gotas insignificantes, como no hay vidas insignificantes.</p>
+
+<p>Es una declaración de que lo pequeño construye lo grande. Que lo invisible sostiene lo visible. Que la gota que nadie ve en el fondo del vaso es tan esencial como la que brilla en la superficie.</p>
+
+<div class="sep"></div>
+
+<h2>Por qué este es nuestro eslogan</h2>
+
+<p>Cuando buscábamos las palabras que definieran a HARA, queríamos algo que fuera cierto en todos los niveles. Que funcionara como descripción técnica del proceso de extracción. Que funcionara como filosofía de vida. Que funcionara como declaración de valor sobre las personas.</p>
+
+<p><em class="t">Cada Gota Cuenta</em> hace las tres cosas.</p>
+
+<div class="callout">
+  <div class="callout-label" data-i18n="cl1">COMO CAFÉ</div>
+  <p data-i18n="ct1">Cada gota que cae del gotero frío lleva una composición molecular única — una fracción irrepetible del grano. El café que tomás es la suma precisa de todas estas fracciones. Ninguna sobra.</p>
+</div>
+
+<div class="callout" style="margin-top:1rem">
+  <div class="callout-label" data-i18n="cl2">COMO VIDA</div>
+  <p data-i18n="ct2">Cada momento de tu vida — los brillantes y los oscuros — es una gota que se suma al todo de lo que sos. No podés sacar ninguna sin cambiar el sabor completo de tu historia. Cada momento cuenta.</p>
+</div>
+
+<div class="callout" style="margin-top:1rem">
+  <div class="callout-label" data-i18n="cl3">COMO COMUNIDAD</div>
+  <p data-i18n="ct3">Cada persona es una gota en el río de la historia compartida. Tu vida, tu trabajo, tu presencia — por pequeña que parezca — es parte insustituible del todo. Cada persona cuenta.</p>
+</div>
+
+<div class="manifesto">
+  <div class="manifesto-inner">
+    <blockquote data-i18n="mq"><em>Cada Gota Cuenta.</em></blockquote>
+    <div class="mf-sub" data-i18n="ms">No es solo un eslogan. Es una forma de mirar el café, la vida y a las personas. Es creer que nada es demasiado pequeño para importar.</div>
+    <div class="mf-sig">HARA COFFEE LAB · SALTA, ARGENTINA</div>
+  </div>
+</div>
+
+</div>
+
+<!-- ══════ KOREAN ══════ -->
+<div class="lang-content" data-lang="ko" style="display:none;">
+
+<h2>한 방울이 떨어질 때 보이는 것</h2>
+
+<p>에스프레소를 내려본 적이 있다면 알 겁니다. 30초도 채 안 걸립니다. 커피의 연속적인 줄기가 잔에 떨어집니다. 멈춰서 바라볼 시간이 없습니다. 핸드드립은 조금 더 길지만 — 3분, 4분 — 흐름은 역시 일정하고, 연속적이고, 급합니다. 둘 다 커피가 강처럼 도달합니다. 비처럼이 아니라.</p>
+
+<p>하지만 <em class="t">Café de Goteo en Frío</em>를 추출할 때는 다른 일이 일어납니다. 물이 커피 위에 한 방울씩 떨어집니다. 1초에서 2초에 한 방울. 몇 시간 동안. 그리고 가만히 바라보게 되면 — 언젠가는 누구나 바라보게 됩니다 — 다른 어떤 추출 방법에서도 알아차릴 수 없는 무언가를 발견하기 시작합니다:</p>
+
+<p><strong>빠져나오는 각 방울이 이전 방울과 다릅니다.</strong></p>
+
+<div class="sep"></div>
+
+<h2>변해가는 색</h2>
+
+<p>처음 떨어지는 방울들은 어둡고, 짙고, 거의 검습니다. 원두의 가장 접근하기 쉬운 에센스가 농축되어 있습니다: 부드러운 산, 단당류, 입자 표면에서 기다리고 있던 향기로운 테르펜들. 이 첫 방울들은 신선하고, 생기 넘치고, 캐릭터로 가득합니다. 따로 맛본다면 과일과 단맛의 폭발을 느낄 겁니다.</p>
+
+<p>시간이 흐르면서 방울들이 맑아집니다. 색이 호박색이 되고, 그다음 금색, 그리고 거의 투명해집니다. 표면의 성분은 이미 떠났습니다. 이제 물이 더 깊이 닿아, 세포 안에 있는 것을 추출합니다: 더 무거운, 더 느린 화합물, 일부는 덜 쾌적한 것들. 마지막 방울들은 은은한 쓴맛, 처음에는 없었던 떫은맛을 가져올 수 있습니다.</p>
+
+<div class="drop-timeline">
+  <div class="dt-line"></div>
+  <div class="dt-item">
+    <div class="dt-dot dt-dot-1"></div>
+    <div class="dt-content">
+      <div class="dt-label dt-label-1">첫 방울들</div>
+      <div class="dt-text">어둡고, 농축되고, 생기 넘치는. <strong>과일산, 당류, 꽃향 테르펜.</strong> 원두의 가장 신선하고 접근 가능한 에센스. 순수한 활력.</div>
+    </div>
+  </div>
+  <div class="dt-item">
+    <div class="dt-dot dt-dot-2"></div>
+    <div class="dt-content">
+      <div class="dt-label dt-label-2">중간 방울들</div>
+      <div class="dt-text">금빛 호박색. <strong>바디, 둥근 단맛, 부드러운 초콜릿.</strong> 추출의 심장. 원두의 성숙함이 조용히 드러나는.</div>
+    </div>
+  </div>
+  <div class="dt-item">
+    <div class="dt-dot dt-dot-3"></div>
+    <div class="dt-content">
+      <div class="dt-label dt-label-3">후반 방울들</div>
+      <div class="dt-text">더 맑고, 더 엷은. <strong>흙 노트, 한 줄기 쓴맛, 깊은 복합성.</strong> 빠져나오는 데 더 긴 시간이 필요했던 성분들.</div>
+    </div>
+  </div>
+  <div class="dt-item">
+    <div class="dt-dot dt-dot-4"></div>
+    <div class="dt-content">
+      <div class="dt-label dt-label-4">마지막 방울들</div>
+      <div class="dt-text">거의 투명한. <strong>흐릿한 맛, 한때였던 것의 메아리.</strong> 원두가 줄 수 있는 모든 것을 이미 내어주었다는 신호.</div>
+    </div>
+  </div>
+</div>
+
+<p>이 진행을 바라보며 — 어둠에서 맑음으로, 생기에서 엷음으로의 느린 전환 — 커피 이상의 무언가를 보고 있다는 생각을 떨칠 수가 없습니다.</p>
+
+<div class="sep"></div>
+
+<h2>한 방울, 한 인생</h2>
+
+<p>커피의 첫 방울들은 청춘과 같습니다. 에너지로, 신선함으로, 약속으로 가득한. 담고 있는 모든 것이 강렬하고 생기 넘칩니다. 세상은 달콤하고 가능성은 무한해 보입니다.</p>
+
+<p>중간 방울들은 성숙입니다. 색이 변하고, 강도가 둥글어지며, 처음에는 없었던 깊이가 나타납니다. 더 이상 순수한 폭발이 아닙니다 — 지혜, 균형, 오직 시간만이 줄 수 있는 풍요로움입니다.</p>
+
+<p>후반 방울들은 복합성을 가져옵니다. 일부 노트는 아름답습니다 — 깊고, 이야기를 품은. 다른 것들은 더 어렵습니다 — 세월과 함께 오는 쓴맛, 선택하지 않았지만 우리를 형성하는 경험들. 그리고 마지막 방울들은 메아리입니다: 한때였던 것의 속삭임, "나는 가진 모든 것을 내어주었다"고 말하는 투명함.</p>
+
+<div class="parallel">
+  <div class="par-side par-coffee">
+    <div class="par-label">커피</div>
+    <h4>각 방울은 다른 성분을 담고 있다</h4>
+    <p>첫 방울은 백 번째 방울과 같지 않습니다. 각각은 원두의 다른 층에서, 고유한 조성으로 추출합니다. 우리가 마시는 커피는 이 모든 방울의 합 — 달콤한, 산미 있는, 쓴 — 한 잔에 섞인 것입니다.</p>
+  </div>
+  <div class="par-side par-life">
+    <div class="par-label">인생</div>
+    <h4>각 순간은 다른 경험을 담고 있다</h4>
+    <p>첫날은 천 번째 날과 같지 않습니다. 각각은 다른 교훈, 다른 감정을 가져옵니다. 우리라는 사람은 이 모든 순간의 합 — 달콤한, 어려운, 우리를 각인시킨 — 하나의 이야기로 엮인 것입니다.</p>
+  </div>
+</div>
+
+<p>이 비유에서 가장 가슴에 와닿는 것: <strong>첫 방울만 골라 마실 수 없다는 것</strong>입니다. 우리가 사랑하는 커피는 모든 방울의 혼합 — 처음의 신선함, 중간의 깊이, 심지어 후반의 복합성. 어느 층을 빼더라도 커피는 불완전해집니다. 무언가가 빠집니다.</p>
+
+<p>인생도 마찬가지입니다. 우리는 모든 순간의 합입니다. 빛나고 달콤한 것만이 아니라 — 쓰고, 어렵고, 선택하지 않았을 것들도. 각 순간은 각 방울처럼 우리가 결국 누구인지의 최종 맛에 기여합니다. 그러므로 각각이 <em class="t">의미를 갖습니다</em>.</p>
+
+<div class="poem-block">
+  <div class="poem-inner">
+    <span class="poem-line">첫 방울은 <strong>약속</strong>을 담고 있다.</span>
+    <span class="poem-line">중간 방울은 <strong>이야기</strong>를 담고 있다.</span>
+    <span class="poem-line">마지막 방울은 <strong>지혜</strong>를 담고 있다.</span>
+    <span class="poem-break"></span>
+    <span class="poem-line">그리고 우리가 마시는 커피는</span>
+    <span class="poem-line"><strong>그 모든 것이 함께인 것</strong>이다.</span>
+  </div>
+</div>
+
+<div class="sep"></div>
+
+<h2>각 방울, 각 사람</h2>
+
+<p>여기까지는 한 개인의 삶을 이야기했습니다. 하지만 방울의 비유는 개인을 넘어섭니다.</p>
+
+<p>하나의 공동체, 도시, 나라를 생각해보세요. 그 역사는 한 명의 영웅이 쓰거나 한 순간이 정의하지 않습니다. 어떤 사회의 역사든 <strong>개인의 삶들의 합</strong>입니다 — 각각 고유한 색, 농도, 맛을 가진. 어떤 삶은 첫 방울 같습니다: 폭발적이고, 눈에 띄고, 에너지로 가득한. 다른 삶은 중간 방울 같습니다: 꾸준하고, 깊고, 안에서 모든 것을 지탱하는. 또 다른 삶은 마지막 방울 같습니다: 섬세하고, 거의 보이지 않지만, 없으면 전체가 불완전해지는.</p>
+
+<div class="community-block">
+  <div class="cb-inner">
+    <div class="cb-label">공동체는 이런 것입니다</div>
+    <div class="drops-row">
+      <div class="mini-drop"></div><div class="mini-drop"></div><div class="mini-drop"></div><div class="mini-drop"></div><div class="mini-drop"></div><div class="mini-drop"></div><div class="mini-drop"></div><div class="mini-drop"></div><div class="mini-drop"></div><div class="mini-drop"></div><div class="mini-drop"></div><div class="mini-drop"></div><div class="mini-drop"></div><div class="mini-drop"></div><div class="mini-drop"></div><div class="mini-drop"></div><div class="mini-drop"></div><div class="mini-drop"></div><div class="mini-drop"></div><div class="mini-drop"></div><div class="mini-drop"></div><div class="mini-drop"></div><div class="mini-drop"></div><div class="mini-drop"></div><div class="mini-drop"></div><div class="mini-drop"></div><div class="mini-drop"></div><div class="mini-drop"></div><div class="mini-drop"></div><div class="mini-drop"></div><div class="mini-drop"></div><div class="mini-drop"></div><div class="mini-drop"></div><div class="mini-drop"></div><div class="mini-drop"></div><div class="mini-drop"></div><div class="mini-drop"></div><div class="mini-drop"></div><div class="mini-drop"></div><div class="mini-drop"></div><div class="mini-drop"></div><div class="mini-drop"></div><div class="mini-drop"></div><div class="mini-drop"></div><div class="mini-drop"></div>
+    </div>
+    <div class="cb-text">각 색의 점은 하나의 삶입니다. 각 삶은 다른 색조, 다른 기여를 가집니다. 어느 것도 빠져서는 안 됩니다. <strong>전체의 풍요로움은 각 부분이 존재하는 것에 달려 있습니다.</strong></div>
+  </div>
+</div>
+
+<p><em class="t">Cada Gota Cuenta</em>라고 말할 때, 우리는 커피만을 이야기하는 것이 아닙니다. 각 사람, 각 삶, 각 개인의 이야기가 <strong>소중하다</strong>고 말하는 것입니다. 우리 공동체의 결은 방울 한 방울, 사람 한 사람으로 짜인다는 것. 의미 없는 방울이 없듯, 의미 없는 삶도 없다는 것.</p>
+
+<p>작은 것이 큰 것을 만든다는 선언입니다. 보이지 않는 것이 보이는 것을 지탱한다는 것. 잔 바닥에서 아무도 보지 못하는 방울이 표면에서 빛나는 방울만큼이나 본질적이라는 것.</p>
+
+<div class="sep"></div>
+
+<h2>왜 이것이 우리의 슬로건인가</h2>
+
+<p>HARA를 정의할 말을 찾을 때, 모든 층위에서 참인 것을 원했습니다. 추출 공정의 기술적 서술로도, 삶의 철학으로도, 사람에 대한 가치 선언으로도 작동하는.</p>
+
+<p><em class="t">Cada Gota Cuenta</em>는 세 가지를 다 합니다.</p>
+
+<div class="callout">
+  <div class="callout-label">커피로서</div>
+  <p>냉점적기에서 떨어지는 각 방울은 고유한 분자 조성을 담고 있습니다 — 원두의 반복 불가능한 분획. 우리가 마시는 커피는 이 모든 분획의 정밀한 합입니다. 남는 것은 없습니다.</p>
+</div>
+
+<div class="callout" style="margin-top:1rem">
+  <div class="callout-label">인생으로서</div>
+  <p>당신 삶의 각 순간은 — 빛나는 것과 어두운 것 — 당신이라는 전체에 합산되는 한 방울입니다. 어느 하나를 빼더라도 당신 이야기의 맛 전체가 바뀝니다. 각 순간이 의미를 갖습니다.</p>
+</div>
+
+<div class="callout" style="margin-top:1rem">
+  <div class="callout-label">공동체로서</div>
+  <p>각 사람은 공유된 역사의 강에서 하나의 방울입니다. 당신의 삶, 당신의 일, 당신의 존재 — 아무리 작아 보여도 — 전체의 대체 불가능한 부분입니다. 각 사람이 의미를 갖습니다.</p>
+</div>
+
+<div class="manifesto">
+  <div class="manifesto-inner">
+    <blockquote><em>Cada Gota Cuenta.</em></blockquote>
+    <div class="mf-sub">단순한 슬로건이 아닙니다. 커피와 인생과 사람을 바라보는 방식입니다. 아무것도 의미 없기에 너무 작지 않다고 믿는 것입니다.</div>
+    <div class="mf-sig">HARA COFFEE LAB · 아르헨티나 살타</div>
+  </div>
+</div>
+
+</div>
+
+<!-- ══════ ENGLISH ══════ -->
+<div class="lang-content" data-lang="en" style="display:none;">
+
+<h2>What you see when a drop falls</h2>
+
+<p>If you've ever pulled an espresso, you know it takes less than 30 seconds. A continuous stream of coffee falls into the cup. There's no time to stop and watch. Pour-over is a bit longer — three, four minutes — but the flow is also constant, continuous, urgent. In both cases, coffee arrives like a river. Not like rain.</p>
+
+<p>But when you prepare a <em class="t">Café de Goteo en Frío</em>, something different happens. Water falls onto the coffee one drop at a time. One drop every one or two seconds. For hours. And if you stand there watching — sooner or later, everyone does — you start to notice something you can't notice with any other brewing method:</p>
+
+<p><strong>Each drop that falls is different from the one before.</strong></p>
+
+<div class="sep"></div>
+
+<h2>The changing color</h2>
+
+<p>The first drops are dark, dense, almost black. They carry the bean's most accessible essence in concentrated form: gentle acids, simple sugars, aromatic terpenes waiting on the particle's surface. Those first drops are fresh, vibrant, full of character. If you tasted them alone, you'd feel an explosion of fruit and sweetness.</p>
+
+<p>As the minutes pass, the drops lighten. The color becomes amber, then golden, then nearly transparent. The surface compounds have already left. Now the water is reaching deeper, extracting what's inside the cell: heavier, slower compounds, some less pleasant. The final drops may carry a faint bitterness, an astringency that wasn't there at the start.</p>
+
+<div class="drop-timeline">
+  <div class="dt-line"></div>
+  <div class="dt-item">
+    <div class="dt-dot dt-dot-1"></div>
+    <div class="dt-content">
+      <div class="dt-label dt-label-1">FIRST DROPS</div>
+      <div class="dt-text">Dark, concentrated, vibrant. <strong>Fruit acids, sugars, floral terpenes.</strong> The bean's freshest, most accessible essence. Pure vitality.</div>
+    </div>
+  </div>
+  <div class="dt-item">
+    <div class="dt-dot dt-dot-2"></div>
+    <div class="dt-content">
+      <div class="dt-label dt-label-2">MIDDLE DROPS</div>
+      <div class="dt-text">Golden amber. <strong>Body, round sweetness, smooth chocolate.</strong> The heart of the extraction. The bean's maturity revealing itself with calm.</div>
+    </div>
+  </div>
+  <div class="dt-item">
+    <div class="dt-dot dt-dot-3"></div>
+    <div class="dt-content">
+      <div class="dt-label dt-label-3">LATE DROPS</div>
+      <div class="dt-text">Lighter, fainter. <strong>Earthy notes, a touch of bitterness, deep complexity.</strong> Compounds that needed more time to emerge.</div>
+    </div>
+  </div>
+  <div class="dt-item">
+    <div class="dt-dot dt-dot-4"></div>
+    <div class="dt-content">
+      <div class="dt-label dt-label-4">FINAL DROPS</div>
+      <div class="dt-text">Nearly transparent. <strong>Faint flavor, an echo of what was.</strong> The signal that the bean has given everything it had to give.</div>
+    </div>
+  </div>
+</div>
+
+<p>Watching this progression — the slow transition from dark to clear, from vibrant to faint — you can't help feeling you're seeing something more than coffee.</p>
+
+<div class="sep"></div>
+
+<h2>One drop, one life</h2>
+
+<p>The first drops are like youth. Full of energy, freshness, promise. Everything they contain is intense and vibrant. The world is sweet and possibilities seem infinite.</p>
+
+<p>The middle drops are maturity. The color changes, intensity rounds out, a depth appears that wasn't there before. No longer pure explosion — it's wisdom, balance, the richness only time can give.</p>
+
+<p>The late drops bring complexity. Some notes are beautiful — earthy, deep, with a story inside. Others are harder — the bitterness that comes with the years, experiences we didn't choose but that shape us. And the final drops are the echo: a whisper of what was, a transparency that says "I've given everything."</p>
+
+<div class="parallel">
+  <div class="par-side par-coffee">
+    <div class="par-label">COFFEE</div>
+    <h4>Each drop carries different compounds</h4>
+    <p>The first drop isn't the same as the hundredth. Each one extracts from a different layer of the bean, with a unique composition. The coffee we drink is the sum of all these drops — the sweet, the acidic, the bitter — blended in a single cup.</p>
+  </div>
+  <div class="par-side par-life">
+    <div class="par-label">LIFE</div>
+    <h4>Each moment carries different experiences</h4>
+    <p>The first day isn't the same as the thousandth. Each brings a different lesson, a different emotion. The person we are is the sum of all these moments — the sweet, the difficult, the ones that marked us — woven into a single story.</p>
+  </div>
+</div>
+
+<p>Here's what moves me most about this analogy: <strong>you can't choose to drink only the first drops</strong>. The coffee we love is the blend of all of them — the freshness of the first, the depth of the middle, even the complexity of the late. Remove any layer and the coffee would be incomplete. Something would be missing.</p>
+
+<p>Life is the same. We are the sum of all our moments. Not just the bright and sweet ones — also the bitter, the difficult, the ones we wouldn't have chosen. Each moment, like each drop, contributes to the final flavor of who we are. And each one, therefore, <em class="t">counts</em>.</p>
+
+<div class="poem-block">
+  <div class="poem-inner">
+    <span class="poem-line">The first drop carries <strong>the promise</strong>.</span>
+    <span class="poem-line">The middle drop carries <strong>the story</strong>.</span>
+    <span class="poem-line">The last drop carries <strong>the wisdom</strong>.</span>
+    <span class="poem-break"></span>
+    <span class="poem-line">And the coffee we drink</span>
+    <span class="poem-line">is <strong>all of them together</strong>.</span>
+  </div>
+</div>
+
+<div class="sep"></div>
+
+<h2>Each drop, each person</h2>
+
+<p>So far we've talked about one life. But the drop metaphor goes beyond the individual.</p>
+
+<p>Think of a community, a city, a nation. Its history isn't written by a single hero or defined by a single moment. The history of any society is the <strong>sum of individual lives</strong> — each with its own color, density, particular flavor. Some lives are like the first drops: explosive, visible, full of energy. Others are like the middle drops: steady, deep, holding everything together from within. And others are like the last: subtle, nearly invisible, but without which the whole would be incomplete.</p>
+
+<div class="community-block">
+  <div class="cb-inner">
+    <div class="cb-label">A COMMUNITY IS THIS</div>
+    <div class="drops-row">
+      <div class="mini-drop"></div><div class="mini-drop"></div><div class="mini-drop"></div><div class="mini-drop"></div><div class="mini-drop"></div><div class="mini-drop"></div><div class="mini-drop"></div><div class="mini-drop"></div><div class="mini-drop"></div><div class="mini-drop"></div><div class="mini-drop"></div><div class="mini-drop"></div><div class="mini-drop"></div><div class="mini-drop"></div><div class="mini-drop"></div><div class="mini-drop"></div><div class="mini-drop"></div><div class="mini-drop"></div><div class="mini-drop"></div><div class="mini-drop"></div><div class="mini-drop"></div><div class="mini-drop"></div><div class="mini-drop"></div><div class="mini-drop"></div><div class="mini-drop"></div><div class="mini-drop"></div><div class="mini-drop"></div><div class="mini-drop"></div><div class="mini-drop"></div><div class="mini-drop"></div><div class="mini-drop"></div><div class="mini-drop"></div><div class="mini-drop"></div><div class="mini-drop"></div><div class="mini-drop"></div><div class="mini-drop"></div><div class="mini-drop"></div><div class="mini-drop"></div><div class="mini-drop"></div><div class="mini-drop"></div><div class="mini-drop"></div><div class="mini-drop"></div><div class="mini-drop"></div><div class="mini-drop"></div><div class="mini-drop"></div>
+    </div>
+    <div class="cb-text">Each colored dot is a life. Each life has a different hue, a different contribution. None is dispensable. <strong>The richness of the whole depends on every part existing.</strong></div>
+  </div>
+</div>
+
+<p>When we say <em class="t">Cada Gota Cuenta</em>, we're not just talking about coffee. We're saying that every person, every life, every individual story <strong>matters</strong>. That our community's texture is woven drop by drop, person by person. That there are no insignificant drops, just as there are no insignificant lives.</p>
+
+<div class="sep"></div>
+
+<h2>Why this is our slogan</h2>
+
+<p><em class="t">Cada Gota Cuenta</em> works on every level: as a technical description of extraction, as a philosophy of life, as a declaration of value about people.</p>
+
+<div class="callout">
+  <div class="callout-label">AS COFFEE</div>
+  <p>Each drop from the cold dripper carries a unique molecular composition — an unrepeatable fraction of the bean. The coffee you drink is the precise sum of all these fractions. None is surplus.</p>
+</div>
+
+<div class="callout" style="margin-top:1rem">
+  <div class="callout-label">AS LIFE</div>
+  <p>Each moment — bright and dark — is a drop added to the whole of who you are. Remove any one and the entire flavor of your story changes. Every moment counts.</p>
+</div>
+
+<div class="callout" style="margin-top:1rem">
+  <div class="callout-label">AS COMMUNITY</div>
+  <p>Each person is a drop in the river of shared history. Your life, your work, your presence — however small it may seem — is an irreplaceable part of the whole. Every person counts.</p>
+</div>
+
+<div class="manifesto">
+  <div class="manifesto-inner">
+    <blockquote><em>Cada Gota Cuenta.</em></blockquote>
+    <div class="mf-sub">Not just a slogan. A way of looking at coffee, life, and people. A belief that nothing is too small to matter.</div>
+    <div class="mf-sig">HARA COFFEE LAB · SALTA, ARGENTINA</div>
+  </div>
+</div>
+
+</div>
+
+</article>
+<div class="author-card"><div class="author-avatar"><span>H</span></div><div class="author-info"><h4>HARA Coffee Lab</h4><p data-i18n="ab">Ciencia, precisión y pasión por el café de especialidad. Salta, Argentina.</p></div></div>
+<footer><div class="footer-brand">© 2026 HARA COFFEE LAB · SALTA, ARGENTINA · CADA GOTA CUENTA</div></footer>
+<script>
+let currentLang='es';
+const ui={es:{ho:'HARA COFFEE LAB',ht:'<em>Cada Gota</em><br>Cuenta',hst:'매 한 방울이 의미를 갖는다',hs:'Un espresso y un cold brew, hechos con el mismo café. Uno es intenso y amargo. El otro es dulce y suave. ¿Qué pasó?',hb:'FILOSOFÍA',hr:'7 min lectura',ab:'Ciencia, precisión y pasión por el café de especialidad. Salta, Argentina.',stl:'PENSALO ASÍ',stq:'El aroma que te llega a la nariz<br>es sabor que no te va a llegar a la boca.',sta:'...',tl1:'PRIMERAS GOTAS',tt1:'Oscuras, concentradas, vibrantes. <strong>Ácidos frutales, azúcares, terpenos florales.</strong> La esencia más fresca y accesible del grano. Pura vitalidad.',tl2:'GOTAS INTERMEDIAS',tt2:'Ámbar dorado. <strong>Cuerpo, dulzura redonda, chocolate suave.</strong> El corazón de la extracción. La madurez del grano revelándose con calma.',tl3:'GOTAS TARDÍAS',tt3:'Más claras, más tenues. <strong>Notas terrosas, un toque de amargura, complejidad profunda.</strong> Los compuestos que necesitaron más tiempo para salir.',tl4:'ÚLTIMAS GOTAS',tt4:'Casi transparentes. <strong>Poco sabor, un eco de lo que fue.</strong> La señal de que el grano ya entregó todo lo que tenía para dar.',pl1:'CAFÉ',ph1:'Cada gota lleva compuestos diferentes',pp1:'La primera gota no es igual a la centésima. Cada una extrae de una capa diferente del grano, con una composición única. El café que tomamos es la suma de todas estas gotas — las dulces, las ácidas, las amargas — mezcladas en una sola taza.',pl2:'VIDA',ph2:'Cada momento lleva experiencias diferentes',pp2:'El primer día no es igual al milésimo. Cada uno trae una lección diferente, una emoción distinta. La persona que somos es la suma de todos estos momentos — los dulces, los difíciles, los que nos marcaron — entrelazados en una sola historia.',p1:'La primera gota lleva <strong>la promesa</strong>.',p2:'La del medio lleva <strong>la historia</strong>.',p3:'La última lleva <strong>la sabiduría</strong>.',p4:'Y el café que tomamos',p5:'es <strong>todas ellas juntas</strong>.',cbl:'UNA COMUNIDAD ES ESTO',cbt:'Cada punto de color es una vida. Cada vida tiene un matiz diferente, un aporte distinto. Ninguna es prescindible. <strong>La riqueza del todo depende de que cada parte exista.</strong>',cl1:'COMO CAFÉ',ct1:'Cada gota que cae del gotero frío lleva una composición molecular única — una fracción irrepetible del grano. El café que tomás es la suma precisa de todas estas fracciones. Ninguna sobra.',cl2:'COMO VIDA',ct2:'Cada momento de tu vida — los brillantes y los oscuros — es una gota que se suma al todo de lo que sos. No podés sacar ninguna sin cambiar el sabor completo de tu historia. Cada momento cuenta.',cl3:'COMO COMUNIDAD',ct3:'Cada persona es una gota en el río de la historia compartida. Tu vida, tu trabajo, tu presencia — por pequeña que parezca — es parte insustituible del todo. Cada persona cuenta.',mq:'<em>Cada Gota Cuenta.</em>',ms:'No es solo un eslogan. Es una forma de mirar el café, la vida y a las personas. Es creer que nada es demasiado pequeño para importar.'},
+ko:{ho:'HARA COFFEE LAB',ht:'<em>Cada Gota</em><br>Cuenta',hst:'매 한 방울이 의미를 갖는다',hs:'같은 커피로 만든 에스프레소와 콜드브루. 하나는 강렬하고 쓰다. 다른 하나는 달콤하고 부드럽다.',hb:'철학',hr:'7분 소요',ab:'과학, 정밀함, 그리고 스페셜티 커피에 대한 열정. 아르헨티나 살타.'},
+en:{ho:'HARA COFFEE LAB',ht:'<em>Cada Gota</em><br>Cuenta',hst:'Every Drop Counts',hs:'An espresso and a cold brew, made with the same coffee. One intense and bitter. The other sweet and smooth. What happened?',hb:'PHILOSOPHY',hr:'7 min read',ab:'Science, precision, and passion for specialty coffee. Salta, Argentina.'}};
+function switchLang(l){currentLang=l;document.documentElement.lang=l==='ko'?'ko':l==='en'?'en':'es';document.querySelectorAll('[data-i18n]').forEach(e=>{const k=e.dataset.i18n;if(ui[l]&&ui[l][k])e.innerHTML=ui[l][k]});document.querySelectorAll('.lang-content').forEach(e=>{e.style.display=e.dataset.lang===l?'block':'none'});document.querySelectorAll('.lang-btn').forEach(b=>b.classList.toggle('active',b.dataset.lang===l))}
+document.querySelectorAll('.lang-btn').forEach(b=>{b.addEventListener('click',()=>switchLang(b.dataset.lang))});
+window.addEventListener('scroll',()=>{const d=document.documentElement;document.getElementById('progressBar').style.width=(d.scrollTop/(d.scrollHeight-d.clientHeight))*100+'%';document.getElementById('mainNav').classList.toggle('scrolled',d.scrollTop>60)});
+</script>
+</body>
+</html>

@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HARA Blog — Goteo vs Inmersión: dos caminos en frío</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Noto+Sans+KR:wght@200;300;400;500;600&family=Noto+Sans:wght@200;300;400;500;600&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+:root{--espresso:#1a1210;--crema:#d4a574;--cream:#f5efe6;--warm-white:#faf8f4;--roast-dark:#2c1f1a;--roast-mid:#6b4226;--copper:#b87333;--sage:#8a9a7b;--water-blue:#7ba0b8;--ice-blue:#a8c8d8;--cold-blue:#4a7a9b;--drip-cyan:#5b9aaa;--steep-indigo:#6b6b9a;--text-primary:#1a1210;--text-secondary:#6b5b50;--text-light:#a09080;--border-light:rgba(212,165,116,.15)}
+*{margin:0;padding:0;box-sizing:border-box}html{scroll-behavior:smooth;font-size:16px}
+body{background:var(--warm-white);color:var(--text-primary);font-family:'Noto Sans','Noto Sans KR',sans-serif;font-weight:300;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:var(--warm-white)}::-webkit-scrollbar-thumb{background:var(--crema);border-radius:3px}
+nav{position:fixed;top:0;left:0;right:0;z-index:200;padding:1.2rem 3rem;display:flex;justify-content:space-between;align-items:center;transition:all .5s ease}
+nav.scrolled{background:rgba(250,248,244,.92);backdrop-filter:blur(24px);padding:.9rem 3rem;box-shadow:0 1px 0 rgba(26,18,16,.06)}
+.nav-left{display:flex;align-items:center;gap:2.5rem}
+.nav-logo{font-family:'Cormorant Garamond',serif;font-weight:500;letter-spacing:.15em;color:var(--text-primary);text-decoration:none;font-size:1.3rem;line-height:1}
+.nav-logo small{display:block;font-weight:300;font-size:.55rem;letter-spacing:.3em;color:var(--text-secondary);margin-top:2px}
+.nav-back{font-size:.72rem;font-weight:400;letter-spacing:.08em;color:var(--text-secondary);text-decoration:none;display:flex;align-items:center;gap:.4rem;transition:color .3s}
+.nav-back:hover{color:var(--espresso)}
+.lang-switcher{display:flex;border:1px solid var(--border-light);border-radius:6px;overflow:hidden}
+.lang-btn{font-family:'JetBrains Mono',monospace;font-size:.6rem;letter-spacing:.1em;padding:.4rem .65rem;border:none;background:transparent;color:var(--text-light);cursor:pointer;transition:all .3s}
+.lang-btn:not(:last-child){border-right:1px solid var(--border-light)}
+.lang-btn.active{background:var(--espresso);color:var(--cream)}
+.lang-btn:hover:not(.active){background:rgba(212,165,116,.08);color:var(--roast-mid)}
+.progress-bar{position:fixed;top:0;left:0;height:2px;z-index:300;width:0%;background:linear-gradient(to right,var(--drip-cyan),var(--crema),var(--steep-indigo));transition:width .1s linear}
+
+.post-hero{height:85vh;min-height:550px;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;background:var(--espresso)}
+.post-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 30% 60%,rgba(91,154,170,.12),transparent 55%),radial-gradient(ellipse at 70% 40%,rgba(107,107,154,.1),transparent 55%)}
+.hero-content{position:relative;z-index:2;text-align:center;padding:2rem;max-width:800px}
+.hero-overline{font-family:'JetBrains Mono',monospace;font-size:.55rem;letter-spacing:.5em;margin-bottom:2rem;opacity:0;animation:fadeUp .8s ease .3s forwards}
+.hero-overline .series-tag{color:var(--crema);border:1px solid rgba(212,165,116,.3);padding:.25rem .6rem;border-radius:4px;margin-right:.8rem}
+.hero-overline .series-num{color:rgba(245,239,230,.35)}
+.hero-title{font-family:'Cormorant Garamond',serif;font-size:clamp(2.4rem,5.5vw,4.5rem);font-weight:300;line-height:1.1;color:var(--cream);margin-bottom:1.5rem;opacity:0;animation:fadeUp 1s ease .5s forwards}
+.hero-title .v-drip{color:var(--drip-cyan);font-style:italic}
+.hero-title .v-steep{color:var(--steep-indigo);font-style:italic}
+.hero-sub{font-size:1rem;line-height:1.8;color:rgba(245,239,230,.55);max-width:540px;margin:0 auto;opacity:0;animation:fadeUp .8s ease .8s forwards}
+.hero-meta{margin-top:2.5rem;display:flex;justify-content:center;gap:1.5rem;opacity:0;animation:fadeUp .8s ease 1s forwards}
+.hero-badge{font-family:'JetBrains Mono',monospace;font-size:.55rem;letter-spacing:.2em;padding:.35rem .8rem;border-radius:4px;background:rgba(123,160,184,.15);color:var(--water-blue)}
+.hero-date,.hero-read{font-family:'JetBrains Mono',monospace;font-size:.6rem;color:rgba(245,239,230,.35);letter-spacing:.1em}
+.hero-drops{position:absolute;bottom:3rem;left:50%;transform:translateX(-50%);display:flex;gap:3rem;opacity:0;animation:fadeUp .8s ease 1.2s forwards}
+.hero-drop{display:flex;flex-direction:column;align-items:center;gap:.4rem}
+.drop-icon{font-size:1.3rem}
+.drop-label{font-family:'JetBrains Mono',monospace;font-size:.5rem;letter-spacing:.15em;color:rgba(245,239,230,.25)}
+
+.article-body{max-width:720px;margin:0 auto;padding:5rem 2rem 4rem}
+.article-body h2{font-family:'Cormorant Garamond',serif;font-size:1.9rem;font-weight:400;color:var(--espresso);margin:4rem 0 1.2rem;line-height:1.25}
+.article-body h2:first-child{margin-top:0}
+.article-body h3{font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:500;color:var(--roast-mid);margin:2.5rem 0 .8rem}
+.article-body p{font-size:.92rem;line-height:2.05;color:var(--text-secondary);margin-bottom:1.3rem}
+.article-body p strong{color:var(--text-primary);font-weight:500}
+.article-body p em.t{font-style:italic;color:var(--copper);font-family:'Cormorant Garamond',serif;font-size:1.02em}
+.sep{width:50px;height:1px;background:linear-gradient(to right,var(--drip-cyan),var(--crema),var(--steep-indigo));margin:3.5rem auto;opacity:.5}
+
+.series-nav{margin:3rem -2rem;padding:2rem 2.5rem;background:rgba(212,165,116,.04);border:1px solid var(--border-light);border-radius:16px;display:flex;align-items:center;gap:1.5rem}
+.sn-badge{font-family:'JetBrains Mono',monospace;font-size:.5rem;letter-spacing:.2em;color:var(--crema);background:var(--espresso);padding:.4rem .8rem;border-radius:5px;white-space:nowrap}
+.sn-steps{display:flex;gap:.5rem;align-items:center;flex-wrap:wrap}
+.sn-step{font-size:.7rem;padding:.35rem .7rem;border-radius:5px;border:1px solid var(--border-light);color:var(--text-light);text-decoration:none;transition:all .3s}
+.sn-step.active{background:var(--espresso);color:var(--cream);border-color:var(--espresso)}
+.sn-step:not(.active):hover{border-color:var(--crema);color:var(--text-primary)}
+.sn-arrow{color:var(--text-light);font-size:.6rem}
+
+/* DUAL REACTOR */
+.dual-reactor{margin:3rem -2rem;display:grid;grid-template-columns:1fr 1fr;gap:0;border-radius:20px;overflow:hidden;border:1px solid var(--border-light)}
+.dr-panel{padding:2.5rem;position:relative}
+.dr-drip{background:linear-gradient(135deg,#0f1a20,#162530);color:var(--cream)}
+.dr-steep{background:linear-gradient(135deg,#151520,#1c1c30);color:var(--cream)}
+.dr-label{font-family:'JetBrains Mono',monospace;font-size:.5rem;letter-spacing:.3em;margin-bottom:1.2rem}
+.dr-drip .dr-label{color:var(--drip-cyan)}
+.dr-steep .dr-label{color:var(--steep-indigo)}
+.dr-panel h4{font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:400;margin-bottom:.3rem}
+.dr-panel .dr-reactor{font-family:'JetBrains Mono',monospace;font-size:.6rem;letter-spacing:.1em;margin-bottom:1rem;opacity:.5}
+.dr-panel p{font-size:.78rem;line-height:1.8;color:rgba(245,239,230,.5);margin-bottom:.8rem}
+.dr-panel p strong{color:rgba(245,239,230,.8)}
+.dr-panel p:last-of-type{margin-bottom:0}
+
+/* CONCENTRATION CURVE */
+.conc-card{margin:3rem -2rem;padding:2.5rem;background:var(--espresso);border-radius:20px;color:var(--cream);position:relative;overflow:hidden}
+.conc-card::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 80%,rgba(212,165,116,.06),transparent 50%)}
+.cc-inner{position:relative;z-index:1}
+.cc-label{font-family:'JetBrains Mono',monospace;font-size:.55rem;letter-spacing:.3em;color:var(--crema);margin-bottom:1.5rem}
+.cc-chart{display:flex;gap:2rem;margin:1.5rem 0}
+.cc-side{flex:1}
+.cc-side h5{font-family:'JetBrains Mono',monospace;font-size:.55rem;letter-spacing:.15em;margin-bottom:1rem}
+.cc-side.side-drip h5{color:var(--drip-cyan)}
+.cc-side.side-steep h5{color:var(--steep-indigo)}
+.cc-bars{display:flex;flex-direction:column;gap:.5rem}
+.cc-bar-row{display:flex;align-items:center;gap:.6rem}
+.cc-bar-label{font-size:.6rem;color:rgba(245,239,230,.3);width:50px;text-align:right;flex-shrink:0}
+.cc-bar-wrap{flex:1;height:16px;background:rgba(255,255,255,.04);border-radius:3px;overflow:hidden;position:relative}
+.cc-bar{height:100%;border-radius:3px;display:flex;align-items:center;padding-left:.5rem;font-size:.5rem;letter-spacing:.05em;transition:width 1s ease}
+.bar-drip{background:rgba(91,154,170,.3);color:var(--drip-cyan)}
+.bar-steep{background:rgba(107,107,154,.3);color:var(--steep-indigo)}
+.cc-note{font-size:.72rem;color:rgba(245,239,230,.35);line-height:1.7;margin-top:1.5rem;text-align:center}
+
+/* COMPOUND TABLE */
+.compound-table{margin:3rem -2rem;border-radius:20px;overflow:hidden;border:1px solid var(--border-light)}
+.ct-header{background:var(--espresso);padding:1.5rem 2rem;color:var(--cream)}
+.ct-label{font-family:'JetBrains Mono',monospace;font-size:.55rem;letter-spacing:.3em;color:var(--crema)}
+.ct-body{background:white}
+.ct-row{display:grid;grid-template-columns:1.2fr 1fr 1fr 1.5fr;align-items:center;border-bottom:1px solid var(--border-light);font-size:.75rem}
+.ct-row:last-child{border-bottom:none}
+.ct-row.ct-head{background:rgba(212,165,116,.04)}
+.ct-row.ct-head .ct-cell{font-family:'JetBrains Mono',monospace;font-size:.55rem;letter-spacing:.1em;color:var(--text-light)}
+.ct-cell{padding:.9rem 1.2rem;color:var(--text-secondary)}
+.ct-cell:first-child{font-weight:400;color:var(--text-primary)}
+.ct-hi-drip{color:var(--drip-cyan);font-weight:400}
+.ct-hi-steep{color:var(--steep-indigo);font-weight:400}
+
+/* DELTA FORCE */
+.delta-card{margin:3rem -2rem;padding:2.5rem;background:white;border:1px solid var(--border-light);border-radius:20px}
+.delta-label{font-family:'JetBrains Mono',monospace;font-size:.55rem;letter-spacing:.3em;color:var(--crema);margin-bottom:1.5rem}
+.delta-eq{text-align:center;padding:1.5rem;background:var(--espresso);border-radius:12px;color:var(--cream);margin-bottom:1.5rem}
+.delta-eq .formula{font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:300}
+.delta-eq .formula em{color:var(--crema);font-style:italic}
+.delta-eq .note{font-size:.68rem;color:rgba(245,239,230,.4);margin-top:.5rem;line-height:1.6}
+.delta-compare{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-top:1.5rem}
+.delta-item{padding:1.5rem;border-radius:14px;border:1px solid var(--border-light);text-align:center}
+.delta-item .di-icon{font-size:1.5rem;margin-bottom:.5rem}
+.delta-item h5{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:500;margin-bottom:.3rem}
+.delta-item .di-val{font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--copper);margin-bottom:.5rem}
+.delta-item p{font-size:.75rem;color:var(--text-secondary);line-height:1.6;margin-bottom:0}
+
+/* FLAVOR BAR */
+.flavor-dual{margin:3rem -2rem;display:grid;grid-template-columns:1fr 1fr;gap:1.5rem}
+.fd-card{padding:2rem;border-radius:16px;border:1px solid var(--border-light);background:white}
+.fd-card h4{font-family:'Cormorant Garamond',serif;font-size:1.15rem;font-weight:500;margin-bottom:1rem;display:flex;align-items:center;gap:.5rem}
+.fd-card h4 .dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.dot-drip{background:var(--drip-cyan)}.dot-steep{background:var(--steep-indigo)}
+.fd-row{display:flex;justify-content:space-between;align-items:center;padding:.45rem 0;border-bottom:1px solid rgba(212,165,116,.06)}
+.fd-row:last-child{border-bottom:none}
+.fd-attr{font-size:.72rem;color:var(--text-secondary)}
+.fd-bar-wrap{width:110px;height:6px;background:rgba(212,165,116,.08);border-radius:3px;overflow:hidden}
+.fd-bar{height:100%;border-radius:3px}
+.fb-drip{background:var(--drip-cyan)}.fb-steep{background:var(--steep-indigo)}
+
+.callout{background:var(--espresso);color:var(--cream);border-radius:16px;padding:2.5rem;margin:2.5rem -2rem;position:relative;overflow:hidden}
+.callout::before{content:'';position:absolute;top:-40%;right:-20%;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,rgba(212,165,116,.08),transparent)}
+.callout .callout-label{font-family:'JetBrains Mono',monospace;font-size:.55rem;letter-spacing:.3em;color:var(--crema);margin-bottom:1rem}
+.callout p{font-size:.85rem;line-height:1.9;color:rgba(245,239,230,.6);margin-bottom:0}
+.callout p strong{color:var(--crema)}
+
+.next-series{margin:3rem -2rem;padding:2.5rem;background:rgba(212,165,116,.04);border:1px solid rgba(212,165,116,.15);border-radius:20px;text-align:center}
+.ns-label{font-family:'JetBrains Mono',monospace;font-size:.5rem;letter-spacing:.3em;color:var(--copper);margin-bottom:1rem}
+.ns-title{font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:400;color:var(--espresso);margin-bottom:.5rem}
+.ns-desc{font-size:.82rem;color:var(--text-secondary);line-height:1.6;max-width:480px;margin:0 auto}
+
+.author-card{max-width:720px;margin:0 auto 4rem;padding:2rem 2rem 0;display:flex;align-items:center;gap:1.5rem;border-top:1px solid var(--border-light)}
+.author-avatar{width:56px;height:56px;border-radius:50%;background:var(--espresso);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.author-avatar span{font-family:'Cormorant Garamond',serif;font-size:1.2rem;color:var(--crema);font-weight:500}
+.author-info h4{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:500;margin-bottom:.15rem}
+.author-info p{font-size:.78rem;color:var(--text-secondary);line-height:1.5}
+footer{padding:3rem 2rem;text-align:center}
+.footer-brand{font-family:'JetBrains Mono',monospace;font-size:.58rem;letter-spacing:.25em;color:var(--text-light)}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@media(max-width:768px){nav{padding:1rem 1.5rem}.post-hero{height:75vh;min-height:480px}.article-body{padding:3.5rem 1.5rem 3rem}.dual-reactor,.conc-card,.compound-table,.delta-card,.flavor-dual,.callout,.series-nav,.next-series{margin-left:-.5rem;margin-right:-.5rem}.dual-reactor,.flavor-dual,.delta-compare{grid-template-columns:1fr}.dr-panel,.conc-card,.delta-card,.callout{padding:2rem 1.5rem}.ct-row{grid-template-columns:1fr 1fr 1fr 1fr;font-size:.65rem}.ct-cell{padding:.6rem .4rem}.cc-chart{flex-direction:column}.author-card{flex-direction:column;text-align:center;padding:1.5rem}.series-nav{flex-direction:column;align-items:flex-start}.hero-drops{bottom:2rem}}
+</style>
+</head>
+<body>
+<div class="progress-bar" id="progressBar"></div>
+<nav id="mainNav"><div class="nav-left"><a href="/" class="nav-logo">HARA<small>COFFEE LAB</small></a><a href="blog-index.html" class="nav-back"><span>←</span> Blog</a></div><div class="lang-switcher"><button class="lang-btn active" data-lang="es">ES</button><button class="lang-btn" data-lang="ko">KO</button><button class="lang-btn" data-lang="en">EN</button></div></nav>
+
+<div class="post-hero">
+  <div class="hero-content">
+    <div class="hero-overline"><span class="series-tag">CdGF SERIES</span><span class="series-num">02 / 03</span></div>
+    <h1 class="hero-title" data-i18n="ht"><span class="v-drip">Goteo</span> vs <span class="v-steep">Inmersión</span><br>dos caminos en frío</h1>
+    <p class="hero-sub" data-i18n="hs">Dentro del cold brew, el método de contacto entre agua y café define dos perfiles de extracción radicalmente distintos.</p>
+    <div class="hero-meta"><span class="hero-badge" data-i18n="hb">CIENCIA</span><span class="hero-date">17 FEB 2026</span><span class="hero-read" data-i18n="hr">12 min lectura</span></div>
+  </div>
+  <div class="hero-drops">
+    <div class="hero-drop"><div class="drop-icon">💧</div><div class="drop-label" data-i18n="d1">GOTEO</div></div>
+    <div class="hero-drop"><div class="drop-icon">🫙</div><div class="drop-label" data-i18n="d2">INMERSIÓN</div></div>
+  </div>
+</div>
+
+<article class="article-body" id="articleBody">
+
+<!-- ══ SPANISH ══ -->
+<div class="lang-content" data-lang="es">
+
+<div class="series-nav"><div class="sn-badge">CdGF SERIES</div><div class="sn-steps"><a class="sn-step" href="blog-post-cdgf-01.html">01 · T, P, t</a><span class="sn-arrow">→</span><span class="sn-step active">02 · Goteo vs Inmersión</span><span class="sn-arrow">→</span><a class="sn-step" href="blog-post-cdgf-03.html">03 · Filosofía CdGF1%</a></div></div>
+
+<h2>El mismo frío, dos reactores diferentes</h2>
+
+<p>En el artículo anterior establecimos que el cold brew preserva la información aromática del grano mejor que cualquier método de alta temperatura. Pero "cold brew" no es un método único — es una familia con dos miembros fundamentalmente diferentes: el <em class="t">goteo lento</em> (slow drip) y la <em class="t">inmersión</em> (steeping). Ambos operan a baja temperatura y presión atmosférica, pero la forma en que el agua contacta al café genera dinámicas de extracción opuestas.</p>
+
+<p>Para entender la diferencia, necesitamos pensar como ingenieros químicos y reconocer que cada método es, en esencia, un <strong>tipo diferente de reactor</strong>.</p>
+
+<div class="dual-reactor">
+  <div class="dr-panel dr-drip">
+    <div class="dr-label">💧 GOTEO LENTO (SLOW DRIP)</div>
+    <h4>Café de Goteo en Frío</h4>
+    <div class="dr-reactor">≈ REACTOR DE FLUJO PISTÓN (PFR)</div>
+    <p>Agua fría gotea sobre la cama de café a una tasa controlada — típicamente <strong>1 gota cada 1–2 segundos</strong> — y atraviesa el lecho por gravedad. Cada gota que entra es <strong>agua fresca</strong> con concentración cero de solutos. Cada gota que sale ha extraído la máxima cantidad posible según su breve tiempo de contacto con el café.</p>
+    <p>La fuerza motriz de extracción (ΔC = C* − C) se mantiene <strong>máxima en todo momento</strong> porque el solvente nunca se satura. Es un flujo continuo de agua limpia que "barre" selectivamente los compuestos más solubles sin dar tiempo a que los compuestos de difusión lenta se incorporen.</p>
+    <p><strong>Analogía:</strong> un río que pasa sobre una piedra y se lleva lo que puede disolver al paso — sin detenerse, sin acumular.</p>
+  </div>
+  <div class="dr-panel dr-steep">
+    <div class="dr-label">🫙 INMERSIÓN (STEEPING)</div>
+    <h4>Cold Brew por Inmersión</h4>
+    <div class="dr-reactor">≈ REACTOR DE MEZCLA COMPLETA (CSTR/BATCH)</div>
+    <p>El café molido se sumerge en un volumen fijo de agua fría durante <strong>12–24 horas</strong>. El agua y el café permanecen en contacto estático — el sistema es cerrado y la concentración de solutos en el líquido <strong>aumenta progresivamente</strong> hasta aproximarse al equilibrio.</p>
+    <p>A medida que la concentración del líquido sube, la fuerza motriz (ΔC) <strong>disminuye</strong>. La extracción se desacelera exponencialmente. Los compuestos de bajo peso molecular se extraen primero, pero con suficiente tiempo, los de alto peso molecular también alcanzan el equilibrio.</p>
+    <p><strong>Analogía:</strong> un lago quieto donde una piedra se disuelve lentamente en el agua estancada — todo lo soluble termina disolviéndose, dado suficiente tiempo.</p>
+  </div>
+</div>
+
+<div class="sep"></div>
+
+<h2>La fuerza motriz: ΔC constante vs ΔC decreciente</h2>
+
+<p>La diferencia central entre ambos métodos se reduce a una sola variable termodinámica: la <strong>fuerza motriz de transferencia de masa</strong>, que es la diferencia de concentración entre la superficie del grano (C*) y el líquido circundante (C).</p>
+
+<div class="delta-card">
+  <div class="delta-label">FUERZA MOTRIZ DE EXTRACCIÓN</div>
+  <div class="delta-eq">
+    <div class="formula"><em>J</em> = <em>kₗ</em> · (<em>C*</em> − <em>C</em>) = <em>kₗ</em> · Δ<em>C</em></div>
+    <div class="note">J = flujo de masa por unidad de superficie. kₗ = coeficiente de transferencia de masa.<br>C* = concentración de saturación en la superficie. C = concentración en el solvente.</div>
+  </div>
+  <div class="delta-compare">
+    <div class="delta-item">
+      <div class="di-icon">💧</div>
+      <h5>Goteo</h5>
+      <div class="di-val">ΔC ≈ CONSTANTE (MÁXIMO)</div>
+      <p>Cada gota que llega es agua limpia (C ≈ 0), por lo que ΔC = C* − 0 = C*. La fuerza motriz nunca decae. Cada gota extrae con la misma eficiencia que la primera. Extracción selectiva y sostenida de los compuestos más solubles.</p>
+    </div>
+    <div class="delta-item">
+      <div class="di-icon">🫙</div>
+      <h5>Inmersión</h5>
+      <div class="di-val">ΔC → 0 (DECRECIENTE)</div>
+      <p>C sube continuamente: C(t) = C*[1 − e^(−k·t)]. A medida que el líquido se satura, ΔC cae y la extracción se detiene. Para compensar, se necesita más tiempo (12–24h). Durante ese tiempo, compuestos de difusión lenta también alcanzan el equilibrio.</p>
+    </div>
+  </div>
+</div>
+
+<p>Esto tiene consecuencias directas en la composición del extracto. El goteo, con su ΔC constante, funciona como un <strong>barrido selectivo</strong>: extrae eficientemente los compuestos más solubles (ácidos orgánicos de bajo PM, cafeína, azúcares simples, terpenos volátiles) sin dar tiempo ni fuerza motriz suficiente para arrancar los compuestos de alto peso molecular de la matriz celular.</p>
+
+<p>La inmersión, con su ΔC decreciente pero su tiempo extendido, eventualmente extrae <strong>un espectro más amplio</strong> de compuestos — incluyendo una fracción de CGA, taninos condensados y melanoidinas solubles que el goteo deja intactos. El resultado es un café con más cuerpo pero también más probabilidad de notas amargas y astringentes.</p>
+
+<div class="sep"></div>
+
+<h2>Perfil de extracción: molécula por molécula</h2>
+
+<div class="compound-table">
+  <div class="ct-header"><div class="ct-label">EXTRACCIÓN POR FAMILIA DE COMPUESTOS</div></div>
+  <div class="ct-body">
+    <div class="ct-row ct-head"><div class="ct-cell">Compuesto</div><div class="ct-cell">Goteo</div><div class="ct-cell">Inmersión</div><div class="ct-cell">Impacto sensorial</div></div>
+    <div class="ct-row"><div class="ct-cell">Ácidos orgánicos (cítrico, málico)</div><div class="ct-cell ct-hi-drip">★★★★</div><div class="ct-cell ct-hi-steep">★★★</div><div class="ct-cell">Acidez suave, notas frutales. Alta selectividad en goteo.</div></div>
+    <div class="ct-row"><div class="ct-cell">Cafeína</div><div class="ct-cell ct-hi-drip">★★★</div><div class="ct-cell ct-hi-steep">★★★★</div><div class="ct-cell">Mayor extracción por inmersión (más tiempo de contacto total).</div></div>
+    <div class="ct-row"><div class="ct-cell">Sacarosa / azúcares simples</div><div class="ct-cell ct-hi-drip">★★★★</div><div class="ct-cell ct-hi-steep">★★★</div><div class="ct-cell">Dulzura natural. Goteo preserva la percepción de dulce.</div></div>
+    <div class="ct-row"><div class="ct-cell">Terpenos (linalol, geraniol)</div><div class="ct-cell ct-hi-drip">★★★★★</div><div class="ct-cell ct-hi-steep">★★★</div><div class="ct-cell">Florales, cítricos. Máxima retención en goteo (mínima agitación).</div></div>
+    <div class="ct-row"><div class="ct-cell">CGA / polifenoles</div><div class="ct-cell ct-hi-drip">★★</div><div class="ct-cell ct-hi-steep">★★★★</div><div class="ct-cell">Amargor, astringencia. Inmersión los extrae por tiempo prolongado.</div></div>
+    <div class="ct-row"><div class="ct-cell">Taninos condensados</div><div class="ct-cell ct-hi-drip">★</div><div class="ct-cell ct-hi-steep">★★★</div><div class="ct-cell">Astringencia, sequedad. Casi ausentes en goteo.</div></div>
+    <div class="ct-row"><div class="ct-cell">Melanoidinas solubles</div><div class="ct-cell ct-hi-drip">★★</div><div class="ct-cell ct-hi-steep">★★★</div><div class="ct-cell">Color pardo, cuerpo. Más presentes en inmersión.</div></div>
+  </div>
+</div>
+
+<h3>La curva de concentración comparada</h3>
+
+<div class="conc-card">
+  <div class="cc-inner">
+    <div class="cc-label">CONCENTRACIÓN RELATIVA POR FAMILIA</div>
+    <div class="cc-chart">
+      <div class="cc-side side-drip">
+        <h5>💧 GOTEO LENTO</h5>
+        <div class="cc-bars">
+          <div class="cc-bar-row"><div class="cc-bar-label">Terpenos</div><div class="cc-bar-wrap"><div class="cc-bar bar-drip" style="width:92%">92%</div></div></div>
+          <div class="cc-bar-row"><div class="cc-bar-label">Ácidos</div><div class="cc-bar-wrap"><div class="cc-bar bar-drip" style="width:85%">85%</div></div></div>
+          <div class="cc-bar-row"><div class="cc-bar-label">Azúcares</div><div class="cc-bar-wrap"><div class="cc-bar bar-drip" style="width:80%">80%</div></div></div>
+          <div class="cc-bar-row"><div class="cc-bar-label">Cafeína</div><div class="cc-bar-wrap"><div class="cc-bar bar-drip" style="width:65%">65%</div></div></div>
+          <div class="cc-bar-row"><div class="cc-bar-label">CGA</div><div class="cc-bar-wrap"><div class="cc-bar bar-drip" style="width:30%">30%</div></div></div>
+          <div class="cc-bar-row"><div class="cc-bar-label">Taninos</div><div class="cc-bar-wrap"><div class="cc-bar bar-drip" style="width:12%">12%</div></div></div>
+        </div>
+      </div>
+      <div class="cc-side side-steep">
+        <h5>🫙 INMERSIÓN 18H</h5>
+        <div class="cc-bars">
+          <div class="cc-bar-row"><div class="cc-bar-label">Terpenos</div><div class="cc-bar-wrap"><div class="cc-bar bar-steep" style="width:60%">60%</div></div></div>
+          <div class="cc-bar-row"><div class="cc-bar-label">Ácidos</div><div class="cc-bar-wrap"><div class="cc-bar bar-steep" style="width:70%">70%</div></div></div>
+          <div class="cc-bar-row"><div class="cc-bar-label">Azúcares</div><div class="cc-bar-wrap"><div class="cc-bar bar-steep" style="width:68%">68%</div></div></div>
+          <div class="cc-bar-row"><div class="cc-bar-label">Cafeína</div><div class="cc-bar-wrap"><div class="cc-bar bar-steep" style="width:82%">82%</div></div></div>
+          <div class="cc-bar-row"><div class="cc-bar-label">CGA</div><div class="cc-bar-wrap"><div class="cc-bar bar-steep" style="width:65%">65%</div></div></div>
+          <div class="cc-bar-row"><div class="cc-bar-label">Taninos</div><div class="cc-bar-wrap"><div class="cc-bar bar-steep" style="width:45%">45%</div></div></div>
+        </div>
+      </div>
+    </div>
+    <div class="cc-note">Los porcentajes representan extracción relativa respecto al total extraíble de cada familia de compuestos. El goteo maximiza terpenos y ácidos suaves; la inmersión tiende al equilibrio general.</div>
+  </div>
+</div>
+
+<p>El dato más impactante es la retención de <strong>terpenos</strong>: el goteo lento extrae un 92% de los terpenos disponibles contra un 60% de la inmersión. ¿Por qué? Porque en la inmersión, el contacto prolongado con el agua — incluso fría — permite una <em class="t">difusión reversa</em>: algunos terpenos que ya se habían disuelto vuelven a adsorberse en la matriz celular cuando el sistema se acerca al equilibrio. Además, la mayor concentración de CGA y taninos en la inmersión puede formar complejos con los terpenos, secuestrándolos y reduciendo su disponibilidad sensorial.</p>
+
+<p>En el goteo, cada gota se lleva sus terpenos y se va — no hay oportunidad de readsorción ni de complejación.</p>
+
+<div class="sep"></div>
+
+<h2>El sabor resultante</h2>
+
+<div class="flavor-dual">
+  <div class="fd-card">
+    <h4><span class="dot dot-drip"></span> Goteo lento</h4>
+    <div class="fd-row"><span class="fd-attr">Claridad aromática</span><div class="fd-bar-wrap"><div class="fd-bar fb-drip" style="width:95%"></div></div></div>
+    <div class="fd-row"><span class="fd-attr">Dulzura</span><div class="fd-bar-wrap"><div class="fd-bar fb-drip" style="width:85%"></div></div></div>
+    <div class="fd-row"><span class="fd-attr">Notas florales/cítricas</span><div class="fd-bar-wrap"><div class="fd-bar fb-drip" style="width:90%"></div></div></div>
+    <div class="fd-row"><span class="fd-attr">Cuerpo</span><div class="fd-bar-wrap"><div class="fd-bar fb-drip" style="width:40%"></div></div></div>
+    <div class="fd-row"><span class="fd-attr">Amargor</span><div class="fd-bar-wrap"><div class="fd-bar fb-drip" style="width:10%"></div></div></div>
+    <div class="fd-row"><span class="fd-attr">Complejidad posfenólica</span><div class="fd-bar-wrap"><div class="fd-bar fb-drip" style="width:25%"></div></div></div>
+  </div>
+  <div class="fd-card">
+    <h4><span class="dot dot-steep"></span> Inmersión</h4>
+    <div class="fd-row"><span class="fd-attr">Claridad aromática</span><div class="fd-bar-wrap"><div class="fd-bar fb-steep" style="width:55%"></div></div></div>
+    <div class="fd-row"><span class="fd-attr">Dulzura</span><div class="fd-bar-wrap"><div class="fd-bar fb-steep" style="width:60%"></div></div></div>
+    <div class="fd-row"><span class="fd-attr">Notas florales/cítricas</span><div class="fd-bar-wrap"><div class="fd-bar fb-steep" style="width:45%"></div></div></div>
+    <div class="fd-row"><span class="fd-attr">Cuerpo</span><div class="fd-bar-wrap"><div class="fd-bar fb-steep" style="width:75%"></div></div></div>
+    <div class="fd-row"><span class="fd-attr">Amargor</span><div class="fd-bar-wrap"><div class="fd-bar fb-steep" style="width:45%"></div></div></div>
+    <div class="fd-row"><span class="fd-attr">Complejidad posfenólica</span><div class="fd-bar-wrap"><div class="fd-bar fb-steep" style="width:70%"></div></div></div>
+  </div>
+</div>
+
+<p>El goteo lento produce un cold brew de <strong>claridad cristalina</strong>: las notas de origen — florales, cítricas, frutales — brillan sin interferencia de polifenoles ni taninos. Es como escuchar una grabación sin ruido de fondo. La inmersión produce un café con más <strong>cuerpo y complejidad oscura</strong>, pero a costa de perder resolución aromática — como escuchar la misma canción con un fondo de ruido que suma profundidad pero difumina los detalles.</p>
+
+<p>Ninguno es objetivamente "mejor". Son herramientas diferentes. Pero para una aplicación específica donde la <strong>preservación aromática</strong> es la prioridad absoluta — por ejemplo, cuando el café va a ser la base de un gelato artesanal que debe conservar su carácter intacto a través de congelación y almacenamiento — el goteo lento tiene una ventaja termodinámica imbatible.</p>
+
+<div class="callout">
+  <div class="callout-label">LA CONCLUSIÓN TERMODINÁMICA</div>
+  <p>El goteo lento en frío es el método de extracción que <strong>maximiza simultáneamente</strong> tres objetivos: selectividad molecular (extrae lo deseable, deja lo no deseado), retención aromática (los terpenos permanecen en solución) y estabilidad de la cadena fría (nunca hay contacto con calor). Es, en términos de ingeniería química, el reactor óptimo para producir un extracto de café de <strong>máxima pureza aromática con mínima degradación</strong>. Es exactamente por esto que en HARA lo llamamos <em class="t">Café de Goteo en Frío</em> — y por esto construimos nuestra filosofía alrededor de este método.</p>
+</div>
+
+<div class="next-series">
+  <div class="ns-label" data-i18n="ns-l">FINAL DE LA SERIE</div>
+  <div class="ns-title" data-i18n="ns-t">CdGF1%: la filosofía de HARA</div>
+  <div class="ns-desc" data-i18n="ns-d">De la gota al gelato — por qué cada decisión en HARA se diseña para que la molécula de aroma llegue intacta a tu paladar.</div>
+</div>
+
+</div>
+
+<!-- ══ KOREAN ══ -->
+<div class="lang-content" data-lang="ko" style="display:none;">
+
+<div class="series-nav"><div class="sn-badge">CdGF 시리즈</div><div class="sn-steps"><a class="sn-step" href="blog-post-cdgf-01.html">01 · T, P, t</a><span class="sn-arrow">→</span><span class="sn-step active">02 · 점적 vs 침출</span><span class="sn-arrow">→</span><a class="sn-step" href="blog-post-cdgf-03.html">03 · CdGF1% 철학</a></div></div>
+
+<h2>같은 냉기, 두 가지 다른 반응기</h2>
+
+<p>지난 글에서 콜드브루가 고온 방법보다 원두의 향미 정보를 더 잘 보존한다는 것을 확립했습니다. 하지만 "콜드브루"는 단일 방법이 아닙니다 — 근본적으로 다른 두 구성원을 가진 하나의 가족입니다: <em class="t">점적식</em>(slow drip)과 <em class="t">침출식</em>(steeping). 둘 다 저온과 대기압에서 작동하지만, 물이 커피와 접촉하는 방식이 정반대의 추출 동역학을 만듭니다.</p>
+
+<p>차이를 이해하려면 화학공학자의 관점이 필요합니다. 각 방법은 본질적으로 <strong>서로 다른 유형의 반응기</strong>입니다.</p>
+
+<div class="dual-reactor">
+  <div class="dr-panel dr-drip">
+    <div class="dr-label">💧 점적식 (SLOW DRIP)</div>
+    <h4>Café de Goteo en Frío</h4>
+    <div class="dr-reactor">≈ 관류 반응기 (PFR)</div>
+    <p>냉수가 제어된 속도로 — 보통 <strong>1–2초에 1방울</strong> — 커피 베드 위에 떨어지고 중력으로 통과합니다. 들어가는 모든 방울은 용질 농도 제로의 <strong>깨끗한 물</strong>입니다. 나오는 모든 방울은 짧은 접촉 시간 동안 가능한 최대량을 추출한 상태입니다.</p>
+    <p>추출의 구동력(ΔC = C* − C)이 <strong>항상 최대</strong>로 유지됩니다. 용매가 결코 포화되지 않기 때문입니다. 깨끗한 물의 연속 흐름이 가장 용해성 높은 화합물을 선택적으로 "쓸어내며" 느린 확산 화합물이 합류할 시간을 주지 않습니다.</p>
+    <p><strong>비유:</strong> 돌 위를 흐르는 강물이 흘러가면서 녹일 수 있는 것만 가져가는 것 — 멈추지 않고, 축적하지 않고.</p>
+  </div>
+  <div class="dr-panel dr-steep">
+    <div class="dr-label">🫙 침출식 (STEEPING)</div>
+    <h4>Cold Brew 침출</h4>
+    <div class="dr-reactor">≈ 완전혼합 반응기 (CSTR/BATCH)</div>
+    <p>분쇄 커피가 고정된 부피의 냉수에 <strong>12–24시간</strong> 잠깁니다. 물과 커피가 정적 접촉 상태를 유지하며 — 닫힌 계에서 액체의 용질 농도가 <strong>점진적으로 상승</strong>하여 평형에 접근합니다.</p>
+    <p>액체 농도가 올라갈수록 구동력(ΔC)이 <strong>감소</strong>합니다. 추출이 지수적으로 감속합니다. 저분자 화합물이 먼저 추출되지만, 충분한 시간이 주어지면 고분자 화합물도 평형에 도달합니다.</p>
+    <p><strong>비유:</strong> 고인 물에서 돌이 천천히 녹는 고요한 호수 — 충분한 시간이 주어지면 용해 가능한 모든 것이 결국 녹습니다.</p>
+  </div>
+</div>
+
+<div class="sep"></div>
+
+<h2>구동력: 일정한 ΔC vs 감소하는 ΔC</h2>
+
+<p>두 방법의 핵심 차이는 단 하나의 열역학적 변수로 귀결됩니다: <strong>물질전달 구동력</strong> — 원두 표면의 농도(C*)와 주변 액체의 농도(C) 사이의 차이.</p>
+
+<div class="delta-card">
+  <div class="delta-label">추출 구동력</div>
+  <div class="delta-eq">
+    <div class="formula"><em>J</em> = <em>kₗ</em> · (<em>C*</em> − <em>C</em>) = <em>kₗ</em> · Δ<em>C</em></div>
+    <div class="note">J = 단위면적당 물질 플럭스. kₗ = 물질전달계수.<br>C* = 표면 포화농도. C = 용매 농도.</div>
+  </div>
+  <div class="delta-compare">
+    <div class="delta-item">
+      <div class="di-icon">💧</div>
+      <h5>점적식</h5>
+      <div class="di-val">ΔC ≈ 일정 (최대)</div>
+      <p>도달하는 모든 방울이 깨끗한 물(C ≈ 0)이므로 ΔC = C* − 0 = C*. 구동력이 절대 감소하지 않습니다. 모든 방울이 첫 방울과 같은 효율로 추출합니다. 가장 용해성 높은 화합물의 선택적이고 지속적인 추출.</p>
+    </div>
+    <div class="delta-item">
+      <div class="di-icon">🫙</div>
+      <h5>침출식</h5>
+      <div class="di-val">ΔC → 0 (감소)</div>
+      <p>C가 지속적으로 상승: C(t) = C*[1 − e^(−k·t)]. 액체가 포화되면서 ΔC가 떨어지고 추출이 정지합니다. 보상하기 위해 더 많은 시간(12–24h)이 필요합니다. 그 시간 동안 느린 확산 화합물도 평형에 도달합니다.</p>
+    </div>
+  </div>
+</div>
+
+<p>이것은 추출물의 조성에 직접적 결과를 가져옵니다. 점적식은 일정한 ΔC로 <strong>선택적 스위핑</strong>을 합니다: 가장 용해성 높은 화합물(저분자 유기산, 카페인, 단당, 휘발성 테르펜)을 효율적으로 추출하면서 고분자 화합물을 세포 매트릭스에서 뜯어낼 시간이나 구동력을 주지 않습니다.</p>
+
+<p>침출식은 감소하는 ΔC이지만 연장된 시간으로 결국 <strong>더 넓은 스펙트럼</strong>의 화합물을 추출합니다 — 점적식이 건드리지 않는 CGA, 축합 탄닌, 가용 멜라노이딘의 일부를 포함하여. 결과는 더 많은 바디이지만 쓴맛과 수렴미 노트의 확률도 더 높은 커피입니다.</p>
+
+<div class="sep"></div>
+
+<h2>추출 프로파일: 분자 단위로</h2>
+
+<div class="compound-table">
+  <div class="ct-header"><div class="ct-label">화합물군별 추출도</div></div>
+  <div class="ct-body">
+    <div class="ct-row ct-head"><div class="ct-cell">화합물</div><div class="ct-cell">점적식</div><div class="ct-cell">침출식</div><div class="ct-cell">관능적 영향</div></div>
+    <div class="ct-row"><div class="ct-cell">유기산 (시트르산, 말산)</div><div class="ct-cell ct-hi-drip">★★★★</div><div class="ct-cell ct-hi-steep">★★★</div><div class="ct-cell">부드러운 산미, 과일 노트. 점적에서 높은 선택성.</div></div>
+    <div class="ct-row"><div class="ct-cell">카페인</div><div class="ct-cell ct-hi-drip">★★★</div><div class="ct-cell ct-hi-steep">★★★★</div><div class="ct-cell">침출에서 더 높은 추출 (총 접촉 시간 더 김).</div></div>
+    <div class="ct-row"><div class="ct-cell">자당 / 단당류</div><div class="ct-cell ct-hi-drip">★★★★</div><div class="ct-cell ct-hi-steep">★★★</div><div class="ct-cell">자연 단맛. 점적이 단맛 인지를 보존.</div></div>
+    <div class="ct-row"><div class="ct-cell">테르펜 (리날룰, 게라니올)</div><div class="ct-cell ct-hi-drip">★★★★★</div><div class="ct-cell ct-hi-steep">★★★</div><div class="ct-cell">꽃향, 시트러스. 점적에서 최대 보존 (최소 교란).</div></div>
+    <div class="ct-row"><div class="ct-cell">CGA / 폴리페놀</div><div class="ct-cell ct-hi-drip">★★</div><div class="ct-cell ct-hi-steep">★★★★</div><div class="ct-cell">쓴맛, 수렴미. 침출이 장시간에 걸쳐 추출.</div></div>
+    <div class="ct-row"><div class="ct-cell">축합 탄닌</div><div class="ct-cell ct-hi-drip">★</div><div class="ct-cell ct-hi-steep">★★★</div><div class="ct-cell">수렴미, 건조감. 점적에서 거의 부재.</div></div>
+    <div class="ct-row"><div class="ct-cell">가용 멜라노이딘</div><div class="ct-cell ct-hi-drip">★★</div><div class="ct-cell ct-hi-steep">★★★</div><div class="ct-cell">갈색, 바디. 침출에서 더 많이 존재.</div></div>
+  </div>
+</div>
+
+<p>가장 충격적인 데이터는 <strong>테르펜</strong> 보존율입니다: 점적식은 이용 가능한 테르펜의 92%를 추출하지만 침출식은 60%에 그칩니다. 왜? 침출에서는 냉수와의 장시간 접촉이 <em class="t">역확산</em>을 허용하기 때문입니다: 이미 용해된 일부 테르펜이 시스템이 평형에 접근하면서 세포 매트릭스에 재흡착됩니다. 또한 침출에서 더 높은 CGA와 탄닌 농도가 테르펜과 복합체를 형성하여 관능적 가용성을 줄일 수 있습니다.</p>
+
+<p>점적식에서는 각 방울이 테르펜을 가지고 떠나갑니다 — 재흡착이나 복합체 형성의 기회가 없습니다.</p>
+
+<div class="sep"></div>
+
+<h2>결과적 맛</h2>
+
+<div class="flavor-dual">
+  <div class="fd-card">
+    <h4><span class="dot dot-drip"></span> 점적식</h4>
+    <div class="fd-row"><span class="fd-attr">향미 투명도</span><div class="fd-bar-wrap"><div class="fd-bar fb-drip" style="width:95%"></div></div></div>
+    <div class="fd-row"><span class="fd-attr">단맛</span><div class="fd-bar-wrap"><div class="fd-bar fb-drip" style="width:85%"></div></div></div>
+    <div class="fd-row"><span class="fd-attr">꽃향/시트러스</span><div class="fd-bar-wrap"><div class="fd-bar fb-drip" style="width:90%"></div></div></div>
+    <div class="fd-row"><span class="fd-attr">바디</span><div class="fd-bar-wrap"><div class="fd-bar fb-drip" style="width:40%"></div></div></div>
+    <div class="fd-row"><span class="fd-attr">쓴맛</span><div class="fd-bar-wrap"><div class="fd-bar fb-drip" style="width:10%"></div></div></div>
+    <div class="fd-row"><span class="fd-attr">포스트페놀 복합성</span><div class="fd-bar-wrap"><div class="fd-bar fb-drip" style="width:25%"></div></div></div>
+  </div>
+  <div class="fd-card">
+    <h4><span class="dot dot-steep"></span> 침출식</h4>
+    <div class="fd-row"><span class="fd-attr">향미 투명도</span><div class="fd-bar-wrap"><div class="fd-bar fb-steep" style="width:55%"></div></div></div>
+    <div class="fd-row"><span class="fd-attr">단맛</span><div class="fd-bar-wrap"><div class="fd-bar fb-steep" style="width:60%"></div></div></div>
+    <div class="fd-row"><span class="fd-attr">꽃향/시트러스</span><div class="fd-bar-wrap"><div class="fd-bar fb-steep" style="width:45%"></div></div></div>
+    <div class="fd-row"><span class="fd-attr">바디</span><div class="fd-bar-wrap"><div class="fd-bar fb-steep" style="width:75%"></div></div></div>
+    <div class="fd-row"><span class="fd-attr">쓴맛</span><div class="fd-bar-wrap"><div class="fd-bar fb-steep" style="width:45%"></div></div></div>
+    <div class="fd-row"><span class="fd-attr">포스트페놀 복합성</span><div class="fd-bar-wrap"><div class="fd-bar fb-steep" style="width:70%"></div></div></div>
+  </div>
+</div>
+
+<p>점적식은 <strong>수정 같은 투명도</strong>의 콜드브루를 만듭니다: 원산지의 꽃향, 시트러스, 과일 노트가 폴리페놀이나 탄닌의 간섭 없이 빛납니다. 배경 소음 없는 녹음을 듣는 것과 같습니다. 침출식은 더 많은 <strong>바디와 어두운 복합성</strong>을 가진 커피를 만들지만, 향미 해상도를 잃는 대가를 치릅니다.</p>
+
+<p>어느 쪽이 객관적으로 "더 낫다"고 할 수 없습니다. 다른 도구입니다. 하지만 <strong>향미 보존</strong>이 절대적 우선순위인 특정 용도 — 예를 들어, 냉동과 저장을 거쳐도 성격을 온전히 보존해야 하는 아르티산 젤라또의 베이스로 사용될 때 — 점적식은 열역학적으로 압도적인 우위를 가집니다.</p>
+
+<div class="callout">
+  <div class="callout-label">열역학적 결론</div>
+  <p>냉점적 추출은 세 가지 목표를 <strong>동시에 극대화</strong>하는 추출 방법입니다: 분자 선택성(바람직한 것을 추출하고 바람직하지 않은 것은 남김), 향미 보존(테르펜이 용액에 잔류), 콜드체인 안정성(열과의 접촉이 전무). 화학공학적으로 이것은 <strong>최소 분해로 최대 향미 순도</strong>의 추출물을 생산하는 최적 반응기입니다. 바로 이것이 HARA에서 이를 <em class="t">Café de Goteo en Frío</em>라 부르는 이유이며, 이 방법을 중심으로 우리의 철학을 구축한 이유입니다.</p>
+</div>
+
+<div class="next-series">
+  <div class="ns-label">시리즈 마지막</div>
+  <div class="ns-title">CdGF1%: HARA의 철학</div>
+  <div class="ns-desc">한 방울에서 젤라또까지 — HARA의 모든 결정이 향기 분자를 온전히 당신의 미각에 전달하기 위해 설계되는 이유.</div>
+</div>
+
+</div>
+
+<!-- ══ ENGLISH ══ -->
+<div class="lang-content" data-lang="en" style="display:none;">
+
+<div class="series-nav"><div class="sn-badge">CdGF SERIES</div><div class="sn-steps"><a class="sn-step" href="blog-post-cdgf-01.html">01 · T, P, t</a><span class="sn-arrow">→</span><span class="sn-step active">02 · Drip vs Immersion</span><span class="sn-arrow">→</span><a class="sn-step" href="blog-post-cdgf-03.html">03 · CdGF1% Philosophy</a></div></div>
+
+<h2>Same cold, two different reactors</h2>
+
+<p>In the previous article we established that cold brew preserves the bean's aromatic information better than any high-temperature method. But "cold brew" isn't a single method — it's a family with two fundamentally different members: <em class="t">slow drip</em> and <em class="t">immersion</em> (steeping). Both operate at low temperature and atmospheric pressure, but the way water contacts coffee generates opposite extraction dynamics.</p>
+
+<p>To understand the difference, we need to think like chemical engineers and recognize that each method is essentially a <strong>different type of reactor</strong>.</p>
+
+<div class="dual-reactor">
+  <div class="dr-panel dr-drip">
+    <div class="dr-label">💧 SLOW DRIP</div>
+    <h4>Café de Goteo en Frío</h4>
+    <div class="dr-reactor">≈ PLUG FLOW REACTOR (PFR)</div>
+    <p>Cold water drips onto the coffee bed at a controlled rate — typically <strong>1 drop every 1–2 seconds</strong> — and passes through by gravity. Every incoming drop is <strong>fresh water</strong> with zero solute concentration. Every outgoing drop has extracted the maximum possible given its brief contact time.</p>
+    <p>The driving force (ΔC = C* − C) remains <strong>maximum at all times</strong> because the solvent never saturates. A continuous flow of clean water selectively "sweeps" the most soluble compounds without giving slow-diffusing compounds time to join.</p>
+    <p><strong>Analogy:</strong> a river flowing over a stone, carrying away what it can dissolve in passing — never stopping, never accumulating.</p>
+  </div>
+  <div class="dr-panel dr-steep">
+    <div class="dr-label">🫙 IMMERSION (STEEPING)</div>
+    <h4>Cold Brew Immersion</h4>
+    <div class="dr-reactor">≈ MIXED TANK REACTOR (CSTR/BATCH)</div>
+    <p>Ground coffee is submerged in a fixed volume of cold water for <strong>12–24 hours</strong>. Water and coffee remain in static contact — the system is closed and solute concentration in the liquid <strong>rises progressively</strong> toward equilibrium.</p>
+    <p>As liquid concentration rises, the driving force (ΔC) <strong>decreases</strong>. Extraction decelerates exponentially. Low-MW compounds extract first, but given enough time, high-MW compounds also reach equilibrium.</p>
+    <p><strong>Analogy:</strong> a still lake where a stone slowly dissolves in stagnant water — everything soluble eventually dissolves, given enough time.</p>
+  </div>
+</div>
+
+<div class="sep"></div>
+
+<h2>The driving force: constant ΔC vs declining ΔC</h2>
+
+<div class="delta-card">
+  <div class="delta-label">EXTRACTION DRIVING FORCE</div>
+  <div class="delta-eq">
+    <div class="formula"><em>J</em> = <em>kₗ</em> · (<em>C*</em> − <em>C</em>) = <em>kₗ</em> · Δ<em>C</em></div>
+    <div class="note">J = mass flux per unit area. kₗ = mass transfer coefficient.<br>C* = saturation concentration at the surface. C = solvent concentration.</div>
+  </div>
+  <div class="delta-compare">
+    <div class="delta-item">
+      <div class="di-icon">💧</div>
+      <h5>Slow Drip</h5>
+      <div class="di-val">ΔC ≈ CONSTANT (MAXIMUM)</div>
+      <p>Every arriving drop is clean water (C ≈ 0), so ΔC = C* − 0 = C*. Driving force never decays. Every drop extracts with the same efficiency as the first. Selective, sustained extraction of the most soluble compounds.</p>
+    </div>
+    <div class="delta-item">
+      <div class="di-icon">🫙</div>
+      <h5>Immersion</h5>
+      <div class="di-val">ΔC → 0 (DECLINING)</div>
+      <p>C rises continuously: C(t) = C*[1 − e^(−k·t)]. As liquid saturates, ΔC drops and extraction stalls. Compensation requires more time (12–24h). During that time, slow-diffusion compounds also reach equilibrium.</p>
+    </div>
+  </div>
+</div>
+
+<p>The drip method, with constant ΔC, acts as a <strong>selective sweep</strong>: efficiently extracting the most soluble compounds while leaving high-MW compounds locked in the cellular matrix. Immersion, with declining ΔC but extended time, eventually extracts a <strong>broader spectrum</strong> — including CGA, condensed tannins, and soluble melanoidins that drip leaves untouched.</p>
+
+<div class="sep"></div>
+
+<h2>Extraction profile: molecule by molecule</h2>
+
+<div class="compound-table">
+  <div class="ct-header"><div class="ct-label">EXTRACTION BY COMPOUND FAMILY</div></div>
+  <div class="ct-body">
+    <div class="ct-row ct-head"><div class="ct-cell">Compound</div><div class="ct-cell">Drip</div><div class="ct-cell">Immersion</div><div class="ct-cell">Sensory impact</div></div>
+    <div class="ct-row"><div class="ct-cell">Organic acids (citric, malic)</div><div class="ct-cell ct-hi-drip">★★★★</div><div class="ct-cell ct-hi-steep">★★★</div><div class="ct-cell">Gentle acidity, fruit notes. High selectivity in drip.</div></div>
+    <div class="ct-row"><div class="ct-cell">Caffeine</div><div class="ct-cell ct-hi-drip">★★★</div><div class="ct-cell ct-hi-steep">★★★★</div><div class="ct-cell">Higher extraction in immersion (longer total contact).</div></div>
+    <div class="ct-row"><div class="ct-cell">Sucrose / simple sugars</div><div class="ct-cell ct-hi-drip">★★★★</div><div class="ct-cell ct-hi-steep">★★★</div><div class="ct-cell">Natural sweetness. Drip preserves sweet perception.</div></div>
+    <div class="ct-row"><div class="ct-cell">Terpenes (linalool, geraniol)</div><div class="ct-cell ct-hi-drip">★★★★★</div><div class="ct-cell ct-hi-steep">★★★</div><div class="ct-cell">Floral, citrus. Maximum retention in drip (minimal agitation).</div></div>
+    <div class="ct-row"><div class="ct-cell">CGA / polyphenols</div><div class="ct-cell ct-hi-drip">★★</div><div class="ct-cell ct-hi-steep">★★★★</div><div class="ct-cell">Bitterness, astringency. Immersion extracts via prolonged time.</div></div>
+    <div class="ct-row"><div class="ct-cell">Condensed tannins</div><div class="ct-cell ct-hi-drip">★</div><div class="ct-cell ct-hi-steep">★★★</div><div class="ct-cell">Astringency, dryness. Nearly absent in drip.</div></div>
+    <div class="ct-row"><div class="ct-cell">Soluble melanoidins</div><div class="ct-cell ct-hi-drip">★★</div><div class="ct-cell ct-hi-steep">★★★</div><div class="ct-cell">Brown color, body. More present in immersion.</div></div>
+  </div>
+</div>
+
+<p>The most striking data: <strong>terpene</strong> retention — drip extracts 92% of available terpenes versus 60% for immersion. In immersion, prolonged contact enables <em class="t">reverse diffusion</em>: some dissolved terpenes re-adsorb onto the cellular matrix as the system approaches equilibrium. Higher CGA and tannin concentrations can also complex with terpenes, sequestering them. In drip, each drop takes its terpenes and leaves — no opportunity for re-adsorption.</p>
+
+<div class="sep"></div>
+
+<h2>The resulting flavor</h2>
+
+<div class="flavor-dual">
+  <div class="fd-card">
+    <h4><span class="dot dot-drip"></span> Slow Drip</h4>
+    <div class="fd-row"><span class="fd-attr">Aromatic clarity</span><div class="fd-bar-wrap"><div class="fd-bar fb-drip" style="width:95%"></div></div></div>
+    <div class="fd-row"><span class="fd-attr">Sweetness</span><div class="fd-bar-wrap"><div class="fd-bar fb-drip" style="width:85%"></div></div></div>
+    <div class="fd-row"><span class="fd-attr">Floral/citrus</span><div class="fd-bar-wrap"><div class="fd-bar fb-drip" style="width:90%"></div></div></div>
+    <div class="fd-row"><span class="fd-attr">Body</span><div class="fd-bar-wrap"><div class="fd-bar fb-drip" style="width:40%"></div></div></div>
+    <div class="fd-row"><span class="fd-attr">Bitterness</span><div class="fd-bar-wrap"><div class="fd-bar fb-drip" style="width:10%"></div></div></div>
+    <div class="fd-row"><span class="fd-attr">Post-phenolic complexity</span><div class="fd-bar-wrap"><div class="fd-bar fb-drip" style="width:25%"></div></div></div>
+  </div>
+  <div class="fd-card">
+    <h4><span class="dot dot-steep"></span> Immersion</h4>
+    <div class="fd-row"><span class="fd-attr">Aromatic clarity</span><div class="fd-bar-wrap"><div class="fd-bar fb-steep" style="width:55%"></div></div></div>
+    <div class="fd-row"><span class="fd-attr">Sweetness</span><div class="fd-bar-wrap"><div class="fd-bar fb-steep" style="width:60%"></div></div></div>
+    <div class="fd-row"><span class="fd-attr">Floral/citrus</span><div class="fd-bar-wrap"><div class="fd-bar fb-steep" style="width:45%"></div></div></div>
+    <div class="fd-row"><span class="fd-attr">Body</span><div class="fd-bar-wrap"><div class="fd-bar fb-steep" style="width:75%"></div></div></div>
+    <div class="fd-row"><span class="fd-attr">Bitterness</span><div class="fd-bar-wrap"><div class="fd-bar fb-steep" style="width:45%"></div></div></div>
+    <div class="fd-row"><span class="fd-attr">Post-phenolic complexity</span><div class="fd-bar-wrap"><div class="fd-bar fb-steep" style="width:70%"></div></div></div>
+  </div>
+</div>
+
+<p>Slow drip produces a cold brew of <strong>crystalline clarity</strong>: origin notes shine without polyphenol interference. Immersion produces more <strong>body and dark complexity</strong> but at the cost of aromatic resolution. Neither is objectively "better." But for applications where <strong>aromatic preservation</strong> is the absolute priority — such as an artisan gelato base that must maintain character through freezing — slow drip holds an unbeatable thermodynamic advantage.</p>
+
+<div class="callout">
+  <div class="callout-label">THE THERMODYNAMIC CONCLUSION</div>
+  <p>Cold slow drip is the extraction method that <strong>simultaneously maximizes</strong> three objectives: molecular selectivity, aromatic retention, and cold chain stability. In chemical engineering terms, it is the optimal reactor for producing a coffee extract of <strong>maximum aromatic purity with minimum degradation</strong>. This is exactly why at HARA we call it <em class="t">Café de Goteo en Frío</em> — and why we built our philosophy around this method.</p>
+</div>
+
+<div class="next-series">
+  <div class="ns-label">SERIES FINALE</div>
+  <div class="ns-title">CdGF1%: the HARA philosophy</div>
+  <div class="ns-desc">From the drop to the gelato — why every decision at HARA is designed to deliver the aroma molecule intact to your palate.</div>
+</div>
+
+</div>
+
+</article>
+<div class="author-card"><div class="author-avatar"><span>H</span></div><div class="author-info"><h4>HARA Coffee Lab</h4><p data-i18n="ab">Ciencia, precisión y pasión por el café de especialidad. Salta, Argentina.</p></div></div>
+<footer><div class="footer-brand">© 2026 HARA COFFEE LAB · SALTA, ARGENTINA · CADA GOTA CUENTA</div></footer>
+<script>
+let currentLang='es';
+const ui={es:{ht:'<span class="v-drip">Goteo</span> vs <span class="v-steep">Inmersión</span><br>dos caminos en frío',hs:'Dentro del cold brew, el método de contacto entre agua y café define dos perfiles de extracción radicalmente distintos.',hb:'CIENCIA',hr:'12 min lectura',d1:'GOTEO',d2:'INMERSIÓN',ab:'Ciencia, precisión y pasión por el café de especialidad. Salta, Argentina.','ns-l':'FINAL DE LA SERIE','ns-t':'CdGF1%: la filosofía de HARA','ns-d':'De la gota al gelato — por qué cada decisión en HARA se diseña para que la molécula de aroma llegue intacta a tu paladar.'},ko:{ht:'<span class="v-drip">점적</span> vs <span class="v-steep">침출</span><br>냉추출의 두 갈래 길',hs:'콜드브루 안에서 물과 커피의 접촉 방식이 근본적으로 다른 두 추출 프로파일을 만듭니다.',hb:'과학',hr:'12분 소요',d1:'점적식',d2:'침출식',ab:'과학, 정밀함, 그리고 스페셜티 커피에 대한 열정. 아르헨티나 살타.','ns-l':'시리즈 마지막','ns-t':'CdGF1%: HARA의 철학','ns-d':'한 방울에서 젤라또까지 — HARA의 모든 결정이 향기 분자를 온전히 당신의 미각에 전달하기 위해 설계되는 이유.'},en:{ht:'<span class="v-drip">Drip</span> vs <span class="v-steep">Immersion</span><br>two cold paths',hs:'Within cold brew, the contact method between water and coffee defines two radically distinct extraction profiles.',hb:'SCIENCE',hr:'12 min read',d1:'DRIP',d2:'IMMERSION',ab:'Science, precision, and passion for specialty coffee. Salta, Argentina.','ns-l':'SERIES FINALE','ns-t':'CdGF1%: the HARA philosophy','ns-d':'From the drop to the gelato — why every decision at HARA is designed to deliver the aroma molecule intact to your palate.'}};
+function switchLang(l){currentLang=l;document.documentElement.lang=l==='ko'?'ko':l==='en'?'en':'es';document.querySelectorAll('[data-i18n]').forEach(e=>{const k=e.dataset.i18n;if(ui[l][k])e.innerHTML=ui[l][k]});document.querySelectorAll('.lang-content').forEach(e=>{e.style.display=e.dataset.lang===l?'block':'none'});document.querySelectorAll('.lang-btn').forEach(b=>b.classList.toggle('active',b.dataset.lang===l))}
+document.querySelectorAll('.lang-btn').forEach(b=>{b.addEventListener('click',()=>switchLang(b.dataset.lang))});
+window.addEventListener('scroll',()=>{const d=document.documentElement;document.getElementById('progressBar').style.width=(d.scrollTop/(d.scrollHeight-d.clientHeight))*100+'%';document.getElementById('mainNav').classList.toggle('scrolled',d.scrollTop>60)});
+</script>
+</body>
+</html>

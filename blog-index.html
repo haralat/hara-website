@@ -1,0 +1,1088 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HARA Coffee Lab — Blog</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Noto+Sans+KR:wght@200;300;400;500;600&family=Noto+Sans:wght@200;300;400;500;600&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --espresso: #1a1210;
+  --crema: #d4a574;
+  --cream: #f5efe6;
+  --warm-white: #faf8f4;
+  --roast-dark: #2c1f1a;
+  --roast-mid: #6b4226;
+  --copper: #b87333;
+  --sage: #8a9a7b;
+  --water-blue: #7ba0b8;
+  --blush: #c4917a;
+  --text-primary: #1a1210;
+  --text-secondary: #6b5b50;
+  --text-light: #a09080;
+  --card-bg: #ffffff;
+  --border-light: rgba(212, 165, 116, 0.15);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; font-size: 16px; }
+
+body {
+  background: var(--warm-white);
+  color: var(--text-primary);
+  font-family: 'Noto Sans', 'Noto Sans KR', sans-serif;
+  font-weight: 300;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: var(--warm-white); }
+::-webkit-scrollbar-thumb { background: var(--crema); border-radius: 3px; }
+
+/* ═══════════════════════════════════════
+   NAVIGATION
+   ═══════════════════════════════════════ */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 200;
+  padding: 1.2rem 3rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all 0.5s ease;
+}
+nav.scrolled {
+  background: rgba(250, 248, 244, 0.92);
+  backdrop-filter: blur(24px);
+  padding: 0.9rem 3rem;
+  box-shadow: 0 1px 0 rgba(26,18,16,0.06);
+}
+
+.nav-left {
+  display: flex;
+  align-items: center;
+  gap: 2.5rem;
+}
+
+.nav-logo {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 500;
+  letter-spacing: 0.15em;
+  color: var(--text-primary);
+  text-decoration: none;
+  font-size: 1.3rem;
+  line-height: 1;
+}
+.nav-logo small {
+  display: block;
+  font-weight: 300;
+  font-size: 0.55rem;
+  letter-spacing: 0.3em;
+  color: var(--text-secondary);
+  margin-top: 2px;
+}
+
+.nav-links {
+  display: flex;
+  gap: 1.8rem;
+  list-style: none;
+}
+.nav-links a {
+  font-size: 0.72rem;
+  font-weight: 400;
+  letter-spacing: 0.12em;
+  color: var(--text-secondary);
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: color 0.3s;
+  position: relative;
+}
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  bottom: -4px; left: 0;
+  width: 0; height: 1px;
+  background: var(--crema);
+  transition: width 0.3s;
+}
+.nav-links a:hover { color: var(--espresso); }
+.nav-links a:hover::after { width: 100%; }
+.nav-links a.active { color: var(--espresso); }
+.nav-links a.active::after { width: 100%; }
+
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+/* Language Switcher */
+.lang-switcher {
+  display: flex;
+  gap: 0;
+  border: 1px solid var(--border-light);
+  border-radius: 6px;
+  overflow: hidden;
+}
+.lang-btn {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.1em;
+  padding: 0.4rem 0.65rem;
+  border: none;
+  background: transparent;
+  color: var(--text-light);
+  cursor: pointer;
+  transition: all 0.3s;
+}
+.lang-btn:not(:last-child) {
+  border-right: 1px solid var(--border-light);
+}
+.lang-btn.active {
+  background: var(--espresso);
+  color: var(--cream);
+}
+.lang-btn:hover:not(.active) {
+  background: rgba(212,165,116,0.08);
+  color: var(--roast-mid);
+}
+
+/* ═══════════════════════════════════════
+   HERO
+   ═══════════════════════════════════════ */
+.blog-hero {
+  padding: 10rem 3rem 4rem;
+  max-width: 1300px;
+  margin: 0 auto;
+  position: relative;
+}
+
+.blog-hero::after {
+  content: '';
+  position: absolute;
+  top: 6rem; right: 0;
+  width: 400px; height: 400px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(212,165,116,0.06), transparent 70%);
+  pointer-events: none;
+}
+
+.hero-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.4em;
+  color: var(--crema);
+  margin-bottom: 1.2rem;
+  opacity: 0;
+  animation: fadeUp 0.8s ease 0.2s forwards;
+}
+
+.hero-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(2.8rem, 5.5vw, 4.5rem);
+  font-weight: 300;
+  line-height: 1.1;
+  color: var(--espresso);
+  margin-bottom: 1.2rem;
+  opacity: 0;
+  animation: fadeUp 1s ease 0.4s forwards;
+}
+.hero-title em {
+  font-style: italic;
+  color: var(--copper);
+}
+
+.hero-desc {
+  font-size: 1rem;
+  line-height: 1.8;
+  color: var(--text-secondary);
+  max-width: 520px;
+  opacity: 0;
+  animation: fadeUp 0.8s ease 0.6s forwards;
+}
+
+/* ═══════════════════════════════════════
+   FEATURED POST
+   ═══════════════════════════════════════ */
+.featured-section {
+  padding: 0 3rem 4rem;
+  max-width: 1300px;
+  margin: 0 auto;
+}
+
+.featured-card {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  background: var(--card-bg);
+  border-radius: 24px;
+  overflow: hidden;
+  border: 1px solid var(--border-light);
+  transition: all 0.5s cubic-bezier(0.4,0,0.2,1);
+  cursor: pointer;
+  text-decoration: none;
+  color: inherit;
+  opacity: 0;
+  animation: fadeUp 0.8s ease 0.8s forwards;
+}
+.featured-card:hover {
+  box-shadow: 0 30px 80px rgba(26,18,16,0.08);
+  transform: translateY(-4px);
+  border-color: rgba(212,165,116,0.3);
+}
+
+.featured-img {
+  aspect-ratio: 4/3;
+  background: var(--espresso);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.featured-img-inner {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  position: relative;
+}
+.featured-img-inner::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 30% 70%, rgba(184,115,51,0.15), transparent 60%),
+    radial-gradient(ellipse at 70% 30%, rgba(212,165,116,0.08), transparent 50%);
+}
+
+.featured-img-icon {
+  position: relative;
+  z-index: 1;
+  width: 100px; height: 100px;
+}
+.featured-img-icon svg { width: 100%; height: 100%; }
+
+.featured-img-text {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.4rem;
+  font-weight: 300;
+  font-style: italic;
+  color: rgba(245,239,230,0.4);
+  position: relative;
+  z-index: 1;
+}
+
+.featured-body {
+  padding: 3rem 3.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.featured-meta {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.2rem;
+}
+.featured-badge {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.55rem;
+  letter-spacing: 0.2em;
+  padding: 0.35rem 0.8rem;
+  border-radius: 4px;
+  text-transform: uppercase;
+}
+.badge-science { background: rgba(123,160,184,0.12); color: var(--water-blue); }
+.badge-story { background: rgba(212,165,116,0.12); color: var(--copper); }
+.badge-recipe { background: rgba(138,154,123,0.12); color: var(--sage); }
+
+.featured-date {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.6rem;
+  color: var(--text-light);
+  letter-spacing: 0.1em;
+}
+
+.featured-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2rem;
+  font-weight: 400;
+  line-height: 1.25;
+  color: var(--espresso);
+  margin-bottom: 1rem;
+}
+
+.featured-excerpt {
+  font-size: 0.88rem;
+  line-height: 1.8;
+  color: var(--text-secondary);
+  margin-bottom: 1.5rem;
+}
+
+.read-more {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  color: var(--copper);
+  text-transform: uppercase;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: gap 0.3s;
+}
+.featured-card:hover .read-more { gap: 0.8rem; }
+.read-more::after {
+  content: '→';
+  transition: transform 0.3s;
+}
+.featured-card:hover .read-more::after { transform: translateX(3px); }
+
+/* ═══════════════════════════════════════
+   CATEGORY FILTER
+   ═══════════════════════════════════════ */
+.filter-bar {
+  padding: 2rem 3rem;
+  max-width: 1300px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--border-light);
+  margin-bottom: 3rem;
+}
+
+.filter-tabs {
+  display: flex;
+  gap: 0.3rem;
+}
+
+.filter-tab {
+  font-size: 0.72rem;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  padding: 0.5rem 1.2rem;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--text-light);
+  cursor: pointer;
+  transition: all 0.3s;
+}
+.filter-tab:hover {
+  color: var(--text-primary);
+  background: rgba(212,165,116,0.06);
+}
+.filter-tab.active {
+  background: var(--espresso);
+  color: var(--cream);
+}
+
+.post-count {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.6rem;
+  color: var(--text-light);
+  letter-spacing: 0.1em;
+}
+
+/* ═══════════════════════════════════════
+   POST GRID
+   ═══════════════════════════════════════ */
+.posts-grid {
+  padding: 0 3rem 6rem;
+  max-width: 1300px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+}
+
+.post-card {
+  background: var(--card-bg);
+  border-radius: 18px;
+  overflow: hidden;
+  border: 1px solid var(--border-light);
+  transition: all 0.5s cubic-bezier(0.4,0,0.2,1);
+  cursor: pointer;
+  text-decoration: none;
+  color: inherit;
+  display: flex;
+  flex-direction: column;
+  opacity: 0;
+  transform: translateY(25px);
+}
+.post-card.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+.post-card:hover {
+  box-shadow: 0 20px 50px rgba(26,18,16,0.07);
+  transform: translateY(-6px);
+  border-color: rgba(212,165,116,0.3);
+}
+
+.post-thumb {
+  aspect-ratio: 16/10;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Decorative thumbnails with distinct colors per category */
+.post-thumb.science-bg {
+  background: linear-gradient(135deg, #1a2030, #2a3545);
+}
+.post-thumb.story-bg {
+  background: linear-gradient(135deg, var(--roast-dark), #3a2a20);
+}
+.post-thumb.recipe-bg {
+  background: linear-gradient(135deg, #1a2518, #2a3528);
+}
+
+.thumb-deco {
+  position: absolute;
+  inset: 0;
+  opacity: 0.12;
+}
+
+.thumb-icon {
+  position: relative;
+  z-index: 1;
+  width: 48px; height: 48px;
+  opacity: 0.5;
+}
+.thumb-icon svg { width: 100%; height: 100%; }
+
+.post-body {
+  padding: 1.5rem 1.8rem 2rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.post-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  margin-bottom: 0.8rem;
+}
+
+.post-badge {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.5rem;
+  letter-spacing: 0.15em;
+  padding: 0.25rem 0.6rem;
+  border-radius: 3px;
+  text-transform: uppercase;
+}
+
+.post-date {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.58rem;
+  color: var(--text-light);
+}
+
+.post-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.3rem;
+  font-weight: 500;
+  line-height: 1.3;
+  color: var(--espresso);
+  margin-bottom: 0.6rem;
+}
+
+.post-excerpt {
+  font-size: 0.8rem;
+  line-height: 1.7;
+  color: var(--text-secondary);
+  flex: 1;
+}
+
+.post-footer {
+  margin-top: 1.2rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border-light);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.post-read-time {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.55rem;
+  color: var(--text-light);
+  letter-spacing: 0.1em;
+}
+
+.post-arrow {
+  font-size: 0.9rem;
+  color: var(--crema);
+  transition: transform 0.3s;
+}
+.post-card:hover .post-arrow { transform: translateX(4px); }
+
+/* ═══════════════════════════════════════
+   NEWSLETTER
+   ═══════════════════════════════════════ */
+.newsletter {
+  background: var(--espresso);
+  padding: 5rem 3rem;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.newsletter::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 30% 50%, rgba(212,165,116,0.06), transparent 60%),
+    radial-gradient(ellipse at 80% 80%, rgba(184,115,51,0.04), transparent 50%);
+}
+
+.newsletter-inner {
+  max-width: 550px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+.newsletter-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2.2rem;
+  font-weight: 300;
+  color: var(--cream);
+  margin-bottom: 0.8rem;
+}
+
+.newsletter-desc {
+  font-size: 0.88rem;
+  color: rgba(245,239,230,0.5);
+  line-height: 1.7;
+  margin-bottom: 2rem;
+}
+
+.newsletter-form {
+  display: flex;
+  gap: 0.5rem;
+  max-width: 420px;
+  margin: 0 auto;
+}
+
+.newsletter-input {
+  flex: 1;
+  padding: 0.85rem 1.2rem;
+  border: 1px solid rgba(212,165,116,0.2);
+  border-radius: 8px;
+  background: rgba(255,255,255,0.04);
+  color: var(--cream);
+  font-family: 'Noto Sans', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 300;
+  outline: none;
+  transition: border-color 0.3s;
+}
+.newsletter-input::placeholder { color: rgba(245,239,230,0.25); }
+.newsletter-input:focus { border-color: var(--crema); }
+
+.newsletter-btn {
+  padding: 0.85rem 1.8rem;
+  border: none;
+  border-radius: 8px;
+  background: var(--crema);
+  color: var(--espresso);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.3s;
+  white-space: nowrap;
+}
+.newsletter-btn:hover {
+  background: var(--copper);
+  color: var(--cream);
+}
+
+/* ═══════════════════════════════════════
+   FOOTER
+   ═══════════════════════════════════════ */
+footer {
+  padding: 3rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1300px;
+  margin: 0 auto;
+}
+
+.footer-left {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.58rem;
+  letter-spacing: 0.25em;
+  color: var(--text-light);
+}
+
+.footer-right {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 1rem;
+  color: var(--text-light);
+}
+
+/* ═══════════════════════════════════════
+   ANIMATIONS
+   ═══════════════════════════════════════ */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ═══════════════════════════════════════
+   RESPONSIVE
+   ═══════════════════════════════════════ */
+@media (max-width: 1024px) {
+  .posts-grid { grid-template-columns: repeat(2, 1fr); }
+  .featured-card { grid-template-columns: 1fr; }
+  .featured-img { aspect-ratio: 16/9; }
+}
+
+@media (max-width: 768px) {
+  nav { padding: 1rem 1.5rem; }
+  nav.scrolled { padding: 0.8rem 1.5rem; }
+  .nav-links { display: none; }
+  .blog-hero { padding: 7rem 1.5rem 3rem; }
+  .featured-section { padding: 0 1.5rem 3rem; }
+  .featured-body { padding: 2rem; }
+  .featured-title { font-size: 1.5rem; }
+  .filter-bar { padding: 1.5rem; flex-direction: column; gap: 1rem; align-items: flex-start; }
+  .filter-tabs { flex-wrap: wrap; }
+  .posts-grid { grid-template-columns: 1fr; padding: 0 1.5rem 4rem; }
+  .newsletter { padding: 3.5rem 1.5rem; }
+  .newsletter-form { flex-direction: column; }
+  footer { padding: 2rem 1.5rem; flex-direction: column; gap: 0.5rem; text-align: center; }
+}
+
+@media (max-width: 480px) {
+  .lang-switcher { display: flex; }
+  .lang-btn { padding: 0.3rem 0.5rem; font-size: 0.55rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- ═══ NAV ═══ -->
+<nav id="mainNav">
+  <div class="nav-left">
+    <a href="/" class="nav-logo">HARA<small>COFFEE LAB</small></a>
+    <ul class="nav-links">
+      <li><a href="/" data-i18n="nav-home">Inicio</a></li>
+      <li><a href="/blog" class="active" data-i18n="nav-blog">Blog</a></li>
+      <li><a href="/menu" data-i18n="nav-menu">Menú</a></li>
+      <li><a href="/about" data-i18n="nav-about">Nosotros</a></li>
+    </ul>
+  </div>
+  <div class="nav-right">
+    <div class="lang-switcher">
+      <button class="lang-btn active" data-lang="es">ES</button>
+      <button class="lang-btn" data-lang="ko">KO</button>
+      <button class="lang-btn" data-lang="en">EN</button>
+    </div>
+  </div>
+</nav>
+
+<!-- ═══ HERO ═══ -->
+<div class="blog-hero">
+  <div class="hero-label" data-i18n="hero-label">DESDE EL LABORATORIO</div>
+  <h1 class="hero-title" data-i18n="hero-title">Ciencia, historias<br>y <em>sabor</em></h1>
+  <p class="hero-desc" data-i18n="hero-desc">Exploramos la química detrás de cada taza, compartimos el camino de HARA y revelamos los procesos creativos de nuestras recetas.</p>
+</div>
+
+<!-- ═══ FEATURED ═══ -->
+<div class="featured-section">
+  <a class="featured-card" href="blog-post-extraction.html" id="featuredCard">
+    <div class="featured-img">
+      <div class="featured-img-inner">
+        <div class="featured-img-icon">
+          <svg viewBox="0 0 100 100" fill="none">
+            <circle cx="50" cy="40" r="25" stroke="#d4a574" stroke-width="1" opacity="0.4"/>
+            <circle cx="50" cy="40" r="15" stroke="#d4a574" stroke-width="0.8" opacity="0.3"/>
+            <circle cx="50" cy="40" r="5" fill="#d4a574" opacity="0.5"/>
+            <path d="M30 75 L50 55 L70 75" stroke="#d4a574" stroke-width="1" opacity="0.3" fill="none"/>
+            <line x1="50" y1="55" x2="50" y2="40" stroke="#d4a574" stroke-width="0.5" opacity="0.2" stroke-dasharray="2 2"/>
+          </svg>
+        </div>
+        <div class="featured-img-text">t ∝ r² / D</div>
+      </div>
+    </div>
+    <div class="featured-body">
+      <div class="featured-meta">
+        <span class="featured-badge badge-science" data-i18n="cat-science">CIENCIA</span>
+        <span class="featured-date">16 FEB 2026</span>
+      </div>
+      <h2 class="featured-title" data-i18n="feat-title">La ciencia de la extracción: molienda, flujo y geometría del dripper</h2>
+      <p class="featured-excerpt" data-i18n="feat-excerpt">Desde la ley de Fick hasta la dinámica de fluidos en un V60 — analizamos cómo la ingeniería química explica cada variable que transforma granos en una taza extraordinaria.</p>
+      <span class="read-more" data-i18n="read-more">LEER ARTÍCULO</span>
+    </div>
+  </a>
+</div>
+
+<!-- ═══ FILTER ═══ -->
+<div class="filter-bar">
+  <div class="filter-tabs">
+    <button class="filter-tab active" data-filter="all" data-i18n="filter-all">Todos</button>
+    <button class="filter-tab" data-filter="science" data-i18n="filter-science">Ciencia</button>
+    <button class="filter-tab" data-filter="story" data-i18n="filter-story">Historias</button>
+    <button class="filter-tab" data-filter="recipe" data-i18n="filter-recipe">Recetas</button>
+  </div>
+  <span class="post-count"><span id="postCount">6</span> <span data-i18n="post-count-label">artículos</span></span>
+</div>
+
+<!-- ═══ POST GRID ═══ -->
+<div class="posts-grid" id="postsGrid">
+  <!-- Posts are rendered by JS -->
+</div>
+
+<!-- ═══ NEWSLETTER ═══ -->
+<div class="newsletter">
+  <div class="newsletter-inner">
+    <h3 class="newsletter-title" data-i18n="nl-title">Cada Gota Cuenta</h3>
+    <p class="newsletter-desc" data-i18n="nl-desc">Recibí ciencia del café, recetas exclusivas e historias de HARA directamente en tu bandeja de entrada.</p>
+    <div class="newsletter-form">
+      <input type="email" class="newsletter-input" data-i18n-placeholder="nl-placeholder" placeholder="tu@email.com">
+      <button class="newsletter-btn" data-i18n="nl-btn">SUSCRIBIR</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ FOOTER ═══ -->
+<footer>
+  <div class="footer-left">© 2026 HARA COFFEE LAB · SALTA, ARGENTINA</div>
+  <div class="footer-right">Cada Gota Cuenta</div>
+</footer>
+
+
+<script>
+// ═══════════════════════════════════════
+// i18n DATA
+// ═══════════════════════════════════════
+const i18n = {
+  es: {
+    'nav-home': 'Inicio',
+    'nav-blog': 'Blog',
+    'nav-menu': 'Menú',
+    'nav-about': 'Nosotros',
+    'hero-label': 'DESDE EL LABORATORIO',
+    'hero-title': 'Ciencia, historias<br>y <em>sabor</em>',
+    'hero-desc': 'Exploramos la química detrás de cada taza, compartimos el camino de HARA y revelamos los procesos creativos de nuestras recetas.',
+    'cat-science': 'CIENCIA',
+    'cat-story': 'HISTORIA',
+    'cat-recipe': 'RECETA',
+    'feat-title': 'La ciencia de la extracción: molienda, flujo y geometría del dripper',
+    'feat-excerpt': 'Desde la ley de Fick hasta la dinámica de fluidos en un V60 — analizamos cómo la ingeniería química explica cada variable que transforma granos en una taza extraordinaria.',
+    'read-more': 'LEER ARTÍCULO',
+    'filter-all': 'Todos',
+    'filter-science': 'Ciencia',
+    'filter-story': 'Historias',
+    'filter-recipe': 'Recetas',
+    'post-count-label': 'artículos',
+    'nl-title': 'Cada Gota Cuenta',
+    'nl-desc': 'Recibí ciencia del café, recetas exclusivas e historias de HARA directamente en tu bandeja de entrada.',
+    'nl-placeholder': 'tu@email.com',
+    'nl-btn': 'SUSCRIBIR',
+    'read-time-unit': 'min lectura',
+  },
+  ko: {
+    'nav-home': '홈',
+    'nav-blog': '블로그',
+    'nav-menu': '메뉴',
+    'nav-about': '소개',
+    'hero-label': '연구실에서 전하는 이야기',
+    'hero-title': '과학, 이야기,<br>그리고 <em>맛</em>',
+    'hero-desc': '한 잔의 커피 뒤에 숨겨진 화학을 탐구하고, HARA의 여정을 나누며, 레시피의 창작 과정을 공개합니다.',
+    'cat-science': '과학',
+    'cat-story': '스토리',
+    'cat-recipe': '레시피',
+    'feat-title': '추출의 과학: 분쇄도, 유속, 드리퍼 형상의 화학공학',
+    'feat-excerpt': 'Fick의 법칙에서 V60의 유체역학까지 — 원두를 한 잔의 커피로 바꾸는 모든 변수를 화학공학의 눈으로 분석합니다.',
+    'read-more': '읽기',
+    'filter-all': '전체',
+    'filter-science': '과학',
+    'filter-story': '스토리',
+    'filter-recipe': '레시피',
+    'post-count-label': '개의 글',
+    'nl-title': '매 한 방울이 의미를 갖는다',
+    'nl-desc': '커피 과학, 독점 레시피, HARA의 이야기를 받아보세요.',
+    'nl-placeholder': 'your@email.com',
+    'nl-btn': '구독하기',
+    'read-time-unit': '분 소요',
+  },
+  en: {
+    'nav-home': 'Home',
+    'nav-blog': 'Blog',
+    'nav-menu': 'Menu',
+    'nav-about': 'About',
+    'hero-label': 'FROM THE LABORATORY',
+    'hero-title': 'Science, stories<br>and <em>flavor</em>',
+    'hero-desc': 'We explore the chemistry behind every cup, share HARA\'s journey, and reveal the creative processes behind our recipes.',
+    'cat-science': 'SCIENCE',
+    'cat-story': 'STORY',
+    'cat-recipe': 'RECIPE',
+    'feat-title': 'The science of extraction: grind size, flow rate, and dripper geometry',
+    'feat-excerpt': 'From Fick\'s law to fluid dynamics inside a V60 — we analyze how chemical engineering explains every variable that transforms beans into an extraordinary cup.',
+    'read-more': 'READ ARTICLE',
+    'filter-all': 'All',
+    'filter-science': 'Science',
+    'filter-story': 'Stories',
+    'filter-recipe': 'Recipes',
+    'post-count-label': 'articles',
+    'nl-title': 'Every Drop Counts',
+    'nl-desc': 'Receive coffee science, exclusive recipes, and stories from HARA straight to your inbox.',
+    'nl-placeholder': 'your@email.com',
+    'nl-btn': 'SUBSCRIBE',
+    'read-time-unit': 'min read',
+  }
+};
+
+// ═══════════════════════════════════════
+// POST DATA (Trilingual)
+// ═══════════════════════════════════════
+const posts = [
+  {
+    id: 'espresso-physics',
+    cat: 'science',
+    date: '2026-02-14',
+    readMin: 8,
+    thumbClass: 'science-bg',
+    title: {
+      es: '¿Por qué el espresso exige molienda fina? La física detrás de los 9 bar',
+      ko: '에스프레소는 왜 미분이어야 하는가 — 9기압의 물리학',
+      en: 'Why espresso demands fine grinding: the physics behind 9 bar'
+    },
+    excerpt: {
+      es: 'La ecuación de Darcy, la ley de Fick y la termodinámica del CO₂ explican por qué 200 μm y 9 atmósferas son una necesidad, no una elección.',
+      ko: 'Darcy 방정식, Fick의 법칙, CO₂ 열역학이 밝히는 200μm과 9기압의 필연성.',
+      en: 'Darcy\'s equation, Fick\'s law, and CO₂ thermodynamics reveal why 200 μm and 9 atmospheres are a necessity, not a choice.'
+    }
+  },
+  {
+    id: 'hara-origin',
+    cat: 'story',
+    date: '2026-02-10',
+    readMin: 6,
+    thumbClass: 'story-bg',
+    title: {
+      es: 'De Corea a Salta: cómo nació HARA Coffee Lab',
+      ko: '한국에서 살타까지: HARA Coffee Lab의 탄생',
+      en: 'From Korea to Salta: how HARA Coffee Lab was born'
+    },
+    excerpt: {
+      es: 'La historia de cómo la precisión coreana se encontró con la calidez sudamericana para crear una filosofía de café donde cada gota cuenta.',
+      ko: '한국의 정밀함과 남미의 따뜻함이 만나 "매 한 방울이 의미를 갖는다"는 커피 철학이 탄생한 이야기.',
+      en: 'The story of how Korean precision met South American warmth to create a coffee philosophy where every drop counts.'
+    }
+  },
+  {
+    id: 'nubita-fresca',
+    cat: 'recipe',
+    date: '2026-02-08',
+    readMin: 5,
+    thumbClass: 'recipe-bg',
+    title: {
+      es: 'Nubita Fresca v6: el camino hacia el gelato perfecto',
+      ko: 'Nubita Fresca v6: 완벽한 젤라또를 향한 여정',
+      en: 'Nubita Fresca v6: the path to the perfect gelato'
+    },
+    excerpt: {
+      es: 'Seis iteraciones, cientos de pruebas de textura y un equilibrio de azúcares que desafía lo convencional. El diario de desarrollo de nuestro gelato insignia.',
+      ko: '6번의 반복, 수백 번의 질감 테스트, 관행을 깨는 당류 밸런스. 시그니처 젤라또의 개발 일지.',
+      en: 'Six iterations, hundreds of texture tests, and a sugar balance that defies convention. The development diary of our signature gelato.'
+    }
+  },
+  {
+    id: 'cold-brew-diffusion',
+    cat: 'science',
+    date: '2026-02-04',
+    readMin: 10,
+    thumbClass: 'science-bg',
+    title: {
+      es: 'Cold brew: la difusión lenta que transforma el sabor',
+      ko: '콜드브루: 느린 확산이 만드는 맛의 변환',
+      en: 'Cold brew: the slow diffusion that transforms flavor'
+    },
+    excerpt: {
+      es: 'A baja temperatura, el coeficiente de difusión cae un 40–50%. Exploramos cómo esta limitación termodinámica produce un perfil de sabor único.',
+      ko: '저온에서 확산계수는 40–50% 감소합니다. 이 열역학적 제약이 어떻게 독특한 맛의 프로파일을 만드는지 탐구합니다.',
+      en: 'At low temperatures, the diffusion coefficient drops 40–50%. We explore how this thermodynamic constraint produces a unique flavor profile.'
+    }
+  },
+  {
+    id: 'salta-terroir',
+    cat: 'story',
+    date: '2026-01-28',
+    readMin: 7,
+    thumbClass: 'story-bg',
+    title: {
+      es: 'Terroir en Salta: agua, altitud y el carácter local del café',
+      ko: '살타의 테루아: 물, 고도, 그리고 커피의 지역적 성격',
+      en: 'Terroir in Salta: water, altitude, and the local character of coffee'
+    },
+    excerpt: {
+      es: 'El agua mineral de los Andes, la altitud de 1.200m y el clima seco de Salta imprimen un carácter único a cada extracción que hacemos en HARA.',
+      ko: '안데스 미네랄 워터, 1,200m 고도, 살타의 건조한 기후가 HARA의 모든 추출에 고유한 성격을 부여합니다.',
+      en: 'Andean mineral water, 1,200m altitude, and Salta\'s dry climate give a unique character to every extraction we make at HARA.'
+    }
+  },
+  {
+    id: 'ddukddak-collab',
+    cat: 'recipe',
+    date: '2026-01-22',
+    readMin: 4,
+    thumbClass: 'recipe-bg',
+    title: {
+      es: 'Café × Cocina coreana: el affogato de misugaru',
+      ko: '커피 × 한식: 미숫가루 아포가토',
+      en: 'Coffee × Korean cuisine: the misugaru affogato'
+    },
+    excerpt: {
+      es: 'Una colaboración con Ddukddak que fusiona el espresso de HARA con misugaru tostado artesanalmente. El encuentro de dos mundos en un postre.',
+      ko: '뚝딱과의 협업으로 HARA 에스프레소와 수제 미숫가루를 결합했습니다. 두 세계가 만나는 디저트.',
+      en: 'A collaboration with Ddukddak fusing HARA espresso with artisan-roasted misugaru. Two worlds meeting in one dessert.'
+    }
+  }
+];
+
+// ═══════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════
+let currentLang = 'es';
+let currentFilter = 'all';
+
+// ═══════════════════════════════════════
+// RENDER POSTS
+// ═══════════════════════════════════════
+const catIcons = {
+  science: `<svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="20" r="12" stroke="#7ba0b8" stroke-width="1" opacity="0.6"/><circle cx="24" cy="20" r="6" stroke="#7ba0b8" stroke-width="0.8" opacity="0.4"/><path d="M14 38 L24 28 L34 38" stroke="#7ba0b8" stroke-width="0.8" opacity="0.4" fill="none"/></svg>`,
+  story: `<svg viewBox="0 0 48 48" fill="none"><rect x="12" y="8" width="24" height="32" rx="3" stroke="#d4a574" stroke-width="1" opacity="0.6" fill="none"/><line x1="17" y1="16" x2="31" y2="16" stroke="#d4a574" stroke-width="0.6" opacity="0.4"/><line x1="17" y1="21" x2="28" y2="21" stroke="#d4a574" stroke-width="0.6" opacity="0.4"/><line x1="17" y1="26" x2="25" y2="26" stroke="#d4a574" stroke-width="0.6" opacity="0.4"/></svg>`,
+  recipe: `<svg viewBox="0 0 48 48" fill="none"><ellipse cx="24" cy="30" rx="14" ry="8" stroke="#8a9a7b" stroke-width="1" opacity="0.6" fill="none"/><path d="M18 14 C18 14 20 22 24 22 C28 22 30 14 30 14" stroke="#8a9a7b" stroke-width="0.8" opacity="0.4" fill="none"/><line x1="24" y1="10" x2="24" y2="14" stroke="#8a9a7b" stroke-width="0.6" opacity="0.3"/></svg>`
+};
+
+const badgeClass = { science: 'badge-science', story: 'badge-story', recipe: 'badge-recipe' };
+
+function formatDate(dateStr) {
+  const d = new Date(dateStr);
+  const months = {
+    es: ['ENE','FEB','MAR','ABR','MAY','JUN','JUL','AGO','SEP','OCT','NOV','DIC'],
+    ko: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'],
+    en: ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC']
+  };
+  return `${d.getDate()} ${months[currentLang][d.getMonth()]} ${d.getFullYear()}`;
+}
+
+function renderPosts() {
+  const grid = document.getElementById('postsGrid');
+  const filtered = currentFilter === 'all' ? posts : posts.filter(p => p.cat === currentFilter);
+
+  document.getElementById('postCount').textContent = filtered.length;
+
+  grid.innerHTML = filtered.map((post, i) => `
+    <a class="post-card" href="blog-post-${post.id}.html" data-delay="${i * 120}" data-cat="${post.cat}">
+      <div class="post-thumb ${post.thumbClass}">
+        <div class="thumb-icon">${catIcons[post.cat]}</div>
+      </div>
+      <div class="post-body">
+        <div class="post-meta">
+          <span class="post-badge ${badgeClass[post.cat]}">${i18n[currentLang]['cat-' + post.cat]}</span>
+          <span class="post-date">${formatDate(post.date)}</span>
+        </div>
+        <h3 class="post-title">${post.title[currentLang]}</h3>
+        <p class="post-excerpt">${post.excerpt[currentLang]}</p>
+        <div class="post-footer">
+          <span class="post-read-time">${post.readMin} ${i18n[currentLang]['read-time-unit']}</span>
+          <span class="post-arrow">→</span>
+        </div>
+      </div>
+    </a>
+  `).join('');
+
+  // Re-observe for animation
+  requestAnimationFrame(() => {
+    grid.querySelectorAll('.post-card').forEach(card => {
+      cardObserver.observe(card);
+    });
+  });
+}
+
+// ═══════════════════════════════════════
+// i18n SWITCH
+// ═══════════════════════════════════════
+function applyLang(lang) {
+  currentLang = lang;
+  document.documentElement.lang = lang === 'ko' ? 'ko' : lang === 'en' ? 'en' : 'es';
+
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.dataset.i18n;
+    if (i18n[lang][key]) el.innerHTML = i18n[lang][key];
+  });
+
+  document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+    const key = el.dataset.i18nPlaceholder;
+    if (i18n[lang][key]) el.placeholder = i18n[lang][key];
+  });
+
+  document.querySelectorAll('.lang-btn').forEach(b => b.classList.toggle('active', b.dataset.lang === lang));
+
+  renderPosts();
+}
+
+// ═══════════════════════════════════════
+// FILTER
+// ═══════════════════════════════════════
+function applyFilter(filter) {
+  currentFilter = filter;
+  document.querySelectorAll('.filter-tab').forEach(t => t.classList.toggle('active', t.dataset.filter === filter));
+  renderPosts();
+}
+
+// ═══════════════════════════════════════
+// OBSERVERS & EVENTS
+// ═══════════════════════════════════════
+const cardObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const delay = entry.target.dataset.delay || 0;
+      setTimeout(() => entry.target.classList.add('visible'), parseInt(delay));
+      cardObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.1, rootMargin: '0px 0px -30px 0px' });
+
+// Nav scroll
+window.addEventListener('scroll', () => {
+  document.getElementById('mainNav').classList.toggle('scrolled', window.scrollY > 60);
+});
+
+// Language buttons
+document.querySelectorAll('.lang-btn').forEach(btn => {
+  btn.addEventListener('click', () => applyLang(btn.dataset.lang));
+});
+
+// Filter buttons
+document.querySelectorAll('.filter-tab').forEach(tab => {
+  tab.addEventListener('click', () => applyFilter(tab.dataset.filter));
+});
+
+// Init
+renderPosts();
+</script>
+
+</body>
+</html>

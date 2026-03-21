@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HARA — Cold Universe</title>
+<meta name="description" content="HARA — Specialty cold drip coffee y gelato artesanal desde Salta, Argentina. Welcome to the Cold Universe.">
+<meta property="og:title" content="HARA — Cold Universe">
+<meta property="og:description" content="Specialty cold drip coffee y gelato artesanal desde Salta, Argentina.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://hara.lat">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400&family=Noto+Sans+KR:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--cloud-milk:#F9F8F6;--cold-brew:#0E0E10;--cacao:#3A2B23;--copper:#B07A5E;--copper-light:#C4957A;--copper-glow:rgba(176,122,94,0.15);--andes-sky:#CFE6F3;--warm-stone:#E8E2DA;--sage:#8A9A7B;--ice:#a0c8e0;--ice-deep:#5a8aa0;--ice-glow:rgba(90,138,160,0.12)}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;font-size:16px}
+body{font-family:'DM Sans',sans-serif;background:var(--cloud-milk);color:var(--cold-brew);line-height:1.7;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+
+nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:0 48px;height:72px;display:flex;align-items:center;justify-content:space-between;background:rgba(14,14,16,0);backdrop-filter:blur(0px);-webkit-backdrop-filter:blur(0px);transition:background 0.6s,backdrop-filter 0.6s}
+nav.scrolled{background:rgba(14,14,16,0.88);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
+
+.splash{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;background:var(--cloud-milk);position:relative;overflow:hidden;cursor:default}
+.splash::before{content:'';position:absolute;width:600px;height:600px;border-radius:50%;border:1px solid rgba(176,122,94,0.06);top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none}
+.splash::after{content:'';position:absolute;width:900px;height:900px;border-radius:50%;border:1px solid rgba(176,122,94,0.03);top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none}
+.splash-logo{font-family:'Cormorant Garamond',serif;font-size:clamp(80px,14vw,180px);font-weight:300;letter-spacing:clamp(16px,4vw,50px);color:var(--cacao);user-select:none;position:relative;z-index:2}
+.splash-logo span{color:var(--copper);font-style:italic;font-weight:400}
+.splash-img{width:clamp(120px,18vw,200px);height:auto;position:relative;z-index:2;margin-bottom:40px}
+.splash-wordmark{font-family:'Cormorant Garamond',serif;font-size:clamp(32px,5vw,48px);font-weight:300;letter-spacing:clamp(10px,3vw,30px);color:var(--cacao);position:relative;z-index:2;user-select:none}
+.splash-wordmark span{color:var(--copper);font-style:italic;font-weight:400}
+.splash-tag{font-size:11px;font-weight:300;letter-spacing:4px;text-transform:uppercase;color:var(--ice-deep);margin-top:20px;position:relative;z-index:2;opacity:0.7}
+.splash-scroll{position:absolute;bottom:40px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:8px;z-index:2}
+.splash-scroll span{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:rgba(58,43,35,0.25);font-weight:400}
+.splash-arrow{width:1px;height:32px;background:linear-gradient(to bottom,rgba(176,122,94,0.4),transparent);animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:0.3;transform:scaleY(1)}50%{opacity:1;transform:scaleY(1.2)}}
+.nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none;opacity:0;transition:opacity 0.4s}
+nav.scrolled .nav-logo{opacity:1}
+.nav-logo img{height:28px;width:auto}
+.nav-logo-text{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:600;letter-spacing:6px;color:var(--cloud-milk)}
+.nav-logo-text span{color:var(--copper)}
+.nav-right{display:flex;gap:24px;align-items:center;opacity:0;transition:opacity 0.4s}
+nav.scrolled .nav-right{opacity:1}
+.nav-links{display:flex;gap:36px;align-items:center}
+.nav-links a{font-size:12px;font-weight:500;letter-spacing:2.5px;text-transform:uppercase;color:rgba(249,248,246,0.6);text-decoration:none;transition:color 0.3s}
+.nav-links a:hover{color:var(--cloud-milk)}
+.nav-cta{padding:10px 24px;border:1px solid var(--copper);color:var(--copper)!important;transition:all 0.3s}
+.nav-cta:hover{background:var(--copper);color:var(--cloud-milk)!important}
+
+.lang-sw{display:flex;gap:2px;background:rgba(249,248,246,0.06);border-radius:4px;padding:2px}
+.lb{font-size:10px;font-weight:500;letter-spacing:1.5px;text-transform:uppercase;color:rgba(249,248,246,0.35);background:transparent;border:none;padding:6px 10px;cursor:pointer;transition:all 0.3s;border-radius:3px;font-family:'DM Sans',sans-serif}
+.lb:hover{color:rgba(249,248,246,0.7)}
+.lb.on{color:var(--cloud-milk);background:rgba(249,248,246,0.1)}
+
+.hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:120px 48px 80px;background:var(--cold-brew);color:var(--cloud-milk);position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:-20%;left:-10%;width:60%;height:80%;background:radial-gradient(ellipse,var(--copper-glow) 0%,transparent 70%);pointer-events:none}
+.hero::after{content:'';position:absolute;bottom:-10%;right:-5%;width:50%;height:60%;background:radial-gradient(ellipse,var(--ice-glow) 0%,transparent 65%);pointer-events:none}
+.hero-content{position:relative;z-index:2;max-width:900px}
+.hero-badge{display:inline-block;font-size:10px;font-weight:500;letter-spacing:4px;text-transform:uppercase;color:var(--copper);border:1px solid rgba(176,122,94,0.3);padding:8px 20px;margin-bottom:48px}
+.hero-title{font-family:'Cormorant Garamond',serif;font-size:clamp(52px,8vw,110px);font-weight:300;letter-spacing:14px;line-height:1.05;margin-bottom:12px}
+.hero-title .accent{color:var(--copper);font-style:italic;font-weight:400}
+.hero-tagline{font-family:'Cormorant Garamond',serif;font-size:clamp(18px,2.5vw,28px);font-weight:300;font-style:italic;color:var(--ice);letter-spacing:3px;margin-bottom:48px}
+.hero-divider{width:60px;height:1px;background:linear-gradient(90deg,transparent,var(--ice-deep),transparent);margin:0 auto 48px}
+.hero-sub{font-size:13px;font-weight:300;letter-spacing:1.5px;color:rgba(249,248,246,0.45);line-height:2;max-width:520px;margin:0 auto 56px}
+.hero-ctas{display:flex;gap:20px;justify-content:center;flex-wrap:wrap}
+.btn-p{display:inline-flex;align-items:center;gap:10px;font-size:11px;font-weight:500;letter-spacing:3px;text-transform:uppercase;text-decoration:none;color:var(--cold-brew);background:var(--copper);padding:16px 36px;transition:all 0.4s}
+.btn-p:hover{background:var(--copper-light);transform:translateY(-2px);box-shadow:0 12px 40px rgba(176,122,94,0.3)}
+.btn-s{display:inline-flex;align-items:center;gap:10px;font-size:11px;font-weight:500;letter-spacing:3px;text-transform:uppercase;text-decoration:none;color:var(--cloud-milk);border:1px solid rgba(249,248,246,0.2);padding:16px 36px;transition:all 0.4s}
+.btn-s:hover{border-color:var(--copper);color:var(--copper);transform:translateY(-2px)}
+
+.philosophy{padding:140px 48px;background:var(--cold-brew);position:relative}
+.philosophy::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(90,138,160,0.25),transparent)}
+.phil-grid{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1fr 1.2fr;gap:100px;align-items:center}
+.phil-label{font-size:10px;font-weight:500;letter-spacing:4px;text-transform:uppercase;color:var(--ice-deep);margin-bottom:32px}
+.phil-title{font-family:'Cormorant Garamond',serif;font-size:clamp(36px,4vw,56px);font-weight:300;color:var(--cloud-milk);line-height:1.2;margin-bottom:32px}
+.phil-title em{font-style:italic;color:var(--ice)}
+.phil-body{font-size:14px;font-weight:300;color:rgba(249,248,246,0.55);line-height:2;max-width:480px}
+.phil-body+.phil-body{margin-top:24px}
+.brand-circles{position:relative;width:360px;height:360px;margin:0 auto}
+.brand-circle{position:absolute;border-radius:50%;border:1px solid;display:flex;align-items:center;justify-content:center;flex-direction:column;transition:transform 0.4s}
+.brand-circle:hover{transform:scale(1.05)}
+.circle-craft{width:220px;height:220px;top:0;left:50%;transform:translateX(-50%);border-color:rgba(160,200,224,0.3);background:radial-gradient(circle,rgba(160,200,224,0.08) 0%,transparent 70%)}
+.circle-fusion{width:220px;height:220px;bottom:0;left:10px;border-color:rgba(176,122,94,0.3);background:radial-gradient(circle,rgba(176,122,94,0.06) 0%,transparent 70%)}
+.circle-origin{width:220px;height:220px;bottom:0;right:10px;border-color:rgba(138,154,123,0.25);background:radial-gradient(circle,rgba(138,154,123,0.06) 0%,transparent 70%)}
+.circle-label{font-size:10px;font-weight:500;letter-spacing:3px;text-transform:uppercase}
+.circle-craft .circle-label{color:var(--ice)}
+.circle-fusion .circle-label{color:var(--copper)}
+.circle-origin .circle-label{color:var(--sage)}
+.circle-sub{font-family:'Cormorant Garamond',serif;font-size:13px;font-style:italic;margin-top:6px;color:rgba(249,248,246,0.5)}
+
+.story{background:var(--cloud-milk);position:relative}
+.story::before{content:'';position:absolute;top:-2px;left:0;right:0;height:120px;background:linear-gradient(to bottom,var(--cold-brew),var(--cloud-milk));pointer-events:none}
+.story-intro{padding:180px 48px 100px;text-align:center}
+.story-label{font-size:10px;font-weight:500;letter-spacing:4px;text-transform:uppercase;color:var(--copper);margin-bottom:32px}
+.story-heading{font-family:'Cormorant Garamond',serif;font-size:clamp(32px,4vw,52px);font-weight:300;color:var(--cacao);line-height:1.3;max-width:700px;margin:0 auto 40px}
+.story-heading em{font-style:italic;color:var(--copper)}
+.story-desc{font-size:14px;font-weight:300;color:rgba(58,43,35,0.6);line-height:2;max-width:560px;margin:0 auto}
+.pillars{max-width:1200px;margin:0 auto;padding:40px 48px 140px;display:grid;grid-template-columns:repeat(3,1fr);gap:48px}
+.pillar{padding:48px 36px;border:1px solid rgba(58,43,35,0.08);background:white;transition:all 0.4s}
+.pillar:hover{transform:translateY(-8px);box-shadow:0 24px 60px rgba(58,43,35,0.08);border-color:rgba(176,122,94,0.2)}
+.pillar-number{font-family:'Cormorant Garamond',serif;font-size:64px;font-weight:300;line-height:1;margin-bottom:24px}
+.pillar:nth-child(1) .pillar-number{color:var(--ice-deep)}
+.pillar:nth-child(2) .pillar-number{color:var(--copper)}
+.pillar:nth-child(3) .pillar-number{color:var(--sage)}
+.pillar-title{font-size:11px;font-weight:500;letter-spacing:3px;text-transform:uppercase;color:var(--cacao);margin-bottom:8px}
+.pillar-subtitle{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:400;font-style:italic;color:var(--copper);margin-bottom:24px}
+.pillar:nth-child(1) .pillar-subtitle{color:var(--ice-deep)}
+.pillar-line{width:32px;height:1px;margin-bottom:24px}
+.pillar:nth-child(1) .pillar-line{background:var(--ice-deep)}
+.pillar:nth-child(2) .pillar-line{background:var(--copper)}
+.pillar:nth-child(3) .pillar-line{background:var(--sage)}
+.pillar-text{font-size:13.5px;font-weight:300;color:rgba(58,43,35,0.6);line-height:1.9}
+.pillar-quote{margin-top:28px;padding-top:20px;border-top:1px solid rgba(58,43,35,0.06);font-family:'Noto Sans KR','Cormorant Garamond',serif;font-size:15px;font-style:italic;color:var(--cacao)}
+
+.products{padding:120px 48px;background:var(--warm-stone)}
+.products-inner{max-width:1200px;margin:0 auto}
+.products-header{text-align:center;margin-bottom:80px}
+.products-label{font-size:10px;font-weight:500;letter-spacing:4px;text-transform:uppercase;color:var(--copper);margin-bottom:24px}
+.products-title{font-family:'Cormorant Garamond',serif;font-size:clamp(28px,3.5vw,44px);font-weight:300;color:var(--cacao)}
+.product-cards{display:grid;grid-template-columns:1fr 1fr;gap:32px}
+.product-card{background:var(--cloud-milk);padding:56px 48px;transition:all 0.4s}
+.product-card:hover{transform:translateY(-4px);box-shadow:0 20px 60px rgba(58,43,35,0.1)}
+.product-icon{width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin-bottom:32px;font-size:20px}
+.product-card:first-child .product-icon{background:rgba(90,138,160,0.1)}
+.product-card:last-child .product-icon{background:rgba(196,112,75,0.1)}
+.product-name{font-size:11px;font-weight:500;letter-spacing:3px;text-transform:uppercase;color:var(--cacao);margin-bottom:8px}
+.product-tagline{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:400;color:var(--copper);margin-bottom:24px;line-height:1.3}
+.product-card:first-child .product-tagline{color:var(--ice-deep)}
+.product-desc{font-size:13.5px;font-weight:300;color:rgba(58,43,35,0.55);line-height:1.9}
+.product-tag{display:inline-block;margin-top:28px;font-size:10px;font-weight:500;letter-spacing:2px;text-transform:uppercase;color:var(--copper);border:1px solid rgba(176,122,94,0.25);padding:6px 16px}
+
+.b2b{padding:140px 48px;background:var(--cacao);color:var(--cloud-milk);text-align:center;position:relative;overflow:hidden}
+.b2b::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 50%,rgba(176,122,94,0.12) 0%,transparent 60%);pointer-events:none}
+.b2b-content{position:relative;z-index:1;max-width:640px;margin:0 auto}
+.b2b-label{font-size:10px;font-weight:500;letter-spacing:4px;text-transform:uppercase;color:var(--copper);margin-bottom:32px}
+.b2b-title{font-family:'Cormorant Garamond',serif;font-size:clamp(28px,3.5vw,44px);font-weight:300;line-height:1.3;margin-bottom:24px}
+.b2b-title em{font-style:italic;color:var(--copper-light)}
+.b2b-desc{font-size:14px;font-weight:300;color:rgba(249,248,246,0.5);line-height:2;margin-bottom:48px}
+.b2b-cta{display:inline-flex;align-items:center;gap:12px;font-size:11px;font-weight:500;letter-spacing:3px;text-transform:uppercase;text-decoration:none;color:var(--cacao);background:var(--copper);padding:18px 40px;transition:all 0.4s}
+.b2b-cta:hover{background:var(--copper-light);transform:translateY(-2px);box-shadow:0 16px 48px rgba(176,122,94,0.3)}
+.b2b-note{margin-top:32px;font-size:12px;color:rgba(249,248,246,0.3)}
+.b2b-note a{color:rgba(249,248,246,0.3);text-decoration:none}
+.b2b-note a:hover{color:var(--copper)}
+
+footer{padding:60px 48px;background:var(--cold-brew);color:var(--cloud-milk)}
+.footer-inner{max-width:1200px;margin:0 auto;display:flex;justify-content:space-between;align-items:center}
+.footer-logo{display:flex;align-items:center;gap:10px}
+.footer-logo img{height:24px;width:auto;filter:brightness(1.8)}
+.footer-logo-text{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:600;letter-spacing:6px}
+.footer-logo-text span{color:var(--copper)}
+.footer-tagline{font-size:11px;font-weight:300;letter-spacing:2px;color:var(--ice-deep);margin-top:4px}
+.footer-location{font-size:12px;font-weight:300;color:rgba(249,248,246,0.35);letter-spacing:1px;margin-bottom:4px;text-align:right}
+.footer-copy{font-size:11px;color:rgba(249,248,246,0.2);text-align:right}
+.footer-divider{width:100%;height:1px;background:rgba(249,248,246,0.06);max-width:1200px;margin:32px auto 24px}
+.footer-bottom{max-width:1200px;margin:0 auto;display:flex;justify-content:space-between;align-items:center}
+.footer-social{display:flex;gap:24px}
+.footer-social a{font-size:12px;color:rgba(249,248,246,0.3);text-decoration:none;letter-spacing:1px;transition:color 0.3s}
+.footer-social a:hover{color:var(--copper)}
+.footer-universe{font-size:11px;color:rgba(249,248,246,0.15);letter-spacing:2px}
+
+@media(max-width:1024px){.phil-grid{grid-template-columns:1fr;gap:60px;text-align:center}.phil-body{margin:0 auto}.pillars{grid-template-columns:1fr;max-width:600px}}
+@media(max-width:768px){nav{padding:0 16px}.nav-links{display:none}.lb{padding:6px 8px;font-size:9px}.hero{padding:100px 24px 80px}.hero-title{letter-spacing:6px}.philosophy{padding:80px 24px}.story-intro{padding:140px 24px 60px}.pillars{padding:20px 24px 80px;gap:24px}.pillar{padding:36px 28px}.products{padding:80px 24px}.product-cards{grid-template-columns:1fr}.product-card{padding:40px 32px}.b2b{padding:80px 24px}footer{padding:40px 24px}.footer-inner{flex-direction:column;gap:20px;text-align:center}.footer-location,.footer-copy{text-align:center}.footer-bottom{flex-direction:column;gap:16px}.brand-circles{width:280px;height:280px}.brand-circle{width:170px!important;height:170px!important}}
+@media(max-width:480px){.hero-ctas{flex-direction:column;align-items:center}.btn-p,.btn-s{width:100%;justify-content:center;max-width:280px}}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="#" class="nav-logo"><img src="logo-nav.png" alt="HARA" style="filter:brightness(2.5)"><span class="nav-logo-text">H<span>A</span>R<span>A</span></span></a>
+  <div class="nav-right">
+    <div class="nav-links">
+      <a href="#story" id="n1">Nuestra Historia</a>
+      <a href="#products" id="n2">Productos</a>
+      <a href="menu.html" id="n3">Menú</a>
+      <a href="blog.html" id="n5">Blog</a>
+      <a href="#b2b" class="nav-cta" id="n4">Contacto B2B</a>
+    </div>
+    <div class="lang-sw">
+      <button class="lb on" onclick="go('es')">ES</button>
+      <button class="lb" onclick="go('en')">EN</button>
+      <button class="lb" onclick="go('ko')">KO</button>
+      <button class="lb" onclick="go('pt')">PT</button>
+    </div>
+  </div>
+</nav>
+
+<section class="splash">
+  <img src="logo-splash.png" alt="HARA" class="splash-img">
+  <div class="splash-wordmark">H<span>A</span>R<span>A</span></div>
+  <div class="splash-tag">Cold Universe</div>
+  <div class="splash-scroll"><span id="s1">Descubrí</span><div class="splash-arrow"></div></div>
+</section>
+
+<section class="hero">
+  <div class="hero-content">
+    <div class="hero-badge" id="t1">Specialty Cold Drip Coffee · Artisan Gelato</div>
+    <h1 class="hero-title">H<span class="accent">A</span>R<span class="accent">A</span></h1>
+    <p class="hero-tagline">Cold Universe</p>
+    <div class="hero-divider"></div>
+    <p class="hero-sub" id="t2">Donde la precisión oriental se encuentra con el alma sudamericana.<br>Café de especialidad y gelato artesanal, nacidos en el corazón de los Andes.</p>
+    <div class="hero-ctas">
+      <a href="#story" class="btn-p" id="t3">Descubrí nuestra historia ↓</a>
+      <a href="#b2b" class="btn-s" id="t4">Alianzas comerciales →</a>
+    </div>
+  </div>
+</section>
+
+<section class="philosophy">
+  <div class="phil-grid">
+    <div>
+      <div class="phil-label" id="t5">Filosofía</div>
+      <h2 class="phil-title" id="t6">El calor destruye.<br><em>El frío revela.</em><br>Esa es nuestra verdad.</h2>
+      <p class="phil-body" id="t7">HARA nace de una convicción: las mejores cosas se descubren cuando dejás de forzar. Sin calor, sin presión — solo tiempo, gravedad y paciencia. Así extraemos café. Así pensamos cada producto.</p>
+      <p class="phil-body" id="t8">Desde Salta, en el corazón de los Andes, miramos al continente con ojos de Oriente. La disciplina coreana del detalle y la calidez sudamericana del alma, juntas en un universo donde la temperatura solo desciende.</p>
+    </div>
+    <div>
+      <div class="brand-circles">
+        <div class="brand-circle circle-craft"><span class="circle-label">Cold</span><span class="circle-sub" id="t9">Precisión</span></div>
+        <div class="brand-circle circle-fusion"><span class="circle-label">Fusion</span><span class="circle-sub" id="t10">Encuentro</span></div>
+        <div class="brand-circle circle-origin"><span class="circle-label">Origin</span><span class="circle-sub" id="t11">Los Andes</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="story" id="story">
+  <div class="story-intro">
+    <div class="story-label" id="t12">Tres Pilares</div>
+    <h2 class="story-heading" id="t13">Construimos sobre tres verdades que definen <em>quiénes somos</em> y hacia dónde vamos</h2>
+    <p class="story-desc" id="t14">Cada decisión — desde la selección del grano hasta la temperatura de servicio — pasa por estos tres filtros. Si no cumple los tres, no lleva nuestro nombre.</p>
+  </div>
+  <div class="pillars">
+    <div class="pillar">
+      <div class="pillar-number">01</div>
+      <div class="pillar-title">Cold</div>
+      <div class="pillar-subtitle" id="t15">Sin calor, sin prisa</div>
+      <div class="pillar-line"></div>
+      <p class="pillar-text" id="t16">Controlamos cada variable del proceso: temperatura, tiempo, proporción de extracción. Sin calor aplicado — solo gravedad y paciencia. 12 años de disciplina industrial coreana al servicio del frío.</p>
+      <div class="pillar-quote" id="t17">"열은 파괴하고, 차가움은 보존한다"</div>
+    </div>
+    <div class="pillar">
+      <div class="pillar-number">02</div>
+      <div class="pillar-title">Fusion</div>
+      <div class="pillar-subtitle" id="t18">Donde Oriente encuentra Sudamérica</div>
+      <div class="pillar-line"></div>
+      <p class="pillar-text" id="t19">No somos exóticos. Somos el resultado natural de dos culturas que aprenden una de la otra. Una nueva categoría que no existía hasta que decidimos crearla.</p>
+      <div class="pillar-quote" id="t20">"동양이 남미를 만나는 곳"</div>
+    </div>
+    <div class="pillar">
+      <div class="pillar-number">03</div>
+      <div class="pillar-title">Origin</div>
+      <div class="pillar-subtitle" id="t21">Nacido en el corazón de los Andes</div>
+      <div class="pillar-line"></div>
+      <p class="pillar-text" id="t22">Salta no es solo nuestra ubicación, es nuestra identidad. El agua andina, la altitud, el terroir — un carácter imposible de replicar en otro lugar del continente.</p>
+      <div class="pillar-quote" id="t23">"안데스의 심장에서 태어나다"</div>
+    </div>
+  </div>
+</section>
+
+<section class="products" id="products">
+  <div class="products-inner">
+    <div class="products-header">
+      <div class="products-label" id="t24">Nuestros Productos</div>
+      <h2 class="products-title" id="t25">Lo que creamos</h2>
+    </div>
+    <div class="product-cards">
+      <div class="product-card">
+        <div class="product-icon">☕</div>
+        <div class="product-name">Specialty Coffee</div>
+        <div class="product-tagline" id="t26">Cold Drip Concentrado</div>
+        <p class="product-desc" id="t27">Extracción por goteo frío sin calor aplicado — solo gravedad, tiempo y granos de origen seleccionado. Consistencia perfecta para tu taza o el menú de tu establecimiento.</p>
+        <span class="product-tag" id="t28">Retail y B2B</span>
+      </div>
+      <div class="product-card">
+        <div class="product-icon">🍨</div>
+        <div class="product-name">Artisan Gelato</div>
+        <div class="product-tagline" id="t29">Sabores del Mundo, Alma Andina</div>
+        <p class="product-desc" id="t30">Gelato artesanal que fusiona ingredientes asiáticos con productos locales. La temperatura solo desciende — del goteo frío al gelato, sin un solo momento de calor.</p>
+        <span class="product-tag" id="t31">Próximamente</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="b2b" id="b2b">
+  <div class="b2b-content">
+    <div class="b2b-label" id="t32">Alianzas Comerciales</div>
+    <h2 class="b2b-title" id="t33">¿Buscás algo <em>diferente</em> para tu carta?</h2>
+    <p class="b2b-desc" id="t34">Trabajamos con cafeterías, restaurantes, hoteles y distribuidores en toda Sudamérica. Cold drip concentrado y gelato artesanal diseñados para elevar tu oferta.</p>
+    <a href="mailto:hello@hara.lat" class="b2b-cta" id="t35">Escribinos →</a>
+    <p class="b2b-note"><a href="mailto:hello@hara.lat">hello@hara.lat</a> · <span id="t36">Respuesta en 24 horas</span></p>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-inner">
+    <div><div class="footer-logo"><img src="logo-nav.png" alt="HARA"><span class="footer-logo-text">H<span>A</span>R<span>A</span></span></div><div class="footer-tagline">Cold Universe</div></div>
+    <div><div class="footer-location" id="t37">Salta, Argentina · Nacido en el NOA, pensado para el continente</div><div class="footer-copy" id="t38">© 2026 ARCOPA S.A.S. — Todos los derechos reservados</div></div>
+  </div>
+  <div style="max-width:1200px;margin:0 auto"><div class="footer-divider"></div><div class="footer-bottom"><div class="footer-social"><a href="#">Instagram</a><a href="#">WhatsApp</a></div><div class="footer-universe">COLD UNIVERSE</div></div></div>
+</footer>
+
+<script>
+var D = {
+  es: ["Nuestra Historia","Productos","Menú","Contacto B2B","Blog","Specialty Cold Drip Coffee · Artisan Gelato","Donde la precisión oriental se encuentra con el alma sudamericana.<br>Café de especialidad y gelato artesanal, nacidos en el corazón de los Andes.","Descubrí nuestra historia ↓","Alianzas comerciales →","Filosofía","El calor destruye.<br><em>El frío revela.</em><br>Esa es nuestra verdad.","HARA nace de una convicción: las mejores cosas se descubren cuando dejás de forzar. Sin calor, sin presión — solo tiempo, gravedad y paciencia. Así extraemos café. Así pensamos cada producto.","Desde Salta, en el corazón de los Andes, miramos al continente con ojos de Oriente. La disciplina coreana del detalle y la calidez sudamericana del alma, juntas en un universo donde la temperatura solo desciende.","Precisión","Encuentro","Los Andes","Tres Pilares","Construimos sobre tres verdades que definen <em>quiénes somos</em> y hacia dónde vamos","Cada decisión — desde la selección del grano hasta la temperatura de servicio — pasa por estos tres filtros. Si no cumple los tres, no lleva nuestro nombre.","Sin calor, sin prisa","Controlamos cada variable del proceso: temperatura, tiempo, proporción de extracción. Sin calor aplicado — solo gravedad y paciencia. 12 años de disciplina industrial coreana al servicio del frío.","\u201C열은 파괴하고, 차가움은 보존한다\u201D","Donde Oriente encuentra Sudamérica","No somos exóticos. Somos el resultado natural de dos culturas que aprenden una de la otra. Una nueva categoría que no existía hasta que decidimos crearla.","\u201C동양이 남미를 만나는 곳\u201D","Nacido en el corazón de los Andes","Salta no es solo nuestra ubicación, es nuestra identidad. El agua andina, la altitud, el terroir — un carácter imposible de replicar en otro lugar del continente.","\u201C안데스의 심장에서 태어나다\u201D","Nuestros Productos","Lo que creamos","Cold Drip Concentrado","Extracción por goteo frío sin calor aplicado — solo gravedad, tiempo y granos de origen seleccionado. Consistencia perfecta para tu taza o el menú de tu establecimiento.","Retail y B2B","Sabores del Mundo, Alma Andina","Gelato artesanal que fusiona ingredientes asiáticos con productos locales. La temperatura solo desciende — del goteo frío al gelato, sin un solo momento de calor.","Próximamente","Alianzas Comerciales","¿Buscás algo <em>diferente</em> para tu carta?","Trabajamos con cafeterías, restaurantes, hoteles y distribuidores en toda Sudamérica. Cold drip concentrado y gelato artesanal diseñados para elevar tu oferta.","Escribinos →","Respuesta en 24 horas","Salta, Argentina · Nacido en el NOA, pensado para el continente","© 2026 ARCOPA S.A.S. — Todos los derechos reservados"],
+  en: ["Our Story","Products","Menu","B2B Contact","Blog","Specialty Cold Drip Coffee · Artisan Gelato","Where Eastern precision meets the South American soul.<br>Specialty coffee and artisan gelato, born in the heart of the Andes.","Discover our story ↓","Commercial partnerships →","Philosophy","Heat destroys.<br><em>Cold reveals.</em><br>That is our truth.","HARA is born from a conviction: the best things are discovered when you stop forcing. No heat, no pressure — only time, gravity, and patience. That\u2019s how we extract coffee. That\u2019s how we think about every product.","From Salta, in the heart of the Andes, we look at the continent through Eastern eyes. Korean discipline for detail and South American warmth of soul, together in a universe where the temperature only descends.","Precision","Encounter","The Andes","Three Pillars","We build on three truths that define <em>who we are</em> and where we\u2019re going","Every decision — from bean selection to serving temperature — passes through these three filters. If it doesn\u2019t meet all three, it doesn\u2019t carry our name.","No heat, no rush","We control every variable in the process: temperature, time, extraction ratio. No heat applied — only gravity and patience. 12 years of Korean industrial discipline in service of the cold.","\u201CHeat destroys, cold preserves\u201D","Where East meets South America","We\u2019re not exotic. We\u2019re the natural result of two cultures learning from each other. A new category that didn\u2019t exist until we decided to create it.","\u201CWhere East meets South America\u201D","Born in the heart of the Andes","Salta isn\u2019t just our location — it\u2019s our identity. Andean water, altitude, terroir — a character impossible to replicate anywhere else on the continent.","\u201CBorn in the heart of the Andes\u201D","Our Products","What we create","Cold Drip Concentrate","Cold drip extraction with no heat applied — only gravity, time, and carefully selected single-origin beans. Perfect consistency for your cup or your establishment\u2019s menu.","Retail & B2B","Flavors of the World, Andean Soul","Artisan gelato fusing Asian ingredients with local products. Temperature only descends — from cold drip to gelato, without a single moment of heat.","Coming Soon","Commercial Partnerships","Looking for something <em>different</em> for your menu?","We work with cafés, restaurants, hotels, and distributors across South America. Cold drip concentrate and artisan gelato designed to elevate your offering.","Get in touch →","Response within 24 hours","Salta, Argentina · Born in the NOA, designed for the continent","© 2026 ARCOPA S.A.S. — All rights reserved"],
+  ko: ["우리의 이야기","제품","메뉴","B2B 문의","Blog","스페셜티 냉점적 커피 · 아르티잔 젤라또","동양의 정밀함이 남미의 영혼을 만나는 곳.<br>안데스의 심장에서 태어난 스페셜티 커피와 아르티잔 젤라또.","우리의 이야기 보기 ↓","비즈니스 제휴 →","철학","열은 파괴하고,<br><em>차가움은 드러낸다.</em><br>이것이 우리의 진실입니다.","HARA는 하나의 확신에서 출발합니다: 가장 좋은 것은 강요를 멈출 때 발견됩니다. 열도 없이, 압력도 없이 — 오직 시간, 중력, 그리고 인내. 이것이 우리가 커피를 추출하는 방식이고, 모든 제품을 만드는 방식입니다.","안데스의 심장, 살타에서 우리는 동양의 눈으로 대륙을 바라봅니다. 한국의 디테일에 대한 규율과 남미의 따뜻한 영혼이 만나, 온도가 오직 내려가기만 하는 하나의 우주를 만듭니다.","정밀함","만남","안데스","세 가지 기둥","<em>우리가 누구인지</em>, 어디로 가는지를 정의하는 세 가지 진실 위에 세워갑니다","원두 선택부터 서빙 온도까지 — 모든 결정은 이 세 가지 필터를 통과합니다. 셋 모두를 충족하지 못하면, 우리의 이름을 달지 않습니다.","열 없이, 서두름 없이","공정의 모든 변수를 통제합니다: 온도, 시간, 추출 비율. 열을 가하지 않습니다 — 오직 중력과 인내뿐. 12년간의 한국 산업 현장 규율을 차가움에 바칩니다.","\u201C열은 파괴하고, 차가움은 보존한다\u201D","동양이 남미를 만나는 곳","우리는 이국적인 것이 아닙니다. 두 문화가 서로에게 배우는 자연스러운 결과입니다. 우리가 만들기로 결심하기 전에는 존재하지 않았던 새로운 카테고리.","\u201C동양이 남미를 만나는 곳\u201D","안데스의 심장에서 태어나다","살타는 단순한 소재지가 아닙니다 — 우리의 정체성입니다. 안데스의 물, 고도, 테루아 — 대륙 어디에서도 복제할 수 없는 캐릭터.","\u201C안데스의 심장에서 태어나다\u201D","우리의 제품","우리가 만드는 것","냉점적 콘센트레이트","열을 가하지 않는 냉점적 추출 — 오직 중력, 시간, 그리고 엄선된 싱글 오리진 원두. 당신의 한 잔을 위해, 또는 매장의 메뉴를 위해 완벽한 일관성을 제공합니다.","리테일 & B2B","세계의 맛, 안데스의 영혼","아시아 식재료와 현지 원료를 융합한 아르티잔 젤라또. 온도는 오직 내려가기만 합니다 — 냉점적 커피에서 젤라또까지, 단 한 순간의 열도 없이.","곧 출시","비즈니스 제휴","메뉴에 <em>특별한 무언가</em>를 찾고 계신가요?","남미 전역의 카페, 레스토랑, 호텔, 유통업체와 협력합니다. 냉점적 콘센트레이트와 아르티잔 젤라또로 당신의 메뉴를 한 단계 높여보세요.","문의하기 →","24시간 이내 답변","살타, 아르헨티나 · NOA에서 태어나, 대륙을 향해","© 2026 ARCOPA S.A.S. — 모든 권리 보유"],
+  pt: ["Nossa História","Produtos","Cardápio","Contato B2B","Blog","Specialty Cold Drip Coffee · Artisan Gelato","Onde a precisão oriental encontra a alma sul-americana.<br>Café especial e gelato artesanal, nascidos no coração dos Andes.","Descubra nossa história ↓","Parcerias comerciais →","Filosofia","O calor destrói.<br><em>O frio revela.</em><br>Essa é a nossa verdade.","A HARA nasce de uma convicção: as melhores coisas são descobertas quando você para de forçar. Sem calor, sem pressão — apenas tempo, gravidade e paciência. É assim que extraímos café. É assim que pensamos cada produto.","De Salta, no coração dos Andes, olhamos para o continente com olhos do Oriente. A disciplina coreana pelo detalhe e o calor sul-americano da alma, juntos em um universo onde a temperatura só desce.","Precisão","Encontro","Os Andes","Três Pilares","Construímos sobre três verdades que definem <em>quem somos</em> e para onde vamos","Cada decisão — da seleção do grão à temperatura de serviço — passa por estes três filtros. Se não atende aos três, não leva o nosso nome.","Sem calor, sem pressa","Controlamos cada variável do processo: temperatura, tempo, proporção de extração. Sem calor aplicado — apenas gravidade e paciência. 12 anos de disciplina industrial coreana a serviço do frio.","\u201CO calor destrói, o frio preserva\u201D","Onde o Oriente encontra a América do Sul","Não somos exóticos. Somos o resultado natural de duas culturas que aprendem uma com a outra. Uma nova categoria que não existia até decidirmos criá-la.","\u201COnde o Oriente encontra a América do Sul\u201D","Nascido no coração dos Andes","Salta não é apenas nossa localização — é nossa identidade. A água andina, a altitude, o terroir — um caráter impossível de replicar em outro lugar do continente.","\u201CNascido no coração dos Andes\u201D","Nossos Produtos","O que criamos","Cold Drip Concentrado","Extração por gotejo frio sem calor aplicado — apenas gravidade, tempo e grãos de origem selecionada. Consistência perfeita para sua xícara ou o menu do seu estabelecimento.","Varejo e B2B","Sabores do Mundo, Alma Andina","Gelato artesanal que fusiona ingredientes asiáticos com produtos locais. A temperatura só desce — do gotejo frio ao gelato, sem um único momento de calor.","Em breve","Parcerias Comerciais","Procurando algo <em>diferente</em> para seu cardápio?","Trabalhamos com cafeterias, restaurantes, hotéis e distribuidores em toda a América do Sul. Cold drip concentrado e gelato artesanal projetados para elevar sua oferta.","Entre em contato →","Resposta em 24 horas","Salta, Argentina · Nascido no NOA, pensado para o continente","© 2026 ARCOPA S.A.S. — Todos os direitos reservados"]
+};
+var ids = ['n1','n2','n3','n4','n5','t1','t2','t3','t4','t5','t6','t7','t8','t9','t10','t11','t12','t13','t14','t15','t16','t17','t18','t19','t20','t21','t22','t23','t24','t25','t26','t27','t28','t29','t30','t31','t32','t33','t34','t35','t36','t37','t38'];
+var html_ids = ['t2','t6','t13','t33'];
+var splash_t = {es:'Descubrí',en:'Discover',ko:'스크롤',pt:'Descubra'};
+function go(lang) {
+  var d = D[lang];
+  if (!d) return;
+  document.documentElement.lang = lang;
+  for (var i = 0; i < ids.length; i++) {
+    var el = document.getElementById(ids[i]);
+    if (el) {
+      if (html_ids.indexOf(ids[i]) >= 0) { el.innerHTML = d[i]; }
+      else { el.textContent = d[i]; }
+    }
+  }
+  var s1 = document.getElementById('s1');
+  if (s1) s1.textContent = splash_t[lang] || splash_t.es;
+  var btns = document.querySelectorAll('.lb');
+  for (var j = 0; j < btns.length; j++) {
+    btns[j].className = 'lb' + (btns[j].textContent.trim().toLowerCase() === lang ? ' on' : '');
+  }
+  try { localStorage.setItem('hara-lang', lang); } catch(e) {}
+}
+try { var s = localStorage.getItem('hara-lang'); if (s && D[s]) go(s); } catch(e) {}
+window.addEventListener('scroll', function() {
+  var nav = document.querySelector('nav');
+  if (window.scrollY > window.innerHeight * 0.5) { nav.classList.add('scrolled'); }
+  else { nav.classList.remove('scrolled'); }
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HARA Blog — Cómo probar café (de verdad)</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Noto+Sans+KR:wght@200;300;400;500;600&family=Noto+Sans:wght@200;300;400;500;600&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+:root{--espresso:#1a1210;--crema:#d4a574;--cream:#f5efe6;--warm-white:#faf8f4;--roast-mid:#6b4226;--copper:#b87333;--amber:#c9a84c;--berry:#a05070;--citrus:#c89040;--floral:#9a7ab5;--choco:#7a5a3a;--nut:#b0956a;--green-note:#7a9a5b;--text-primary:#1a1210;--text-secondary:#6b5b50;--text-light:#a09080;--border-light:rgba(212,165,116,.15)}
+*{margin:0;padding:0;box-sizing:border-box}html{scroll-behavior:smooth;font-size:16px}
+body{background:var(--warm-white);color:var(--text-primary);font-family:'Noto Sans','Noto Sans KR',sans-serif;font-weight:300;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:var(--warm-white)}::-webkit-scrollbar-thumb{background:var(--crema);border-radius:3px}
+nav{position:fixed;top:0;left:0;right:0;z-index:200;padding:1.2rem 3rem;display:flex;justify-content:space-between;align-items:center;transition:all .5s}
+nav.scrolled{background:rgba(250,248,244,.92);backdrop-filter:blur(24px);padding:.9rem 3rem;box-shadow:0 1px 0 rgba(26,18,16,.06)}
+.nav-left{display:flex;align-items:center;gap:2.5rem}
+.nav-logo{font-family:'Cormorant Garamond',serif;font-weight:500;letter-spacing:.15em;color:var(--text-primary);text-decoration:none;font-size:1.3rem;line-height:1}
+.nav-logo small{display:block;font-weight:300;font-size:.55rem;letter-spacing:.3em;color:var(--text-secondary);margin-top:2px}
+.nav-back{font-size:.72rem;font-weight:400;letter-spacing:.08em;color:var(--text-secondary);text-decoration:none;display:flex;align-items:center;gap:.4rem;transition:color .3s}
+.nav-back:hover{color:var(--espresso)}
+.lang-switcher{display:flex;border:1px solid var(--border-light);border-radius:6px;overflow:hidden}
+.lang-btn{font-family:'JetBrains Mono',monospace;font-size:.6rem;letter-spacing:.1em;padding:.4rem .65rem;border:none;background:transparent;color:var(--text-light);cursor:pointer;transition:all .3s}
+.lang-btn:not(:last-child){border-right:1px solid var(--border-light)}
+.lang-btn.active{background:var(--espresso);color:var(--cream)}
+.lang-btn:hover:not(.active){background:rgba(212,165,116,.08);color:var(--roast-mid)}
+.progress-bar{position:fixed;top:0;left:0;height:2px;z-index:300;width:0%;background:linear-gradient(to right,var(--berry),var(--citrus),var(--floral));transition:width .1s linear}
+
+.post-hero{height:80vh;min-height:520px;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;background:var(--espresso)}
+.post-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 40% 55%,rgba(160,80,112,.06),transparent 40%),radial-gradient(ellipse at 60% 45%,rgba(200,144,64,.06),transparent 40%)}
+.hero-content{position:relative;z-index:2;text-align:center;padding:2rem;max-width:700px}
+.hero-overline{font-family:'JetBrains Mono',monospace;font-size:.55rem;letter-spacing:.5em;color:rgba(245,239,230,.25);margin-bottom:2rem;opacity:0;animation:fadeUp .8s ease .3s forwards}
+.hero-title{font-family:'Cormorant Garamond',serif;font-size:clamp(2.2rem,5vw,4rem);font-weight:300;line-height:1.15;color:var(--cream);margin-bottom:1.5rem;opacity:0;animation:fadeUp 1s ease .5s forwards}
+.hero-sub{font-size:1rem;line-height:1.8;color:rgba(245,239,230,.5);max-width:480px;margin:0 auto;opacity:0;animation:fadeUp .8s ease .8s forwards}
+.hero-meta{margin-top:2.5rem;display:flex;justify-content:center;gap:1.5rem;opacity:0;animation:fadeUp .8s ease 1s forwards}
+.hero-badge{font-family:'JetBrains Mono',monospace;font-size:.55rem;letter-spacing:.2em;padding:.35rem .8rem;border-radius:4px;background:rgba(212,165,116,.12);color:var(--crema)}
+.hero-date,.hero-read{font-family:'JetBrains Mono',monospace;font-size:.6rem;color:rgba(245,239,230,.25);letter-spacing:.1em}
+
+.article-body{max-width:680px;margin:0 auto;padding:5rem 2rem 4rem}
+.article-body h2{font-family:'Cormorant Garamond',serif;font-size:1.75rem;font-weight:400;color:var(--espresso);margin:3.5rem 0 1rem;line-height:1.3}
+.article-body h2:first-child{margin-top:0}
+.article-body h3{font-family:'Cormorant Garamond',serif;font-size:1.15rem;font-weight:500;color:var(--roast-mid);margin:2rem 0 .6rem}
+.article-body p{font-size:.95rem;line-height:2.1;color:var(--text-secondary);margin-bottom:1.4rem}
+.article-body p strong{color:var(--text-primary);font-weight:500}
+.article-body p em.t{font-style:italic;color:var(--copper);font-family:'Cormorant Garamond',serif;font-size:1.05em}
+.sep{width:40px;height:1px;background:var(--crema);margin:3rem auto;opacity:.4}
+
+/* STEP CARD */
+.step-card{margin:2rem -1rem;padding:2rem 2.5rem;border-radius:20px;border:1px solid var(--border-light);background:white;position:relative;counter-increment:step-counter}
+.step-card::before{content:counter(step-counter);position:absolute;top:-14px;left:24px;font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:600;color:var(--crema);background:var(--warm-white);padding:0 .6rem;line-height:1}
+.step-card h4{font-family:'Cormorant Garamond',serif;font-size:1.15rem;font-weight:500;margin-bottom:.4rem;color:var(--espresso)}
+.step-card .step-time{font-family:'JetBrains Mono',monospace;font-size:.55rem;letter-spacing:.12em;color:var(--copper);margin-bottom:.6rem}
+.step-card p{font-size:.85rem;line-height:1.85;color:var(--text-secondary);margin-bottom:.5rem}
+.step-card p:last-child{margin-bottom:0}
+
+/* PREP LIST */
+.prep-block{margin:2.5rem -1rem;padding:2.5rem;background:var(--espresso);border-radius:20px;color:var(--cream)}
+.prep-label{font-family:'JetBrains Mono',monospace;font-size:.55rem;letter-spacing:.3em;color:var(--crema);margin-bottom:1.5rem}
+.prep-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}
+.prep-item{text-align:center;padding:1.2rem;border-radius:12px;border:1px solid rgba(255,255,255,.06);background:rgba(255,255,255,.02)}
+.prep-icon{font-size:1.5rem;margin-bottom:.4rem}
+.prep-name{font-size:.82rem;margin-bottom:.2rem}
+.prep-detail{font-size:.65rem;color:rgba(245,239,230,.35);line-height:1.5}
+
+/* FLAVOR WHEEL SIMPLE */
+.wheel-block{margin:2.5rem -1rem;padding:2.5rem;background:white;border:1px solid var(--border-light);border-radius:20px}
+.wh-label{font-family:'JetBrains Mono',monospace;font-size:.55rem;letter-spacing:.3em;color:var(--copper);margin-bottom:1.5rem}
+.wh-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}
+.wh-cat{padding:1.2rem;border-radius:14px;border-left:3px solid}
+.wh-cat h5{font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:500;margin-bottom:.4rem}
+.wh-cat p{font-size:.75rem;color:var(--text-secondary);line-height:1.7;margin-bottom:.4rem}
+.wh-cat .wh-ref{font-size:.68rem;color:var(--text-light);font-style:italic}
+.wh-fruity{border-color:var(--berry);background:rgba(160,80,112,.03)}
+.wh-sweet{border-color:var(--citrus);background:rgba(200,144,64,.03)}
+.wh-floral{border-color:var(--floral);background:rgba(154,122,181,.03)}
+.wh-nutty{border-color:var(--nut);background:rgba(176,149,106,.03)}
+.wh-choco{border-color:var(--choco);background:rgba(122,90,58,.03)}
+.wh-other{border-color:var(--green-note);background:rgba(122,154,91,.03)}
+
+/* SENSE CARDS */
+.sense-cards{margin:2.5rem -1rem;display:grid;grid-template-columns:repeat(4,1fr);gap:1rem}
+.sc{padding:1.5rem 1rem;border-radius:16px;border:1px solid var(--border-light);background:white;text-align:center}
+.sc-icon{font-size:1.8rem;margin-bottom:.5rem}
+.sc h5{font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:500;margin-bottom:.3rem}
+.sc p{font-size:.75rem;color:var(--text-secondary);line-height:1.6;margin-bottom:0}
+
+/* EXERCISE */
+.exercise{margin:2.5rem -1rem;padding:2.5rem;background:rgba(200,144,64,.04);border:1px solid rgba(200,144,64,.15);border-radius:20px;position:relative}
+.exercise::before{content:'✏️';position:absolute;top:-12px;left:24px;font-size:1.1rem;background:var(--warm-white);padding:0 .5rem}
+.ex-label{font-family:'JetBrains Mono',monospace;font-size:.5rem;letter-spacing:.25em;color:var(--amber);margin-bottom:1rem}
+.exercise h4{font-family:'Cormorant Garamond',serif;font-size:1.15rem;font-weight:500;margin-bottom:.5rem}
+.exercise p{font-size:.85rem;line-height:1.85;color:var(--text-secondary);margin-bottom:.5rem}
+.exercise p:last-child{margin-bottom:0}
+.ex-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:1rem}
+.ex-option{padding:1.2rem;border-radius:12px;border:1px solid var(--border-light);background:white;text-align:center}
+.ex-option h5{font-family:'Cormorant Garamond',serif;font-size:.95rem;font-weight:500;margin-bottom:.3rem}
+.ex-option p{font-size:.72rem;margin-bottom:0}
+
+/* TASTING SHEET */
+.tasting-sheet{margin:2.5rem -1rem;padding:2.5rem;background:var(--espresso);border-radius:20px;color:var(--cream)}
+.ts-label{font-family:'JetBrains Mono',monospace;font-size:.55rem;letter-spacing:.3em;color:var(--crema);margin-bottom:1.5rem}
+.ts-row{display:grid;grid-template-columns:.8fr 2fr;gap:.5rem;align-items:start;margin-bottom:1rem;padding-bottom:1rem;border-bottom:1px solid rgba(255,255,255,.04)}
+.ts-row:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}
+.ts-attr{font-family:'Cormorant Garamond',serif;font-size:.95rem;font-weight:400;color:var(--crema);padding-top:.1rem}
+.ts-guide{font-size:.78rem;color:rgba(245,239,230,.4);line-height:1.7}
+.ts-guide strong{color:rgba(245,239,230,.6)}
+.ts-scale{display:flex;gap:.3rem;margin-top:.4rem}
+.ts-dot{width:18px;height:18px;border-radius:50%;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.03);font-family:'JetBrains Mono',monospace;font-size:.45rem;display:flex;align-items:center;justify-content:center;color:rgba(245,239,230,.2)}
+
+/* COMPARISON */
+.compare-block{margin:2.5rem -1rem;padding:2.5rem;background:white;border:1px solid var(--border-light);border-radius:20px}
+.cmp-label{font-family:'JetBrains Mono',monospace;font-size:.55rem;letter-spacing:.3em;color:var(--copper);margin-bottom:1.5rem}
+.cmp-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem}
+.cmp-card{padding:1.5rem;border-radius:14px;border:1px solid var(--border-light);text-align:center}
+.cmp-icon{font-size:1.3rem;margin-bottom:.5rem}
+.cmp-title{font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:500;margin-bottom:.3rem}
+.cmp-desc{font-size:.72rem;color:var(--text-secondary);line-height:1.6;margin-bottom:.5rem}
+.cmp-try{font-family:'JetBrains Mono',monospace;font-size:.55rem;color:var(--copper);letter-spacing:.08em}
+
+/* CALLOUT */
+.callout{background:var(--espresso);color:var(--cream);border-radius:16px;padding:2.5rem;margin:2.5rem -1rem;position:relative;overflow:hidden}
+.callout::before{content:'';position:absolute;top:-40%;right:-20%;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,rgba(212,165,116,.06),transparent)}
+.callout .callout-label{font-family:'JetBrains Mono',monospace;font-size:.55rem;letter-spacing:.3em;color:var(--crema);margin-bottom:1rem}
+.callout p{font-size:.88rem;line-height:1.95;color:rgba(245,239,230,.55);margin-bottom:0}
+.callout p strong{color:var(--crema)}
+
+.author-card{max-width:680px;margin:0 auto 4rem;padding:2rem 2rem 0;display:flex;align-items:center;gap:1.5rem;border-top:1px solid var(--border-light)}
+.author-avatar{width:56px;height:56px;border-radius:50%;background:var(--espresso);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.author-avatar span{font-family:'Cormorant Garamond',serif;font-size:1.2rem;color:var(--crema);font-weight:500}
+.author-info h4{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:500;margin-bottom:.15rem}
+.author-info p{font-size:.78rem;color:var(--text-secondary);line-height:1.5}
+footer{padding:3rem 2rem;text-align:center}
+.footer-brand{font-family:'JetBrains Mono',monospace;font-size:.58rem;letter-spacing:.25em;color:var(--text-light)}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@media(max-width:768px){nav{padding:1rem 1.5rem}.post-hero{height:70vh}.article-body{padding:3.5rem 1.5rem 3rem}.prep-block,.wheel-block,.sense-cards,.exercise,.tasting-sheet,.compare-block,.callout,.step-card{margin-left:-.5rem;margin-right:-.5rem}.prep-grid,.wh-grid,.cmp-grid{grid-template-columns:1fr 1fr}.sense-cards{grid-template-columns:1fr 1fr}.prep-block,.tasting-sheet,.callout{padding:2rem 1.5rem}.ts-row{grid-template-columns:1fr}.author-card{flex-direction:column;text-align:center;padding:1.5rem}}
+@media(max-width:480px){.prep-grid,.wh-grid,.cmp-grid,.ex-grid{grid-template-columns:1fr}.sense-cards{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<div class="progress-bar" id="progressBar"></div>
+<nav id="mainNav"><div class="nav-left"><a href="/" class="nav-logo">HARA<small>COFFEE LAB</small></a><a href="blog-index.html" class="nav-back"><span>←</span> Blog</a></div><div class="lang-switcher"><button class="lang-btn active" data-lang="es">ES</button><button class="lang-btn" data-lang="ko">KO</button><button class="lang-btn" data-lang="en">EN</button></div></nav>
+
+<div class="post-hero">
+  <div class="hero-content">
+    <div class="hero-overline" data-i18n="ho">HARA COFFEE LAB</div>
+    <h1 class="hero-title" data-i18n="ht">Cómo probar café<br>(de verdad)</h1>
+    <p class="hero-sub" data-i18n="hs">No necesitás ser barista. Solo necesitás prestar atención. Una guía práctica para empezar a escuchar lo que tu café te dice.</p>
+    <div class="hero-meta"><span class="hero-badge" data-i18n="hb">PRÁCTICA</span><span class="hero-date">18 FEB 2026</span><span class="hero-read" data-i18n="hr">8 min lectura</span></div>
+  </div>
+</div>
+
+<article class="article-body" id="articleBody">
+
+<!-- ══ SPANISH ══ -->
+<div class="lang-content" data-lang="es">
+
+<h2>Tomás café todos los días. Pero ¿lo probás?</h2>
+
+<p>La mayoría de nosotros tomamos café en piloto automático. Un sorbo, un "está bueno" o "está malo", y seguimos con el día. No hay nada de malo en eso — pero hay un mundo entero escondido en esa taza que la mayoría nunca descubre.</p>
+
+<p>Los catadores profesionales de café no tienen papilas mágicas. Tienen algo más simple: <strong>un método</strong>. Una forma ordenada de prestar atención a lo que ya está ahí. Y la buena noticia es que no necesitás entrenamiento formal ni equipamiento costoso para empezar. Necesitás una taza de café, tu nariz, tu boca y cinco minutos de curiosidad.</p>
+
+<p>Esto es todo lo que necesitás para probar café de verdad — hoy, en tu casa, con lo que tengas.</p>
+
+<div class="sep"></div>
+
+<h2>Lo que vas a necesitar</h2>
+
+<div class="prep-block">
+  <div class="prep-label" data-i18n="prl">PREPARACIÓN</div>
+  <div class="prep-grid">
+    <div class="prep-item"><div class="prep-icon">☕</div><div class="prep-name" data-i18n="pr1n">Una taza de café</div><div class="prep-detail" data-i18n="pr1d">Cualquier café que tengas. Preparado como lo hagas siempre. Sin azúcar ni leche para esta prueba.</div></div>
+    <div class="prep-item"><div class="prep-icon">🥄</div><div class="prep-name" data-i18n="pr2n">Una cuchara</div><div class="prep-detail" data-i18n="pr2d">De sopa, de postre, cualquiera. Para sorber el café ruidosamente (sí, es necesario).</div></div>
+    <div class="prep-item"><div class="prep-icon">💧</div><div class="prep-name" data-i18n="pr3n">Un vaso de agua</div><div class="prep-detail" data-i18n="pr3d">Para limpiar el paladar entre sorbos. Agua temperatura ambiente.</div></div>
+  </div>
+</div>
+
+<p>Eso es todo. Nada más. Si además tenés dos cafés diferentes para comparar, mejor — pero uno alcanza para empezar.</p>
+
+<div class="sep"></div>
+
+<h2>Los cuatro sentidos del café</h2>
+
+<p>Antes de empezar el protocolo, una idea rápida: el sabor del café se percibe con <strong>cuatro sentidos diferentes</strong>, y la clave es prestarle atención a cada uno por separado.</p>
+
+<div class="sense-cards">
+  <div class="sc"><div class="sc-icon">👃</div><h5 data-i18n="s1n">Aroma</h5><p data-i18n="s1d">Lo que tu nariz detecta antes y durante el sorbo. El 80% de lo que llamamos "sabor" es en realidad olfato.</p></div>
+  <div class="sc"><div class="sc-icon">👅</div><h5 data-i18n="s2n">Gusto</h5><p data-i18n="s2d">Solo cinco: dulce, ácido, amargo, salado, umami. Es lo que la lengua detecta sin la nariz.</p></div>
+  <div class="sc"><div class="sc-icon">🤲</div><h5 data-i18n="s3n">Cuerpo</h5><p data-i18n="s3d">La textura en la boca. ¿Se siente como agua, como jugo, como leche, como aceite? Eso es el cuerpo.</p></div>
+  <div class="sc"><div class="sc-icon">⏳</div><h5 data-i18n="s4n">Final</h5><p data-i18n="s4d">Lo que queda después de tragar. ¿Desaparece rápido? ¿Permanece? ¿Cambia? El final cuenta una historia.</p></div>
+</div>
+
+<div class="sep"></div>
+
+<h2>El protocolo: paso a paso</h2>
+
+<p>Este es un protocolo simplificado basado en el cupping profesional de la SCA (Specialty Coffee Association). Hacelo con calma. No hay respuestas correctas o incorrectas — solo lo que vos percibís.</p>
+
+<div style="counter-reset:step-counter">
+
+<div class="step-card">
+  <h4 data-i18n="st1h">Olé en seco</h4>
+  <div class="step-time" data-i18n="st1t">30 SEGUNDOS</div>
+  <p data-i18n="st1p1">Antes de probar, acercá la nariz a la taza y respirá profundo. ¿Qué sentís? No busques palabras técnicas — buscá <strong>asociaciones</strong>. ¿Te recuerda a algo? ¿A chocolate? ¿A fruta? ¿A pan tostado? ¿A flores? ¿A tierra húmeda? Todo vale.</p>
+  <p data-i18n="st1p2">Hacelo dos o tres veces, separando unos segundos entre cada inhalación. La nariz se satura rápido.</p>
+</div>
+
+<div class="step-card">
+  <h4 data-i18n="st2h">Sorbé ruidosamente</h4>
+  <div class="step-time" data-i18n="st2t">1 MINUTO</div>
+  <p data-i18n="st2p1">Con la cuchara, tomá un poco de café y <strong>sorbelo fuerte</strong>, haciendo ruido. Esto no es mala educación — es técnica. Al sorber con fuerza, atomizás el café en una nube fina que cubre toda la boca y llega a la parte posterior de la nariz (retronasal), donde están los receptores más sensibles.</p>
+  <p data-i18n="st2p2">Dejá que el café cubra toda tu boca por 2–3 segundos antes de tragar. Prestá atención: ¿qué sentís en la punta de la lengua? ¿Y en los lados? ¿Y atrás?</p>
+</div>
+
+<div class="step-card">
+  <h4 data-i18n="st3h">Buscá la acidez</h4>
+  <div class="step-time" data-i18n="st3t">30 SEGUNDOS</div>
+  <p data-i18n="st3p1">La acidez en café no es la acidez del vinagre. Es más parecida a la acidez de una <strong>manzana verde</strong>, de un <strong>cítrico</strong>, o de un <strong>vino blanco</strong>. Se siente en los costados de la lengua y produce salivación. ¿Está presente? ¿Es suave o brillante? ¿Te gusta o te molesta?</p>
+  <p data-i18n="st3p2">Un café sin acidez se siente "plano". Un café con buena acidez se siente "vivo".</p>
+</div>
+
+<div class="step-card">
+  <h4 data-i18n="st4h">Sentí el cuerpo</h4>
+  <div class="step-time" data-i18n="st4t">30 SEGUNDOS</div>
+  <p data-i18n="st4p1">Ahora ignorá el sabor y concentrate solo en la <strong>textura</strong>. ¿El café se siente liviano como agua? ¿Como jugo de manzana? ¿Como leche? ¿Como crema? Eso es el cuerpo. No tiene que ver con la intensidad del sabor — tiene que ver con el peso que sentís en la boca.</p>
+</div>
+
+<div class="step-card">
+  <h4 data-i18n="st5h">Escuchá el final</h4>
+  <div class="step-time" data-i18n="st5t">1 MINUTO</div>
+  <p data-i18n="st5p1">Tragá. Y ahora esperá. <strong>¿Qué queda?</strong> Un buen café tiene un final que evoluciona — primero sentís una cosa, después otra. Tal vez empieza dulce y termina con un toque de chocolate amargo. Tal vez desaparece limpio, sin dejar rastro.</p>
+  <p data-i18n="st5p2">Un final largo y agradable es señal de calidad. Un final amargo que se queda pegado en la boca es señal de sobreextracción o tueste oscuro excesivo.</p>
+</div>
+
+<div class="step-card">
+  <h4 data-i18n="st6h">Repetí cuando se enfríe</h4>
+  <div class="step-time" data-i18n="st6t">5 MINUTOS DESPUÉS</div>
+  <p data-i18n="st6p1">Este es el truco secreto de los catadores profesionales: <strong>el café cambia cuando se enfría</strong>. A temperatura alta, percibís más cuerpo y menos complejidad aromática. A medida que baja la temperatura, aparecen notas que estaban escondidas — frutas, flores, acidez más definida.</p>
+  <p data-i18n="st6p2">Un café de buena calidad <strong>mejora al enfriarse</strong>. Un café malo empeora (se vuelve más amargo y desagradable). Es una de las pruebas más simples y reveladoras de calidad.</p>
+</div>
+
+</div>
+
+<div class="sep"></div>
+
+<h2>El vocabulario: qué palabras usar</h2>
+
+<p>No necesitás un diccionario de sommeliers. La rueda del sabor del café (SCA Flavor Wheel) organiza los aromas y sabores en familias que podés usar como mapa. Acá están las seis más comunes, con las palabras que probablemente ya conocés:</p>
+
+<div class="wheel-block">
+  <div class="wh-label" data-i18n="whl">FAMILIAS DE SABOR (SIMPLIFICADAS)</div>
+  <div class="wh-grid">
+    <div class="wh-cat wh-fruity"><h5 data-i18n="w1n">Frutal</h5><p data-i18n="w1d">Berry (arándano, frambuesa), cítrico (limón, naranja, pomelo), frutas de hueso (durazno, damasco), tropical (maracuyá, mango).</p><div class="wh-ref" data-i18n="w1r">¿Dónde buscarlo? En cafés africanos (Etiopía, Kenia) y naturales.</div></div>
+    <div class="wh-cat wh-sweet"><h5 data-i18n="w2n">Dulce</h5><p data-i18n="w2d">Caramelo, miel, azúcar morena, melaza, panela, jarabe de arce.</p><div class="wh-ref" data-i18n="w2r">¿Dónde buscarlo? En cafés de Centro/Sudamérica, procesamiento honey.</div></div>
+    <div class="wh-cat wh-floral"><h5 data-i18n="w3n">Floral</h5><p data-i18n="w3d">Jazmín, rosa, lavanda, azahar, flor de naranjo. Delicadas y volátiles.</p><div class="wh-ref" data-i18n="w3r">¿Dónde buscarlo? En cafés lavados de alta altitud, Geisha, Yirgacheffe.</div></div>
+    <div class="wh-cat wh-nutty"><h5 data-i18n="w4n">Frutos secos</h5><p data-i18n="w4d">Almendra, avellana, maní, nuez. Suaves y reconfortantes.</p><div class="wh-ref" data-i18n="w4r">¿Dónde buscarlo? En cafés brasileños, colombianos, tuestes medios.</div></div>
+    <div class="wh-cat wh-choco"><h5 data-i18n="w5n">Chocolate</h5><p data-i18n="w5d">Cacao, chocolate con leche, chocolate amargo, brownie, trufa.</p><div class="wh-ref" data-i18n="w5r">¿Dónde buscarlo? En tuestes medios y medio-oscuros, Guatemala, Brasil.</div></div>
+    <div class="wh-cat wh-other"><h5 data-i18n="w6n">Especias y hierbas</h5><p data-i18n="w6d">Canela, clavo, pimienta, cardamomo, tabaco, cedro, tierra húmeda.</p><div class="wh-ref" data-i18n="w6r">¿Dónde buscarlo? En Sumatra, India, procesamiento natural, tuestes oscuros.</div></div>
+  </div>
+</div>
+
+<p>No te preocupes si al principio no detectás ninguna de estas notas. La habilidad de identificar sabores es como un músculo: <strong>se entrena con la práctica</strong>. Lo importante no es acertar — es empezar a prestar atención.</p>
+
+<div class="sep"></div>
+
+<h2>Tu ficha de cata</h2>
+
+<p>Cuando pruebes, es útil tener una estructura para organizar lo que percibís. Podés copiar esto en un papel o simplemente tenerlo en la cabeza:</p>
+
+<div class="tasting-sheet">
+  <div class="ts-label" data-i18n="tsl">FICHA DE CATA SIMPLIFICADA</div>
+
+  <div class="ts-row">
+    <div class="ts-attr" data-i18n="ts1a">Aroma</div>
+    <div class="ts-guide" data-i18n="ts1g"><strong>¿A qué huele?</strong> Anotá la primera asociación que te venga. Sin pensar demasiado. Puede ser "flores", "chocolate", "tostada", "fruta" — lo que sea.</div>
+  </div>
+  <div class="ts-row">
+    <div class="ts-attr" data-i18n="ts2a">Acidez</div>
+    <div class="ts-guide" data-i18n="ts2g"><strong>¿Está presente? ¿Cómo es?</strong> Baja / Media / Alta. ¿Es agradable (como cítrico) o molesta (como vinagre)? <div class="ts-scale"><span class="ts-dot">1</span><span class="ts-dot">2</span><span class="ts-dot">3</span><span class="ts-dot">4</span><span class="ts-dot">5</span></div></div>
+  </div>
+  <div class="ts-row">
+    <div class="ts-attr" data-i18n="ts3a">Dulzura</div>
+    <div class="ts-guide" data-i18n="ts3g"><strong>¿Hay dulzura natural?</strong> No azúcar — la dulzura inherente del café. Como la diferencia entre una frutilla ácida y una madura. <div class="ts-scale"><span class="ts-dot">1</span><span class="ts-dot">2</span><span class="ts-dot">3</span><span class="ts-dot">4</span><span class="ts-dot">5</span></div></div>
+  </div>
+  <div class="ts-row">
+    <div class="ts-attr" data-i18n="ts4a">Cuerpo</div>
+    <div class="ts-guide" data-i18n="ts4g"><strong>¿Qué textura tiene?</strong> Agua / Jugo / Leche / Crema. <div class="ts-scale"><span class="ts-dot">1</span><span class="ts-dot">2</span><span class="ts-dot">3</span><span class="ts-dot">4</span><span class="ts-dot">5</span></div></div>
+  </div>
+  <div class="ts-row">
+    <div class="ts-attr" data-i18n="ts5a">Sabor</div>
+    <div class="ts-guide" data-i18n="ts5g"><strong>¿Qué notas específicas encontrás?</strong> Usá las familias de arriba como guía. ¿Frutal? ¿Chocolatoso? ¿Floral? ¿A nuez? Escribí todo lo que venga.</div>
+  </div>
+  <div class="ts-row">
+    <div class="ts-attr" data-i18n="ts6a">Final</div>
+    <div class="ts-guide" data-i18n="ts6g"><strong>¿Qué queda después de tragar?</strong> Corto / Medio / Largo. ¿Agradable o no? ¿Evoluciona?</div>
+  </div>
+  <div class="ts-row">
+    <div class="ts-attr" data-i18n="ts7a">General</div>
+    <div class="ts-guide" data-i18n="ts7g"><strong>¿Te gusta?</strong> No como evaluación técnica — como sensación. ¿Volverías a tomar este café? ¿Lo recomendarías?</div>
+  </div>
+</div>
+
+<div class="sep"></div>
+
+<h2>Ejercicios para esta semana</h2>
+
+<p>La cata se aprende catando. Acá tenés tres ejercicios para hacer en casa esta semana. No necesitás ningún equipo especial.</p>
+
+<div class="exercise">
+  <div class="ex-label" data-i18n="e1l">EJERCICIO 1 — HOY</div>
+  <h4 data-i18n="e1h">El café con los ojos cerrados</h4>
+  <p data-i18n="e1p">Prepará tu café como siempre. Cerrá los ojos. Olelo. Sorbelo. ¿Qué sentís que no habías notado antes? Cuando los ojos están cerrados, la nariz y la boca se despiertan. Hacé esto con el café de mañana — solo una vez, un minuto. Es suficiente para empezar a notar cosas nuevas.</p>
+</div>
+
+<div class="exercise">
+  <div class="ex-label" data-i18n="e2l">EJERCICIO 2 — MAÑANA</div>
+  <h4 data-i18n="e2h">El test de la temperatura</h4>
+  <p data-i18n="e2p">Prepará un café y probalo a tres temperaturas: bien caliente (apenas lo hacés), tibio (5 minutos después), y casi frío (10–15 minutos después). ¿Cambia? Si es un café de buena calidad, vas a notar que <strong>aparecen notas nuevas al enfriarse</strong>. Si es un café bajo, se va a poner cada vez más amargo. Este ejercicio solo requiere paciencia.</p>
+</div>
+
+<div class="exercise">
+  <div class="ex-label" data-i18n="e3l">EJERCICIO 3 — ESTE FIN DE SEMANA</div>
+  <h4 data-i18n="e3h">Comparación directa</h4>
+  <p data-i18n="e3p">Conseguí dos cafés diferentes. Pueden ser de distinta marca, distinto origen, distinto tueste — lo que sea, pero que sean diferentes. Prepará los dos de la misma forma y al mismo tiempo. Probá uno, tomá agua, probá el otro. Ida y vuelta tres veces. Las diferencias que no notarías probando uno solo se hacen evidentes al comparar.</p>
+  <div class="ex-grid">
+    <div class="ex-option"><h5 data-i18n="e3a">Opción A</h5><p data-i18n="e3ad">Mismo café, tueste claro vs tueste oscuro</p></div>
+    <div class="ex-option"><h5 data-i18n="e3b">Opción B</h5><p data-i18n="e3bd">Café africano vs café sudamericano</p></div>
+  </div>
+</div>
+
+<div class="sep"></div>
+
+<h2>Tres comparaciones que cambian la perspectiva</h2>
+
+<p>Si te enganchaste con la comparación directa y querés ir más allá, estos tres enfrentamientos son los que más rápido educan el paladar:</p>
+
+<div class="compare-block">
+  <div class="cmp-label" data-i18n="cmpl">COMPARACIONES REVELADORA</div>
+  <div class="cmp-grid">
+    <div class="cmp-card"><div class="cmp-icon">🌍</div><div class="cmp-title" data-i18n="c1t">Origen vs Origen</div><div class="cmp-desc" data-i18n="c1d">Un café etíope vs un café brasileño. Es el contraste más dramático: frutal/floral vs nuez/chocolate. Entendés al instante qué significa "terroir" en café.</div><div class="cmp-try" data-i18n="c1x">DESCUBRÍS: QUÉ ES TERROIR</div></div>
+    <div class="cmp-card"><div class="cmp-icon">🔥</div><div class="cmp-title" data-i18n="c2t">Tueste vs Tueste</div><div class="cmp-desc" data-i18n="c2d">El mismo origen, tueste claro vs tueste oscuro. Entendés cuánto el tueste puede revelar o esconder el carácter del grano.</div><div class="cmp-try" data-i18n="c2x">DESCUBRÍS: QUÉ HACE EL TUESTE</div></div>
+    <div class="cmp-card"><div class="cmp-icon">💧</div><div class="cmp-title" data-i18n="c3t">Método vs Método</div><div class="cmp-desc" data-i18n="c3d">Mismo café, mismo tueste: un espresso, un filtrado y un cold brew. Tres mundos diferentes del mismo grano. Entendés qué significa "extracción".</div><div class="cmp-try" data-i18n="c3x">DESCUBRÍS: QUÉ HACE EL MÉTODO</div></div>
+  </div>
+</div>
+
+<div class="callout">
+  <div class="callout-label" data-i18n="cl">UNA ÚLTIMA COSA</div>
+  <p data-i18n="ct">El error más grande al empezar a catar café es buscar "la respuesta correcta". No hay respuestas correctas. <strong>Lo que vos percibís es válido.</strong> Si a vos te sabe a durazno y a tu amigo le sabe a caramelo, los dos tienen razón — porque la percepción del sabor es personal, influida por tu genética, tu memoria y tu experiencia. La cata no es un examen. Es una conversación con la taza. Lo único que necesitás es <strong>prestar atención y ser curioso</strong>. El café va a hacer el resto.</p>
+</div>
+
+</div>
+
+<!-- ══ KOREAN ══ -->
+<div class="lang-content" data-lang="ko" style="display:none;">
+
+<h2>매일 커피를 마신다. 하지만 맛을 본 적이 있는가?</h2>
+
+<p>대부분의 사람은 자동 모드로 커피를 마십니다. 한 모금, "맛있네" 또는 "별로네", 그리고 하루를 이어갑니다. 잘못된 것은 아니지만 — 그 잔 안에 대부분이 발견하지 못하는 세계가 숨어 있습니다.</p>
+
+<p>프로 커피 테이스터는 마법의 미각을 가진 것이 아닙니다. 더 단순한 것을 가지고 있습니다: <strong>방법</strong>. 이미 거기에 있는 것에 질서 있게 주의를 기울이는 방식. 좋은 소식은 시작하는 데 공식 교육도 비싼 장비도 필요 없다는 것입니다. 커피 한 잔, 코, 입, 그리고 5분의 호기심이면 됩니다.</p>
+
+<div class="sep"></div>
+
+<h2>필요한 것</h2>
+
+<div class="prep-block">
+  <div class="prep-label">준비물</div>
+  <div class="prep-grid">
+    <div class="prep-item"><div class="prep-icon">☕</div><div class="prep-name">커피 한 잔</div><div class="prep-detail">있는 커피 아무거나. 평소처럼 준비. 이 테스트에는 설탕이나 우유 없이.</div></div>
+    <div class="prep-item"><div class="prep-icon">🥄</div><div class="prep-name">숟가락 하나</div><div class="prep-detail">밥숟가락이든 뭐든. 커피를 시끄럽게 흡입하는 데 사용 (네, 필요합니다).</div></div>
+    <div class="prep-item"><div class="prep-icon">💧</div><div class="prep-name">물 한 잔</div><div class="prep-detail">모금 사이에 입을 헹구는 용도. 실온.</div></div>
+  </div>
+</div>
+
+<div class="sep"></div>
+
+<h2>커피의 네 감각</h2>
+
+<div class="sense-cards">
+  <div class="sc"><div class="sc-icon">👃</div><h5>향</h5><p>모금 전과 중에 코가 감지하는 것. "맛"이라고 부르는 것의 80%가 사실은 후각.</p></div>
+  <div class="sc"><div class="sc-icon">👅</div><h5>미각</h5><p>단 다섯 가지: 단맛, 신맛, 쓴맛, 짠맛, 감칠맛. 코 없이 혀가 감지하는 것.</p></div>
+  <div class="sc"><div class="sc-icon">🤲</div><h5>바디</h5><p>입안의 질감. 물 같은지, 주스 같은지, 우유 같은지, 크림 같은지? 그것이 바디.</p></div>
+  <div class="sc"><div class="sc-icon">⏳</div><h5>여운</h5><p>삼킨 후 남는 것. 빨리 사라지는지? 머무는지? 변하는지? 여운은 이야기를 들려준다.</p></div>
+</div>
+
+<div class="sep"></div>
+
+<h2>프로토콜: 단계별</h2>
+
+<p>SCA(스페셜티커피협회) 전문 커핑을 단순화한 프로토콜입니다. 천천히 하세요. 정답은 없습니다 — 당신이 인지하는 것이 전부입니다.</p>
+
+<div style="counter-reset:step-counter">
+
+<div class="step-card">
+  <h4>건조 향 맡기</h4>
+  <div class="step-time">30초</div>
+  <p>맛보기 전에 코를 잔에 가까이 대고 깊이 들이마시세요. 무엇이 느껴지나요? 기술적 단어를 찾지 말고 — <strong>연상</strong>을 찾으세요. 뭔가 떠오르나요? 초콜릿? 과일? 구운 빵? 꽃? 젖은 흙? 뭐든 좋습니다.</p>
+  <p>두세 번 반복하되, 흡입 사이에 몇 초 간격을 두세요. 코는 빨리 포화됩니다.</p>
+</div>
+
+<div class="step-card">
+  <h4>시끄럽게 흡입하기</h4>
+  <div class="step-time">1분</div>
+  <p>숟가락으로 커피를 조금 떠서 <strong>세게 소리 내며 흡입</strong>하세요. 예의 없는 게 아니라 — 기술입니다. 세게 흡입하면 커피가 미세한 안개로 입 전체를 덮고 코 뒤쪽(후비강)까지 도달합니다 — 가장 민감한 수용체가 있는 곳.</p>
+  <p>삼키기 전 2–3초간 커피가 입 전체를 덮게 하세요. 혀끝에서 무엇이 느껴지나요? 옆면은? 뒤쪽은?</p>
+</div>
+
+<div class="step-card">
+  <h4>산미 찾기</h4>
+  <div class="step-time">30초</div>
+  <p>커피의 산미는 식초의 산미가 아닙니다. <strong>풋사과</strong>, <strong>시트러스</strong>, <strong>화이트 와인</strong>의 산미에 더 가깝습니다. 혀 옆면에서 느껴지고 침이 고이게 합니다. 있나요? 부드러운가요 밝은가요? 좋은가요 거슬리나요?</p>
+  <p>산미 없는 커피는 "밋밋"하게 느껴집니다. 좋은 산미가 있는 커피는 "살아있다"고 느껴집니다.</p>
+</div>
+
+<div class="step-card">
+  <h4>바디 느끼기</h4>
+  <div class="step-time">30초</div>
+  <p>이번에는 맛을 무시하고 <strong>질감</strong>에만 집중하세요. 물처럼 가벼운가요? 사과주스 같은가요? 우유 같은가요? 크림 같은가요? 맛의 강도와는 다릅니다 — 입에서 느끼는 무게입니다.</p>
+</div>
+
+<div class="step-card">
+  <h4>여운 듣기</h4>
+  <div class="step-time">1분</div>
+  <p>삼키세요. 그리고 기다리세요. <strong>뭐가 남나요?</strong> 좋은 커피는 진화하는 여운을 가집니다 — 처음에는 한 가지, 그다음에는 다른 것. 달콤하게 시작해서 다크초콜릿 터치로 끝날 수도. 깔끔하게 흔적 없이 사라질 수도.</p>
+  <p>길고 쾌적한 여운은 품질의 표시입니다. 입에 달라붙는 쓴 여운은 과추출이나 과도한 다크 로스트의 표시입니다.</p>
+</div>
+
+<div class="step-card">
+  <h4>식은 후 반복</h4>
+  <div class="step-time">5분 후</div>
+  <p>프로 테이스터의 비밀 트릭: <strong>커피는 식으면 변합니다</strong>. 높은 온도에서는 바디를 더, 향미 복합성을 덜 인지합니다. 온도가 내려가면 숨어 있던 노트가 나타납니다 — 과일, 꽃, 더 선명한 산미.</p>
+  <p>좋은 커피는 <strong>식으면 좋아집니다</strong>. 나쁜 커피는 식으면 나빠집니다(더 쓰고 불쾌해짐). 가장 단순하고 드러내는 품질 테스트 중 하나입니다.</p>
+</div>
+
+</div>
+
+<div class="sep"></div>
+
+<h2>어휘: 어떤 단어를 쓸까</h2>
+
+<div class="wheel-block">
+  <div class="wh-label">맛 가족 (단순화)</div>
+  <div class="wh-grid">
+    <div class="wh-cat wh-fruity"><h5>과일</h5><p>베리(블루베리, 라즈베리), 시트러스(레몬, 오렌지, 자몽), 석과(복숭아, 살구), 열대(패션프루트, 망고).</p><div class="wh-ref">어디서 찾을까? 아프리카 커피(에티오피아, 케냐), 내추럴 가공.</div></div>
+    <div class="wh-cat wh-sweet"><h5>달콤함</h5><p>캐러멜, 꿀, 흑설탕, 당밀, 판넬라, 메이플 시럽.</p><div class="wh-ref">어디서 찾을까? 중남미 커피, 허니 가공.</div></div>
+    <div class="wh-cat wh-floral"><h5>꽃향</h5><p>자스민, 장미, 라벤더, 오렌지 블로섬. 섬세하고 휘발성.</p><div class="wh-ref">어디서 찾을까? 고산지 워시드 커피, 게이샤, 예가체프.</div></div>
+    <div class="wh-cat wh-nutty"><h5>견과류</h5><p>아몬드, 헤이즐넛, 피넛, 호두. 부드럽고 편안한.</p><div class="wh-ref">어디서 찾을까? 브라질, 콜롬비아, 미디엄 로스트.</div></div>
+    <div class="wh-cat wh-choco"><h5>초콜릿</h5><p>카카오, 밀크초콜릿, 다크초콜릿, 브라우니, 트러플.</p><div class="wh-ref">어디서 찾을까? 미디엄~미디엄다크 로스트, 과테말라, 브라질.</div></div>
+    <div class="wh-cat wh-other"><h5>스파이스 & 허브</h5><p>시나몬, 클로브, 후추, 카다멈, 담배, 시더, 젖은 흙.</p><div class="wh-ref">어디서 찾을까? 수마트라, 인도, 내추럴, 다크 로스트.</div></div>
+  </div>
+</div>
+
+<div class="sep"></div>
+
+<h2>커핑 시트</h2>
+
+<div class="tasting-sheet">
+  <div class="ts-label">간이 커핑 시트</div>
+  <div class="ts-row"><div class="ts-attr">향</div><div class="ts-guide"><strong>어떤 냄새인가?</strong> 떠오르는 첫 연상을 적으세요. 너무 생각하지 말고.</div></div>
+  <div class="ts-row"><div class="ts-attr">산미</div><div class="ts-guide"><strong>있는가? 어떤 산미인가?</strong> 낮음/보통/높음. 쾌적한(시트러스 같은)가 불쾌한(식초 같은)가? <div class="ts-scale"><span class="ts-dot">1</span><span class="ts-dot">2</span><span class="ts-dot">3</span><span class="ts-dot">4</span><span class="ts-dot">5</span></div></div></div>
+  <div class="ts-row"><div class="ts-attr">단맛</div><div class="ts-guide"><strong>자연 단맛이 있는가?</strong> 설탕이 아닌 — 커피 자체의 단맛. 신 딸기와 익은 딸기의 차이. <div class="ts-scale"><span class="ts-dot">1</span><span class="ts-dot">2</span><span class="ts-dot">3</span><span class="ts-dot">4</span><span class="ts-dot">5</span></div></div></div>
+  <div class="ts-row"><div class="ts-attr">바디</div><div class="ts-guide"><strong>어떤 질감인가?</strong> 물/주스/우유/크림. <div class="ts-scale"><span class="ts-dot">1</span><span class="ts-dot">2</span><span class="ts-dot">3</span><span class="ts-dot">4</span><span class="ts-dot">5</span></div></div></div>
+  <div class="ts-row"><div class="ts-attr">맛</div><div class="ts-guide"><strong>어떤 구체적 노트가 있는가?</strong> 위의 맛 가족을 가이드로. 과일? 초콜릿? 꽃향? 견과류? 떠오르는 것 전부 적으세요.</div></div>
+  <div class="ts-row"><div class="ts-attr">여운</div><div class="ts-guide"><strong>삼킨 후 뭐가 남는가?</strong> 짧음/보통/길음. 쾌적한가? 진화하는가?</div></div>
+  <div class="ts-row"><div class="ts-attr">전체</div><div class="ts-guide"><strong>마음에 드는가?</strong> 기술적 평가가 아니라 — 느낌으로. 다시 마시겠는가? 추천하겠는가?</div></div>
+</div>
+
+<div class="sep"></div>
+
+<h2>이번 주 연습</h2>
+
+<div class="exercise">
+  <div class="ex-label">연습 1 — 오늘</div>
+  <h4>눈 감고 마시는 커피</h4>
+  <p>평소처럼 커피를 준비하세요. 눈을 감으세요. 향을 맡으세요. 흡입하세요. 전에 못 느꼈던 것이 느껴지나요? 눈이 감기면 코와 입이 깨어납니다. 내일 아침 커피로 해보세요 — 한 번만, 1분만. 새로운 것을 알아차리기 시작하기에 충분합니다.</p>
+</div>
+
+<div class="exercise">
+  <div class="ex-label">연습 2 — 내일</div>
+  <h4>온도 테스트</h4>
+  <p>커피를 내려서 세 가지 온도에서 맛보세요: 뜨거울 때(바로), 미지근할 때(5분 후), 거의 식었을 때(10–15분 후). 변하나요? 좋은 커피라면 <strong>식으면서 새 노트가 나타납니다</strong>. 낮은 품질이면 점점 더 쓰고 불쾌해집니다.</p>
+</div>
+
+<div class="exercise">
+  <div class="ex-label">연습 3 — 이번 주말</div>
+  <h4>직접 비교</h4>
+  <p>다른 커피 두 가지를 구하세요. 다른 브랜드든, 다른 산지든, 다른 로스트든 — 뭐든 좋지만 달라야 합니다. 같은 방법으로 동시에 준비. 하나 맛보고, 물 마시고, 다른 것 맛보기. 세 번 왕복. 하나만 맛볼 때는 모르는 차이가 비교하면 분명해집니다.</p>
+  <div class="ex-grid">
+    <div class="ex-option"><h5>옵션 A</h5><p>같은 커피, 라이트 로스트 vs 다크 로스트</p></div>
+    <div class="ex-option"><h5>옵션 B</h5><p>아프리카 커피 vs 남미 커피</p></div>
+  </div>
+</div>
+
+<div class="sep"></div>
+
+<h2>관점을 바꾸는 세 가지 비교</h2>
+
+<div class="compare-block">
+  <div class="cmp-label">드러내는 비교</div>
+  <div class="cmp-grid">
+    <div class="cmp-card"><div class="cmp-icon">🌍</div><div class="cmp-title">산지 vs 산지</div><div class="cmp-desc">에티오피아 vs 브라질. 가장 극적인 대비: 과일/꽃향 vs 견과/초콜릿. "커피의 테루아"가 무엇인지 즉시 이해.</div><div class="cmp-try">발견: 테루아란 무엇인가</div></div>
+    <div class="cmp-card"><div class="cmp-icon">🔥</div><div class="cmp-title">로스트 vs 로스트</div><div class="cmp-desc">같은 산지, 라이트 vs 다크. 로스팅이 원두의 캐릭터를 얼마나 드러내거나 숨기는지 이해.</div><div class="cmp-try">발견: 로스팅이 하는 일</div></div>
+    <div class="cmp-card"><div class="cmp-icon">💧</div><div class="cmp-title">방법 vs 방법</div><div class="cmp-desc">같은 커피, 같은 로스트: 에스프레소, 핸드드립, 콜드브루. 같은 원두의 세 가지 세계.</div><div class="cmp-try">발견: 추출이란 무엇인가</div></div>
+  </div>
+</div>
+
+<div class="callout">
+  <div class="callout-label">마지막으로</div>
+  <p>커피 맛보기를 시작할 때 가장 큰 실수는 "정답"을 찾는 것입니다. 정답은 없습니다. <strong>당신이 인지하는 것이 유효합니다.</strong> 당신에게 복숭아 맛이고 친구에게 캐러멜 맛이라면, 둘 다 맞습니다 — 맛의 인지는 유전자, 기억, 경험에 의해 영향받는 개인적인 것이니까요. 커핑은 시험이 아닙니다. 잔과의 대화입니다. 필요한 것은 <strong>주의를 기울이고 호기심을 갖는 것</strong>뿐. 커피가 나머지를 해줄 겁니다.</p>
+</div>
+
+</div>
+
+<!-- ══ ENGLISH ══ -->
+<div class="lang-content" data-lang="en" style="display:none;">
+
+<h2>You drink coffee every day. But do you taste it?</h2>
+
+<p>Most of us drink coffee on autopilot. A sip, "it's good" or "it's bad," and on with the day. Nothing wrong with that — but there's an entire world hidden in that cup most people never discover.</p>
+
+<p>Professional coffee tasters don't have magic taste buds. They have something simpler: <strong>a method</strong>. An orderly way to pay attention to what's already there. You need a cup of coffee, your nose, your mouth, and five minutes of curiosity.</p>
+
+<div class="sep"></div>
+
+<h2>What you'll need</h2>
+
+<div class="prep-block">
+  <div class="prep-label">PREPARATION</div>
+  <div class="prep-grid">
+    <div class="prep-item"><div class="prep-icon">☕</div><div class="prep-name">One cup of coffee</div><div class="prep-detail">Any coffee you have. Prepared as usual. No sugar or milk for this test.</div></div>
+    <div class="prep-item"><div class="prep-icon">🥄</div><div class="prep-name">A spoon</div><div class="prep-detail">Any kind. For slurping the coffee loudly (yes, it's necessary).</div></div>
+    <div class="prep-item"><div class="prep-icon">💧</div><div class="prep-name">A glass of water</div><div class="prep-detail">To cleanse your palate between sips. Room temperature.</div></div>
+  </div>
+</div>
+
+<div class="sep"></div>
+
+<h2>The four senses of coffee</h2>
+
+<div class="sense-cards">
+  <div class="sc"><div class="sc-icon">👃</div><h5>Aroma</h5><p>What your nose detects before and during the sip. 80% of what we call "flavor" is actually smell.</p></div>
+  <div class="sc"><div class="sc-icon">👅</div><h5>Taste</h5><p>Only five: sweet, sour, bitter, salty, umami. What the tongue detects without the nose.</p></div>
+  <div class="sc"><div class="sc-icon">🤲</div><h5>Body</h5><p>The texture in the mouth. Does it feel like water, juice, milk, or cream? That's body.</p></div>
+  <div class="sc"><div class="sc-icon">⏳</div><h5>Finish</h5><p>What remains after swallowing. Does it vanish? Linger? Change? The finish tells a story.</p></div>
+</div>
+
+<div class="sep"></div>
+
+<h2>The protocol: step by step</h2>
+
+<div style="counter-reset:step-counter">
+
+<div class="step-card">
+  <h4>Smell it dry</h4>
+  <div class="step-time">30 SECONDS</div>
+  <p>Before tasting, bring your nose to the cup and breathe deep. What do you feel? Don't look for technical words — look for <strong>associations</strong>. Does it remind you of something? Chocolate? Fruit? Toast? Flowers? Wet earth? Anything goes.</p>
+</div>
+
+<div class="step-card">
+  <h4>Slurp loudly</h4>
+  <div class="step-time">1 MINUTE</div>
+  <p>With the spoon, take some coffee and <strong>slurp it hard</strong>, making noise. Not bad manners — it's technique. Slurping atomizes the coffee into a fine mist covering your entire mouth and reaching the retronasal passage, where the most sensitive receptors live.</p>
+  <p>Let the coffee cover your whole mouth for 2–3 seconds before swallowing.</p>
+</div>
+
+<div class="step-card">
+  <h4>Find the acidity</h4>
+  <div class="step-time">30 SECONDS</div>
+  <p>Coffee acidity isn't vinegar acidity. It's closer to a <strong>green apple</strong>, <strong>citrus</strong>, or <strong>white wine</strong>. You feel it on the sides of the tongue. It makes you salivate. Is it present? Gentle or bright? Coffee without acidity feels "flat." Coffee with good acidity feels "alive."</p>
+</div>
+
+<div class="step-card">
+  <h4>Feel the body</h4>
+  <div class="step-time">30 SECONDS</div>
+  <p>Now ignore flavor and focus only on <strong>texture</strong>. Does the coffee feel light like water? Like apple juice? Like milk? Like cream? That's body — not flavor intensity, but weight in the mouth.</p>
+</div>
+
+<div class="step-card">
+  <h4>Listen to the finish</h4>
+  <div class="step-time">1 MINUTE</div>
+  <p>Swallow. Wait. <strong>What remains?</strong> A good coffee has a finish that evolves. A long, pleasant finish signals quality. A bitter finish that clings signals over-extraction or excessive dark roast.</p>
+</div>
+
+<div class="step-card">
+  <h4>Repeat when cooled</h4>
+  <div class="step-time">5 MINUTES LATER</div>
+  <p>The secret trick: <strong>coffee changes as it cools</strong>. As temperature drops, hidden notes appear — fruits, flowers, more defined acidity. Good coffee <strong>improves when cooling</strong>. Bad coffee gets worse. One of the simplest and most revealing quality tests.</p>
+</div>
+
+</div>
+
+<div class="sep"></div>
+
+<h2>The vocabulary</h2>
+
+<div class="wheel-block">
+  <div class="wh-label">FLAVOR FAMILIES (SIMPLIFIED)</div>
+  <div class="wh-grid">
+    <div class="wh-cat wh-fruity"><h5>Fruity</h5><p>Berry (blueberry, raspberry), citrus (lemon, orange, grapefruit), stone fruit (peach, apricot), tropical (passion fruit, mango).</p><div class="wh-ref">Where? African coffees, natural process.</div></div>
+    <div class="wh-cat wh-sweet"><h5>Sweet</h5><p>Caramel, honey, brown sugar, molasses, maple syrup.</p><div class="wh-ref">Where? Central/South American coffees, honey process.</div></div>
+    <div class="wh-cat wh-floral"><h5>Floral</h5><p>Jasmine, rose, lavender, orange blossom. Delicate and volatile.</p><div class="wh-ref">Where? High-altitude washed coffees, Geisha, Yirgacheffe.</div></div>
+    <div class="wh-cat wh-nutty"><h5>Nutty</h5><p>Almond, hazelnut, peanut, walnut. Gentle and comforting.</p><div class="wh-ref">Where? Brazilian, Colombian, medium roasts.</div></div>
+    <div class="wh-cat wh-choco"><h5>Chocolate</h5><p>Cacao, milk chocolate, dark chocolate, brownie, truffle.</p><div class="wh-ref">Where? Medium and medium-dark roasts, Guatemala, Brazil.</div></div>
+    <div class="wh-cat wh-other"><h5>Spice & Herbal</h5><p>Cinnamon, clove, pepper, cardamom, tobacco, cedar, wet earth.</p><div class="wh-ref">Where? Sumatra, India, natural process, dark roasts.</div></div>
+  </div>
+</div>
+
+<div class="sep"></div>
+
+<h2>Your tasting sheet</h2>
+
+<div class="tasting-sheet">
+  <div class="ts-label">SIMPLIFIED TASTING SHEET</div>
+  <div class="ts-row"><div class="ts-attr">Aroma</div><div class="ts-guide"><strong>What does it smell like?</strong> Write the first association. Don't overthink.</div></div>
+  <div class="ts-row"><div class="ts-attr">Acidity</div><div class="ts-guide"><strong>Present? What kind?</strong> Low/Medium/High. Pleasant (citric) or harsh (vinegary)? <div class="ts-scale"><span class="ts-dot">1</span><span class="ts-dot">2</span><span class="ts-dot">3</span><span class="ts-dot">4</span><span class="ts-dot">5</span></div></div></div>
+  <div class="ts-row"><div class="ts-attr">Sweetness</div><div class="ts-guide"><strong>Natural sweetness present?</strong> Not sugar — the coffee's inherent sweetness. <div class="ts-scale"><span class="ts-dot">1</span><span class="ts-dot">2</span><span class="ts-dot">3</span><span class="ts-dot">4</span><span class="ts-dot">5</span></div></div></div>
+  <div class="ts-row"><div class="ts-attr">Body</div><div class="ts-guide"><strong>What texture?</strong> Water / Juice / Milk / Cream. <div class="ts-scale"><span class="ts-dot">1</span><span class="ts-dot">2</span><span class="ts-dot">3</span><span class="ts-dot">4</span><span class="ts-dot">5</span></div></div></div>
+  <div class="ts-row"><div class="ts-attr">Flavor</div><div class="ts-guide"><strong>Specific notes?</strong> Use flavor families above. Write everything that comes.</div></div>
+  <div class="ts-row"><div class="ts-attr">Finish</div><div class="ts-guide"><strong>What remains?</strong> Short/Medium/Long. Pleasant? Evolving?</div></div>
+  <div class="ts-row"><div class="ts-attr">Overall</div><div class="ts-guide"><strong>Do you like it?</strong> Not technical — as a feeling. Would you drink it again?</div></div>
+</div>
+
+<div class="sep"></div>
+
+<h2>Exercises for this week</h2>
+
+<div class="exercise">
+  <div class="ex-label">EXERCISE 1 — TODAY</div>
+  <h4>Coffee with eyes closed</h4>
+  <p>Make your coffee as always. Close your eyes. Smell it. Slurp it. What do you notice that you hadn't before? When eyes close, nose and mouth wake up. Try it tomorrow morning — just once, one minute. Enough to start noticing new things.</p>
+</div>
+
+<div class="exercise">
+  <div class="ex-label">EXERCISE 2 — TOMORROW</div>
+  <h4>The temperature test</h4>
+  <p>Make a coffee and taste at three temperatures: hot (just made), warm (5 min later), almost cold (10–15 min later). Does it change? Good coffee <strong>reveals new notes when cooling</strong>. Bad coffee gets increasingly bitter.</p>
+</div>
+
+<div class="exercise">
+  <div class="ex-label">EXERCISE 3 — THIS WEEKEND</div>
+  <h4>Direct comparison</h4>
+  <p>Get two different coffees. Brew both the same way, same time. Taste one, water, taste the other. Back and forth three times. Differences invisible when tasting alone become obvious when comparing.</p>
+  <div class="ex-grid">
+    <div class="ex-option"><h5>Option A</h5><p>Same coffee, light vs dark roast</p></div>
+    <div class="ex-option"><h5>Option B</h5><p>African coffee vs South American coffee</p></div>
+  </div>
+</div>
+
+<div class="sep"></div>
+
+<h2>Three comparisons that change perspective</h2>
+
+<div class="compare-block">
+  <div class="cmp-label">REVEALING COMPARISONS</div>
+  <div class="cmp-grid">
+    <div class="cmp-card"><div class="cmp-icon">🌍</div><div class="cmp-title">Origin vs Origin</div><div class="cmp-desc">Ethiopian vs Brazilian. Most dramatic contrast: fruity/floral vs nut/chocolate. Instantly understand "terroir" in coffee.</div><div class="cmp-try">DISCOVER: WHAT IS TERROIR</div></div>
+    <div class="cmp-card"><div class="cmp-icon">🔥</div><div class="cmp-title">Roast vs Roast</div><div class="cmp-desc">Same origin, light vs dark. Understand how much roasting reveals or hides bean character.</div><div class="cmp-try">DISCOVER: WHAT ROASTING DOES</div></div>
+    <div class="cmp-card"><div class="cmp-icon">💧</div><div class="cmp-title">Method vs Method</div><div class="cmp-desc">Same coffee, same roast: espresso, pour-over, cold brew. Three worlds from one bean.</div><div class="cmp-try">DISCOVER: WHAT EXTRACTION DOES</div></div>
+  </div>
+</div>
+
+<div class="callout">
+  <div class="callout-label">ONE LAST THING</div>
+  <p>The biggest mistake when starting to taste coffee is looking for "the right answer." There are no right answers. <strong>What you perceive is valid.</strong> If it tastes like peach to you and caramel to your friend, you're both right — because flavor perception is personal. Tasting isn't an exam. It's a conversation with the cup. All you need is <strong>to pay attention and be curious</strong>. The coffee will do the rest.</p>
+</div>
+
+</div>
+
+</article>
+<div class="author-card"><div class="author-avatar"><span>H</span></div><div class="author-info"><h4>HARA Coffee Lab</h4><p data-i18n="ab">Ciencia, precisión y pasión por el café de especialidad. Salta, Argentina.</p></div></div>
+<footer><div class="footer-brand">© 2026 HARA COFFEE LAB · SALTA, ARGENTINA · CADA GOTA CUENTA</div></footer>
+<script>
+let currentLang='es';
+const ui={es:{ho:'HARA COFFEE LAB',ht:'Cómo probar café<br>(de verdad)',hs:'No necesitás ser barista. Solo necesitás prestar atención. Una guía práctica para empezar a escuchar lo que tu café te dice.',hb:'PRÁCTICA',hr:'8 min lectura',ab:'Ciencia, precisión y pasión por el café de especialidad. Salta, Argentina.'},ko:{ho:'HARA COFFEE LAB',ht:'커피 맛보는 법<br>(제대로)',hs:'바리스타일 필요 없습니다. 주의를 기울이면 됩니다. 커피가 하는 말을 듣기 시작하는 실전 가이드.',hb:'실전',hr:'8분 소요',ab:'과학, 정밀함, 그리고 스페셜티 커피에 대한 열정. 아르헨티나 살타.'},en:{ho:'HARA COFFEE LAB',ht:'How to taste coffee<br>(for real)',hs:"You don't need to be a barista. You just need to pay attention. A practical guide to start listening to what your coffee tells you.",hb:'PRACTICE',hr:'8 min read',ab:'Science, precision, and passion for specialty coffee. Salta, Argentina.'}};
+function switchLang(l){currentLang=l;document.documentElement.lang=l==='ko'?'ko':l==='en'?'en':'es';document.querySelectorAll('[data-i18n]').forEach(e=>{const k=e.dataset.i18n;if(ui[l]&&ui[l][k])e.innerHTML=ui[l][k]});document.querySelectorAll('.lang-content').forEach(e=>{e.style.display=e.dataset.lang===l?'block':'none'});document.querySelectorAll('.lang-btn').forEach(b=>b.classList.toggle('active',b.dataset.lang===l))}
+document.querySelectorAll('.lang-btn').forEach(b=>{b.addEventListener('click',()=>switchLang(b.dataset.lang))});
+window.addEventListener('scroll',()=>{const d=document.documentElement;document.getElementById('progressBar').style.width=(d.scrollTop/(d.scrollHeight-d.clientHeight))*100+'%';document.getElementById('mainNav').classList.toggle('scrolled',d.scrollTop>60)});
+</script>
+</body>
+</html>

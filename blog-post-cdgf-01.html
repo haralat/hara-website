@@ -1,0 +1,965 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HARA Blog — Temperatura, Presión, Tiempo: el espacio de extracción del café</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Noto+Sans+KR:wght@200;300;400;500;600&family=Noto+Sans:wght@200;300;400;500;600&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+:root{--espresso:#1a1210;--crema:#d4a574;--cream:#f5efe6;--warm-white:#faf8f4;--roast-dark:#2c1f1a;--roast-mid:#6b4226;--copper:#b87333;--sage:#8a9a7b;--water-blue:#7ba0b8;--ice-blue:#a8c8d8;--hot-red:#c45d3e;--cold-blue:#4a7a9b;--pressure-gold:#c9a84c;--text-primary:#1a1210;--text-secondary:#6b5b50;--text-light:#a09080;--border-light:rgba(212,165,116,.15)}
+*{margin:0;padding:0;box-sizing:border-box}html{scroll-behavior:smooth;font-size:16px}
+body{background:var(--warm-white);color:var(--text-primary);font-family:'Noto Sans','Noto Sans KR',sans-serif;font-weight:300;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:var(--warm-white)}::-webkit-scrollbar-thumb{background:var(--crema);border-radius:3px}
+nav{position:fixed;top:0;left:0;right:0;z-index:200;padding:1.2rem 3rem;display:flex;justify-content:space-between;align-items:center;transition:all .5s ease}
+nav.scrolled{background:rgba(250,248,244,.92);backdrop-filter:blur(24px);padding:.9rem 3rem;box-shadow:0 1px 0 rgba(26,18,16,.06)}
+.nav-left{display:flex;align-items:center;gap:2.5rem}
+.nav-logo{font-family:'Cormorant Garamond',serif;font-weight:500;letter-spacing:.15em;color:var(--text-primary);text-decoration:none;font-size:1.3rem;line-height:1}
+.nav-logo small{display:block;font-weight:300;font-size:.55rem;letter-spacing:.3em;color:var(--text-secondary);margin-top:2px}
+.nav-back{font-size:.72rem;font-weight:400;letter-spacing:.08em;color:var(--text-secondary);text-decoration:none;display:flex;align-items:center;gap:.4rem;transition:color .3s}
+.nav-back:hover{color:var(--espresso)}
+.lang-switcher{display:flex;border:1px solid var(--border-light);border-radius:6px;overflow:hidden}
+.lang-btn{font-family:'JetBrains Mono',monospace;font-size:.6rem;letter-spacing:.1em;padding:.4rem .65rem;border:none;background:transparent;color:var(--text-light);cursor:pointer;transition:all .3s}
+.lang-btn:not(:last-child){border-right:1px solid var(--border-light)}
+.lang-btn.active{background:var(--espresso);color:var(--cream)}
+.lang-btn:hover:not(.active){background:rgba(212,165,116,.08);color:var(--roast-mid)}
+.progress-bar{position:fixed;top:0;left:0;height:2px;z-index:300;width:0%;background:linear-gradient(to right,var(--cold-blue),var(--crema),var(--hot-red));transition:width .1s linear}
+
+/* HERO */
+.post-hero{height:85vh;min-height:550px;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;background:var(--espresso)}
+.post-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 25% 60%,rgba(74,122,155,.12),transparent 55%),radial-gradient(ellipse at 75% 40%,rgba(196,93,62,.1),transparent 55%),radial-gradient(ellipse at 50% 80%,rgba(201,168,76,.06),transparent 50%)}
+.hero-grid-bg{position:absolute;inset:0;overflow:hidden;opacity:.04}
+.hero-grid-bg .gl{position:absolute;background:white}
+.hero-content{position:relative;z-index:2;text-align:center;padding:2rem;max-width:800px}
+.hero-overline{font-family:'JetBrains Mono',monospace;font-size:.55rem;letter-spacing:.5em;margin-bottom:2rem;opacity:0;animation:fadeUp .8s ease .3s forwards}
+.hero-overline .series-tag{color:var(--crema);border:1px solid rgba(212,165,116,.3);padding:.25rem .6rem;border-radius:4px;margin-right:.8rem}
+.hero-overline .series-num{color:rgba(245,239,230,.35)}
+.hero-title{font-family:'Cormorant Garamond',serif;font-size:clamp(2.4rem,5.5vw,4.5rem);font-weight:300;line-height:1.1;color:var(--cream);margin-bottom:1.5rem;opacity:0;animation:fadeUp 1s ease .5s forwards}
+.hero-title .v-temp{color:var(--hot-red);font-style:italic}
+.hero-title .v-press{color:var(--pressure-gold);font-style:italic}
+.hero-title .v-time{color:var(--ice-blue);font-style:italic}
+.hero-sub{font-size:1rem;line-height:1.8;color:rgba(245,239,230,.55);max-width:540px;margin:0 auto;opacity:0;animation:fadeUp .8s ease .8s forwards}
+.hero-meta{margin-top:2.5rem;display:flex;justify-content:center;align-items:center;gap:1.5rem;opacity:0;animation:fadeUp .8s ease 1s forwards}
+.hero-badge{font-family:'JetBrains Mono',monospace;font-size:.55rem;letter-spacing:.2em;padding:.35rem .8rem;border-radius:4px;background:rgba(123,160,184,.15);color:var(--water-blue)}
+.hero-date,.hero-read{font-family:'JetBrains Mono',monospace;font-size:.6rem;color:rgba(245,239,230,.35);letter-spacing:.1em}
+
+.hero-axes{position:absolute;bottom:3.5rem;left:50%;transform:translateX(-50%);display:flex;gap:2.5rem;opacity:0;animation:fadeUp .8s ease 1.2s forwards}
+.hero-axis{display:flex;flex-direction:column;align-items:center;gap:.3rem}
+.hero-axis .ax-icon{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.8rem}
+.ax-t{border:1px solid rgba(196,93,62,.3);color:var(--hot-red)}
+.ax-p{border:1px solid rgba(201,168,76,.3);color:var(--pressure-gold)}
+.ax-ti{border:1px solid rgba(74,122,155,.3);color:var(--ice-blue)}
+.hero-axis .ax-label{font-family:'JetBrains Mono',monospace;font-size:.5rem;letter-spacing:.15em;color:rgba(245,239,230,.25)}
+
+/* ARTICLE */
+.article-body{max-width:720px;margin:0 auto;padding:5rem 2rem 4rem}
+.article-body h2{font-family:'Cormorant Garamond',serif;font-size:1.9rem;font-weight:400;color:var(--espresso);margin:4rem 0 1.2rem;line-height:1.25}
+.article-body h2:first-child{margin-top:0}
+.article-body h3{font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:500;color:var(--roast-mid);margin:2.5rem 0 .8rem}
+.article-body p{font-size:.92rem;line-height:2.05;color:var(--text-secondary);margin-bottom:1.3rem}
+.article-body p strong{color:var(--text-primary);font-weight:500}
+.article-body p em.t{font-style:italic;color:var(--copper);font-family:'Cormorant Garamond',serif;font-size:1.02em}
+.sep{width:50px;height:1px;background:linear-gradient(to right,var(--cold-blue),var(--crema),var(--hot-red));margin:3.5rem auto;opacity:.5}
+
+/* SERIES NAV */
+.series-nav{margin:3rem -2rem;padding:2rem 2.5rem;background:rgba(212,165,116,.04);border:1px solid var(--border-light);border-radius:16px;display:flex;align-items:center;gap:1.5rem}
+.sn-badge{font-family:'JetBrains Mono',monospace;font-size:.5rem;letter-spacing:.2em;color:var(--crema);background:var(--espresso);padding:.4rem .8rem;border-radius:5px;white-space:nowrap}
+.sn-steps{display:flex;gap:.5rem;align-items:center;flex-wrap:wrap}
+.sn-step{font-size:.7rem;padding:.35rem .7rem;border-radius:5px;border:1px solid var(--border-light);color:var(--text-light);text-decoration:none;transition:all .3s}
+.sn-step.active{background:var(--espresso);color:var(--cream);border-color:var(--espresso)}
+.sn-step:not(.active):hover{border-color:var(--crema);color:var(--text-primary)}
+.sn-arrow{color:var(--text-light);font-size:.6rem}
+
+/* VARIABLE TABLE */
+.var-table{margin:3rem -2rem;border-radius:20px;overflow:hidden;border:1px solid var(--border-light)}
+.vt-header{background:var(--espresso);padding:1.5rem 2rem;color:var(--cream)}
+.vt-label{font-family:'JetBrains Mono',monospace;font-size:.55rem;letter-spacing:.3em;color:var(--crema)}
+.vt-body{background:white}
+.vt-row{display:grid;grid-template-columns:130px 1fr 1fr 1fr 1fr;align-items:center;border-bottom:1px solid var(--border-light);font-size:.75rem}
+.vt-row:last-child{border-bottom:none}
+.vt-row.vt-head{background:rgba(212,165,116,.04)}
+.vt-row.vt-head .vt-cell{font-family:'JetBrains Mono',monospace;font-size:.55rem;letter-spacing:.1em;color:var(--text-light);font-weight:400}
+.vt-cell{padding:1rem 1.2rem;color:var(--text-secondary)}
+.vt-cell:first-child{font-weight:400;color:var(--text-primary)}
+.vt-cell.vt-highlight{background:rgba(212,165,116,.04);font-weight:400;color:var(--copper)}
+
+/* METHOD CARDS */
+.method-grid{margin:3rem -2rem;display:grid;grid-template-columns:1fr 1fr;gap:0}
+.method-card{padding:2.5rem;position:relative}
+.mc-hot{background:linear-gradient(135deg,#1e1412,#2a1c18);color:var(--cream)}
+.mc-cold{background:linear-gradient(135deg,#121a22,#182530);color:var(--cream)}
+.mc-espresso{background:linear-gradient(135deg,#1a1815,#2a2520);color:var(--cream)}
+.mc-pour{background:linear-gradient(135deg,#151a15,#202a20);color:var(--cream)}
+.mc-label{font-family:'JetBrains Mono',monospace;font-size:.5rem;letter-spacing:.3em;margin-bottom:1.2rem;display:flex;align-items:center;gap:.5rem}
+.mc-hot .mc-label{color:var(--hot-red)}
+.mc-cold .mc-label{color:var(--ice-blue)}
+.mc-espresso .mc-label{color:var(--pressure-gold)}
+.mc-pour .mc-label{color:var(--sage)}
+.method-card h4{font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:400;margin-bottom:.8rem}
+.method-card p{font-size:.78rem;line-height:1.8;color:rgba(245,239,230,.5);margin-bottom:.6rem}
+.method-card p:last-of-type{margin-bottom:0}
+.method-card p strong{color:rgba(245,239,230,.8)}
+.mc-params{margin-top:1rem;display:flex;gap:.6rem;flex-wrap:wrap}
+.mc-param{font-family:'JetBrains Mono',monospace;font-size:.55rem;padding:.25rem .55rem;border-radius:4px;letter-spacing:.05em}
+.param-t{background:rgba(196,93,62,.15);color:var(--hot-red)}
+.param-t-cold{background:rgba(74,122,155,.15);color:var(--ice-blue)}
+.param-p{background:rgba(201,168,76,.15);color:var(--pressure-gold)}
+.param-ti{background:rgba(168,200,216,.15);color:var(--ice-blue)}
+.param-ti-short{background:rgba(196,93,62,.15);color:var(--hot-red)}
+
+/* EXTRACTION SPACE */
+.extraction-space{margin:3rem -2rem;padding:3rem 2.5rem;background:var(--espresso);border-radius:20px;color:var(--cream);position:relative;overflow:hidden}
+.extraction-space::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 50%,rgba(212,165,116,.06),transparent 60%)}
+.es-inner{position:relative;z-index:1}
+.es-label{font-family:'JetBrains Mono',monospace;font-size:.55rem;letter-spacing:.3em;color:var(--crema);margin-bottom:2rem}
+
+.es-map{display:grid;grid-template-columns:100px 1fr;gap:0;margin:1.5rem 0}
+.es-y-axis{display:flex;flex-direction:column;justify-content:space-between;align-items:flex-end;padding-right:1rem}
+.es-y-label{font-family:'JetBrains Mono',monospace;font-size:.55rem;color:rgba(245,239,230,.3)}
+.es-grid{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:3px;border-radius:12px;overflow:hidden}
+.es-quadrant{padding:1.5rem;position:relative;display:flex;flex-direction:column;justify-content:center;min-height:120px}
+.eq-tl{background:rgba(196,93,62,.12)}
+.eq-tr{background:rgba(201,168,76,.15)}
+.eq-bl{background:rgba(138,154,123,.1)}
+.eq-br{background:rgba(74,122,155,.12)}
+.es-quadrant .eq-name{font-family:'Cormorant Garamond',serif;font-size:1.05rem;font-weight:500;margin-bottom:.2rem}
+.es-quadrant .eq-vars{font-family:'JetBrains Mono',monospace;font-size:.5rem;letter-spacing:.08em;margin-bottom:.4rem;opacity:.6}
+.es-quadrant .eq-flavor{font-size:.68rem;color:rgba(245,239,230,.45);line-height:1.5}
+.es-x-row{display:grid;grid-template-columns:100px 1fr;gap:0;margin-top:.8rem}
+.es-x-spacer{} 
+.es-x-labels{display:flex;justify-content:space-between}
+.es-x-label{font-family:'JetBrains Mono',monospace;font-size:.55rem;color:rgba(245,239,230,.3)}
+.es-axis-title{font-family:'JetBrains Mono',monospace;font-size:.5rem;letter-spacing:.2em;color:rgba(245,239,230,.2);text-align:center;margin-top:.5rem}
+
+/* DIFFUSION CARD */
+.diffusion-card{margin:3rem -2rem;padding:2.5rem;background:white;border:1px solid var(--border-light);border-radius:20px}
+.dc-label{font-family:'JetBrains Mono',monospace;font-size:.55rem;letter-spacing:.3em;color:var(--crema);margin-bottom:1.5rem}
+.dc-equation{text-align:center;padding:1.5rem;background:var(--espresso);border-radius:12px;color:var(--cream);margin-bottom:1.5rem}
+.dc-equation .formula{font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-weight:300}
+.dc-equation .formula em{color:var(--crema);font-style:italic}
+.dc-equation .note{font-size:.7rem;color:rgba(245,239,230,.4);margin-top:.5rem;line-height:1.5}
+.dc-compare{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem}
+.dc-item{text-align:center;padding:1.5rem;border-radius:12px;border:1px solid var(--border-light)}
+.dc-item .dc-val{font-family:'JetBrains Mono',monospace;font-size:1.8rem;margin-bottom:.2rem}
+.dc-item .dc-unit{font-family:'JetBrains Mono',monospace;font-size:.55rem;letter-spacing:.1em;color:var(--text-light);margin-bottom:.6rem}
+.dc-item .dc-desc{font-size:.75rem;color:var(--text-secondary);line-height:1.6}
+.val-hot{color:var(--hot-red)}
+.val-cold{color:var(--cold-blue)}
+
+/* FLAVOR PROFILE */
+.flavor-compare{margin:3rem -2rem;display:grid;grid-template-columns:1fr 1fr;gap:1.5rem}
+.fl-card{padding:2rem;border-radius:16px;border:1px solid var(--border-light);background:white}
+.fl-card h4{font-family:'Cormorant Garamond',serif;font-size:1.15rem;font-weight:500;margin-bottom:.8rem;display:flex;align-items:center;gap:.5rem}
+.fl-card h4 .dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.dot-hot{background:var(--hot-red)}.dot-cold{background:var(--cold-blue)}.dot-esp{background:var(--pressure-gold)}.dot-pour{background:var(--sage)}
+.fl-row{display:flex;justify-content:space-between;align-items:center;padding:.5rem 0;border-bottom:1px solid rgba(212,165,116,.08)}
+.fl-row:last-child{border-bottom:none}
+.fl-attr{font-size:.75rem;color:var(--text-secondary)}
+.fl-bar-wrap{width:120px;height:6px;background:rgba(212,165,116,.08);border-radius:3px;overflow:hidden}
+.fl-bar{height:100%;border-radius:3px}
+.bar-hot{background:var(--hot-red)}.bar-cold{background:var(--cold-blue)}.bar-esp{background:var(--pressure-gold)}.bar-pour{background:var(--sage)}
+
+/* CALLOUT */
+.callout{background:var(--espresso);color:var(--cream);border-radius:16px;padding:2.5rem;margin:2.5rem -2rem;position:relative;overflow:hidden}
+.callout::before{content:'';position:absolute;top:-40%;right:-20%;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,rgba(212,165,116,.08),transparent)}
+.callout .callout-label{font-family:'JetBrains Mono',monospace;font-size:.55rem;letter-spacing:.3em;color:var(--crema);margin-bottom:1rem}
+.callout p{font-size:.85rem;line-height:1.9;color:rgba(245,239,230,.6);margin-bottom:0}
+.callout p strong{color:var(--crema)}
+
+/* NEXT IN SERIES */
+.next-series{margin:3rem -2rem;padding:2.5rem;background:rgba(74,122,155,.04);border:1px solid rgba(74,122,155,.12);border-radius:20px;text-align:center}
+.ns-label{font-family:'JetBrains Mono',monospace;font-size:.5rem;letter-spacing:.3em;color:var(--cold-blue);margin-bottom:1rem}
+.ns-title{font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:400;color:var(--espresso);margin-bottom:.5rem}
+.ns-desc{font-size:.82rem;color:var(--text-secondary);line-height:1.6;max-width:450px;margin:0 auto}
+
+.author-card{max-width:720px;margin:0 auto 4rem;padding:2rem 2rem 0;display:flex;align-items:center;gap:1.5rem;border-top:1px solid var(--border-light)}
+.author-avatar{width:56px;height:56px;border-radius:50%;background:var(--espresso);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.author-avatar span{font-family:'Cormorant Garamond',serif;font-size:1.2rem;color:var(--crema);font-weight:500}
+.author-info h4{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:500;margin-bottom:.15rem}
+.author-info p{font-size:.78rem;color:var(--text-secondary);line-height:1.5}
+footer{padding:3rem 2rem;text-align:center}
+.footer-brand{font-family:'JetBrains Mono',monospace;font-size:.58rem;letter-spacing:.25em;color:var(--text-light)}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@media(max-width:768px){
+  nav{padding:1rem 1.5rem}.post-hero{height:75vh;min-height:480px}
+  .article-body{padding:3.5rem 1.5rem 3rem}
+  .var-table,.method-grid,.extraction-space,.diffusion-card,.flavor-compare,.callout,.series-nav,.next-series{margin-left:-.5rem;margin-right:-.5rem}
+  .method-grid{grid-template-columns:1fr}.vt-row{grid-template-columns:90px repeat(4,1fr);font-size:.65rem}.vt-cell{padding:.7rem .5rem}
+  .es-map{grid-template-columns:60px 1fr}.es-quadrant{min-height:90px;padding:1rem}
+  .dc-compare,.flavor-compare{grid-template-columns:1fr}
+  .extraction-space,.diffusion-card,.callout{padding:2rem 1.5rem}
+  .method-card{padding:2rem 1.5rem}
+  .author-card{flex-direction:column;text-align:center;padding:1.5rem}
+  .hero-axes{bottom:2rem;gap:1.5rem}.series-nav{flex-direction:column;align-items:flex-start}
+}
+</style>
+</head>
+<body>
+<div class="progress-bar" id="progressBar"></div>
+<nav id="mainNav">
+  <div class="nav-left">
+    <a href="/" class="nav-logo">HARA<small>COFFEE LAB</small></a>
+    <a href="blog-index.html" class="nav-back"><span>←</span> Blog</a>
+  </div>
+  <div class="lang-switcher">
+    <button class="lang-btn active" data-lang="es">ES</button>
+    <button class="lang-btn" data-lang="ko">KO</button>
+    <button class="lang-btn" data-lang="en">EN</button>
+  </div>
+</nav>
+
+<div class="post-hero">
+  <div class="hero-grid-bg">
+    <div class="gl" style="position:absolute;left:33%;top:0;bottom:0;width:1px"></div>
+    <div class="gl" style="position:absolute;left:66%;top:0;bottom:0;width:1px"></div>
+    <div class="gl" style="position:absolute;top:33%;left:0;right:0;height:1px"></div>
+    <div class="gl" style="position:absolute;top:66%;left:0;right:0;height:1px"></div>
+  </div>
+  <div class="hero-content">
+    <div class="hero-overline"><span class="series-tag" data-i18n="st">CdGF SERIES</span><span class="series-num" data-i18n="sn">01 / 03</span></div>
+    <h1 class="hero-title" data-i18n="ht"><span class="v-temp">Temperatura</span>, <span class="v-press">Presión</span>, <span class="v-time">Tiempo</span><br>el espacio de extracción</h1>
+    <p class="hero-sub" data-i18n="hs">Cuatro métodos de preparación. Tres variables físicas. Un mapa unificado que explica por qué cada café sabe diferente.</p>
+    <div class="hero-meta">
+      <span class="hero-badge" data-i18n="hb">CIENCIA</span>
+      <span class="hero-date">17 FEB 2026</span>
+      <span class="hero-read" data-i18n="hr">13 min lectura</span>
+    </div>
+  </div>
+  <div class="hero-axes">
+    <div class="hero-axis"><div class="ax-icon ax-t">T°</div><div class="ax-label" data-i18n="ax1">TEMPERATURA</div></div>
+    <div class="hero-axis"><div class="ax-icon ax-p">P</div><div class="ax-label" data-i18n="ax2">PRESIÓN</div></div>
+    <div class="hero-axis"><div class="ax-icon ax-ti">⏱</div><div class="ax-label" data-i18n="ax3">TIEMPO</div></div>
+  </div>
+</div>
+
+<article class="article-body" id="articleBody">
+
+<!-- ══════ SPANISH ══════ -->
+<div class="lang-content" data-lang="es">
+
+<div class="series-nav">
+  <div class="sn-badge">CdGF SERIES</div>
+  <div class="sn-steps">
+    <span class="sn-step active">01 · T, P, t</span>
+    <span class="sn-arrow">→</span>
+    <a class="sn-step" href="blog-post-cdgf-02.html">02 · Goteo vs Inmersión</a>
+    <span class="sn-arrow">→</span>
+    <a class="sn-step" href="blog-post-cdgf-03.html">03 · Filosofía CdGF1%</a>
+  </div>
+</div>
+
+<h2>Tres variables, infinitos cafés</h2>
+
+<p>Todo café que has bebido en tu vida — desde un espresso napolitano hasta un cold brew de 24 horas — es el resultado de la misma operación unitaria: <strong>extracción sólido-líquido</strong>. Agua disuelve compuestos solubles de un sólido poroso (el café molido). Pero el sabor que llega a tu boca depende enteramente de <strong>tres variables físicas</strong>: la temperatura del agua, la presión aplicada y el tiempo de contacto.</p>
+
+<p>Estas tres variables no actúan de forma independiente. Forman un <em class="t">espacio tridimensional de extracción</em> donde cada método de preparación ocupa una coordenada única. Entender este espacio es entender por qué un espresso y un cold brew, usando los mismos granos, pueden saber radicalmente diferente — y por qué esa diferencia no es accidental sino termodinámica.</p>
+
+<div class="sep"></div>
+
+<h2>El mapa de los métodos</h2>
+
+<div class="var-table">
+  <div class="vt-header"><div class="vt-label">PARÁMETROS DE EXTRACCIÓN POR MÉTODO</div></div>
+  <div class="vt-body">
+    <div class="vt-row vt-head">
+      <div class="vt-cell">Parámetro</div>
+      <div class="vt-cell">Espresso</div>
+      <div class="vt-cell">Pour-over</div>
+      <div class="vt-cell">Hot brew</div>
+      <div class="vt-cell">Cold brew</div>
+    </div>
+    <div class="vt-row">
+      <div class="vt-cell">Temperatura</div>
+      <div class="vt-cell vt-highlight">92–96°C</div>
+      <div class="vt-cell">90–96°C</div>
+      <div class="vt-cell">90–96°C</div>
+      <div class="vt-cell vt-highlight">2–8°C</div>
+    </div>
+    <div class="vt-row">
+      <div class="vt-cell">Presión</div>
+      <div class="vt-cell vt-highlight">9 bar</div>
+      <div class="vt-cell">1 atm</div>
+      <div class="vt-cell">1 atm</div>
+      <div class="vt-cell">1 atm</div>
+    </div>
+    <div class="vt-row">
+      <div class="vt-cell">Tiempo</div>
+      <div class="vt-cell vt-highlight">25–30 s</div>
+      <div class="vt-cell">2,5–4 min</div>
+      <div class="vt-cell">3–5 min</div>
+      <div class="vt-cell vt-highlight">8–24 h</div>
+    </div>
+    <div class="vt-row">
+      <div class="vt-cell">Ratio agua:café</div>
+      <div class="vt-cell">1,5–2,5 : 1</div>
+      <div class="vt-cell">15–17 : 1</div>
+      <div class="vt-cell">15–17 : 1</div>
+      <div class="vt-cell">5–8 : 1</div>
+    </div>
+    <div class="vt-row">
+      <div class="vt-cell">TDS</div>
+      <div class="vt-cell vt-highlight">8–12%</div>
+      <div class="vt-cell">1,2–1,5%</div>
+      <div class="vt-cell">1,2–1,5%</div>
+      <div class="vt-cell vt-highlight">1,5–3,5%</div>
+    </div>
+    <div class="vt-row">
+      <div class="vt-cell">Molienda</div>
+      <div class="vt-cell">~200 μm</div>
+      <div class="vt-cell">~600 μm</div>
+      <div class="vt-cell">~800 μm</div>
+      <div class="vt-cell">~1000 μm</div>
+    </div>
+  </div>
+</div>
+
+<p>El espresso y el cold brew son los extremos opuestos del espacio: máxima temperatura + presión + mínimo tiempo versus mínima temperatura + presión atmosférica + máximo tiempo. Representan dos filosofías de extracción completamente diferentes: una que <strong>fuerza</strong> la disolución por energía cinética, y otra que la <strong>espera</strong> por difusión molecular pasiva.</p>
+
+<div class="sep"></div>
+
+<h2>La temperatura: el interruptor molecular</h2>
+
+<p>La temperatura es la variable más determinante porque controla dos fenómenos simultáneamente: la <strong>cinética de difusión</strong> (cuán rápido se disuelven los compuestos) y la <strong>selectividad de extracción</strong> (cuáles compuestos se disuelven).</p>
+
+<div class="diffusion-card">
+  <div class="dc-label">COEFICIENTE DE DIFUSIÓN vs TEMPERATURA</div>
+  <div class="dc-equation">
+    <div class="formula"><em>D</em> = <em>D₀</em> · exp(−<em>Ea</em> / <em>RT</em>)</div>
+    <div class="note">Ecuación de Arrhenius. D = coeficiente de difusión, Ea = energía de activación,<br>R = constante de gases, T = temperatura absoluta.</div>
+  </div>
+  <div class="dc-compare">
+    <div class="dc-item">
+      <div class="dc-val val-hot">93°C</div>
+      <div class="dc-unit">HOT BREW</div>
+      <div class="dc-desc">D ≈ 5,0 × 10⁻¹⁰ m²/s. Alta energía cinética. Las moléculas se mueven rápido y chocan frecuentemente contra la pared celular. Extracción de compuestos de todos los pesos moleculares.</div>
+    </div>
+    <div class="dc-item">
+      <div class="dc-val val-cold">5°C</div>
+      <div class="dc-unit">COLD BREW</div>
+      <div class="dc-desc">D ≈ 2,5 × 10⁻¹⁰ m²/s. Un 40–50% menor. Las moléculas se mueven lentamente. Solo los compuestos de bajo peso molecular con menor energía de activación logran extraerse eficientemente.</div>
+    </div>
+  </div>
+</div>
+
+<p>Esta diferencia de difusividad no es lineal sino <strong>selectiva</strong>. A 5°C, los ácidos orgánicos de bajo peso molecular (cítrico, málico, quínico) y la cafeína se extraen con relativa facilidad — sus moléculas son pequeñas y su energía de activación es baja. Pero los polifenoles de alto peso molecular (ácidos clorogénicos, taninos) y las quinolactonas amargas necesitan significativamente más energía para desprenderse de la matriz celular. A baja temperatura, simplemente <strong>no tienen suficiente energía para salir</strong>.</p>
+
+<p>El resultado es una extracción naturalmente <strong>fraccional</strong>: el cold brew extrae selectivamente los compuestos de sabor agradable (ácidos suaves, azúcares, ciertos volátiles de bajo punto de ebullición) mientras deja atrapados en la matriz los compuestos responsables del amargor y la astringencia. No es que el cold brew sea "menos fuerte" — es que es molecularmente <em class="t">diferente</em>.</p>
+
+<div class="method-grid">
+  <div class="method-card mc-hot">
+    <div class="mc-label">🔥 HOT BREW · 90–96°C</div>
+    <h4>Extracción total</h4>
+    <p>A alta temperatura, el agua tiene energía suficiente para extraer compuestos de <strong>todos los pesos moleculares</strong>: ácidos, azúcares, cafeína, polifenoles, melanoidinas. El perfil resultante es completo, con cuerpo pleno, acidez pronunciada y un espectro aromático amplio que incluye notas desde florales hasta achocolatadas.</p>
+    <p>El riesgo: si el tiempo se excede, los compuestos de alto peso molecular (taninos, CGA degradados) dominan, produciendo amargor y astringencia.</p>
+    <div class="mc-params">
+      <span class="mc-param param-t">93°C</span>
+      <span class="mc-param param-ti">3–5 min</span>
+    </div>
+  </div>
+  <div class="method-card mc-cold">
+    <div class="mc-label">❄️ COLD BREW · 2–8°C</div>
+    <h4>Extracción selectiva</h4>
+    <p>La baja temperatura actúa como un <strong>filtro molecular</strong>. Los compuestos de bajo peso molecular se extraen por difusión lenta; los de alto peso molecular quedan atrapados. El resultado: dulzura natural, acidez redonda y suave, ausencia de amargor, y <strong>volatilidad retenida</strong> — los compuestos aromáticos, al no ser agitados por el calor, permanecen en solución en vez de evaporarse.</p>
+    <p>Una ventaja termodinámica crucial: a baja temperatura, los volátiles aromáticos tienen menor presión de vapor, por lo que se retienen en el líquido en vez de dispersarse en el aire.</p>
+    <div class="mc-params">
+      <span class="mc-param param-t-cold">2–8°C</span>
+      <span class="mc-param param-ti">8–24 h</span>
+    </div>
+  </div>
+</div>
+
+<div class="sep"></div>
+
+<h2>La presión: la cuarta dimensión del espresso</h2>
+
+<p>El espresso introduce una variable que ningún otro método utiliza: <strong>9 atmósferas de presión</strong>. Esta no es una variante menor; redefine completamente la física de extracción.</p>
+
+<div class="method-grid">
+  <div class="method-card mc-espresso">
+    <div class="mc-label">⚡ ESPRESSO · 9 bar</div>
+    <h4>Extracción forzada + emulsión</h4>
+    <p>La presión de 9 bar cumple tres funciones simultáneas:</p>
+    <p><strong>1. Vencer la resistencia del lecho:</strong> La molienda de 200 μm crea un lecho tan denso que el agua no puede pasar por gravedad. Se necesitan 9 atm para forzar el flujo a través de partículas que ofrecen una resistencia de ~10⁶ Pa·s/m² (ecuación de Darcy).</p>
+    <p><strong>2. Acelerar la difusión:</strong> La presión incrementa la penetración del solvente en los poros de la partícula, reduciendo la resistencia interna a la transferencia de masa. Se extrae más en menos tiempo.</p>
+    <p><strong>3. Crear emulsión:</strong> A 9 bar, los lípidos del café (~15% w/w) se dispersan como microgotas de ~10 μm en una emulsión O/W estable. El CO₂ disuelto bajo presión se libera al despresurizar, creando microburbujas que atrapan lípidos = crema.</p>
+    <div class="mc-params">
+      <span class="mc-param param-t">93°C</span>
+      <span class="mc-param param-p">9 bar</span>
+      <span class="mc-param param-ti-short">25–30 s</span>
+    </div>
+  </div>
+  <div class="method-card mc-pour">
+    <div class="mc-label">💧 POUR-OVER · 1 atm</div>
+    <h4>Extracción gravitacional selectiva</h4>
+    <p>El pour-over (V60, Kalita, Chemex) utiliza solo la gravedad como fuerza motriz. Esto cambia fundamentalmente la ecuación:</p>
+    <p><strong>Sin presión = sin emulsión.</strong> Los lípidos quedan retenidos por el filtro de papel. El resultado es un café de <strong>claridad cristalina</strong>, sin la viscosidad ni la crema del espresso.</p>
+    <p><strong>Flujo lento = extracción secuencial.</strong> El agua atraviesa la cama de café por gravedad, creando un gradiente de concentración vertical (analogía de reactor de flujo pistón). Cada capa extrae diferentes compuestos según su posición, produciendo un perfil con <strong>capas aromáticas definidas</strong>.</p>
+    <div class="mc-params">
+      <span class="mc-param param-t">93°C</span>
+      <span class="mc-param param-ti">2,5–4 min</span>
+    </div>
+  </div>
+</div>
+
+<p>La diferencia sensorial entre espresso y pour-over proviene directamente de la presión. El espresso es un sistema coloidal de tres fases (gas + solución + emulsión lipídica) con TDS del 8–12%. El pour-over es una solución acuosa limpia con TDS del 1,2–1,5%. Ambos usan temperatura y molienda similares; la presión es lo que los separa en mundos sensoriales diferentes.</p>
+
+<div class="sep"></div>
+
+<h2>El espacio unificado</h2>
+
+<p>Cuando colocamos los cuatro métodos en un mapa bidimensional (usando temperatura y presión como ejes, con el tiempo codificado en el tamaño y posición), emerge un patrón claro:</p>
+
+<div class="extraction-space">
+  <div class="es-inner">
+    <div class="es-label">MAPA DEL ESPACIO DE EXTRACCIÓN</div>
+    <div class="es-map">
+      <div class="es-y-axis">
+        <div class="es-y-label">9 bar ↑</div>
+        <div class="es-y-label">1 atm</div>
+      </div>
+      <div class="es-grid">
+        <div class="es-quadrant eq-tr">
+          <div class="eq-name">Espresso</div>
+          <div class="eq-vars">93°C · 9 bar · 25 s</div>
+          <div class="eq-flavor">Emulsión coloidal. Cuerpo extremo. Crema. Intensidad concentrada.</div>
+        </div>
+        <div class="es-quadrant eq-tl" style="opacity:.2">
+          <div class="eq-name" style="opacity:.5">—</div>
+          <div class="eq-vars">Baja T · Alta P</div>
+          <div class="eq-flavor">Zona inexplorada. ¿Cold espresso?</div>
+        </div>
+        <div class="es-quadrant eq-bl">
+          <div class="eq-name">Pour-over / Hot brew</div>
+          <div class="eq-vars">93°C · 1 atm · 3–5 min</div>
+          <div class="eq-flavor">Solución limpia. Claridad. Capas aromáticas definidas. Acidez brillante.</div>
+        </div>
+        <div class="es-quadrant eq-br">
+          <div class="eq-name">Cold brew</div>
+          <div class="eq-vars">2–8°C · 1 atm · 8–24 h</div>
+          <div class="eq-flavor">Extracción selectiva. Dulzura natural. Volátiles retenidos. Suavidad.</div>
+        </div>
+      </div>
+    </div>
+    <div class="es-x-row">
+      <div class="es-x-spacer"></div>
+      <div class="es-x-labels">
+        <div class="es-x-label">← Alta T°</div>
+        <div class="es-x-label">Baja T° →</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<h3>Los perfiles de sabor resultantes</h3>
+
+<div class="flavor-compare">
+  <div class="fl-card">
+    <h4><span class="dot dot-esp"></span> Espresso</h4>
+    <div class="fl-row"><span class="fl-attr">Cuerpo</span><div class="fl-bar-wrap"><div class="fl-bar bar-esp" style="width:95%"></div></div></div>
+    <div class="fl-row"><span class="fl-attr">Acidez</span><div class="fl-bar-wrap"><div class="fl-bar bar-esp" style="width:60%"></div></div></div>
+    <div class="fl-row"><span class="fl-attr">Amargor</span><div class="fl-bar-wrap"><div class="fl-bar bar-esp" style="width:70%"></div></div></div>
+    <div class="fl-row"><span class="fl-attr">Dulzura</span><div class="fl-bar-wrap"><div class="fl-bar bar-esp" style="width:50%"></div></div></div>
+    <div class="fl-row"><span class="fl-attr">Retención aromática</span><div class="fl-bar-wrap"><div class="fl-bar bar-esp" style="width:40%"></div></div></div>
+  </div>
+  <div class="fl-card">
+    <h4><span class="dot dot-pour"></span> Pour-over</h4>
+    <div class="fl-row"><span class="fl-attr">Cuerpo</span><div class="fl-bar-wrap"><div class="fl-bar bar-pour" style="width:45%"></div></div></div>
+    <div class="fl-row"><span class="fl-attr">Acidez</span><div class="fl-bar-wrap"><div class="fl-bar bar-pour" style="width:85%"></div></div></div>
+    <div class="fl-row"><span class="fl-attr">Amargor</span><div class="fl-bar-wrap"><div class="fl-bar bar-pour" style="width:30%"></div></div></div>
+    <div class="fl-row"><span class="fl-attr">Dulzura</span><div class="fl-bar-wrap"><div class="fl-bar bar-pour" style="width:65%"></div></div></div>
+    <div class="fl-row"><span class="fl-attr">Retención aromática</span><div class="fl-bar-wrap"><div class="fl-bar bar-pour" style="width:55%"></div></div></div>
+  </div>
+  <div class="fl-card">
+    <h4><span class="dot dot-hot"></span> Hot brew (inmersión)</h4>
+    <div class="fl-row"><span class="fl-attr">Cuerpo</span><div class="fl-bar-wrap"><div class="fl-bar bar-hot" style="width:70%"></div></div></div>
+    <div class="fl-row"><span class="fl-attr">Acidez</span><div class="fl-bar-wrap"><div class="fl-bar bar-hot" style="width:65%"></div></div></div>
+    <div class="fl-row"><span class="fl-attr">Amargor</span><div class="fl-bar-wrap"><div class="fl-bar bar-hot" style="width:55%"></div></div></div>
+    <div class="fl-row"><span class="fl-attr">Dulzura</span><div class="fl-bar-wrap"><div class="fl-bar bar-hot" style="width:55%"></div></div></div>
+    <div class="fl-row"><span class="fl-attr">Retención aromática</span><div class="fl-bar-wrap"><div class="fl-bar bar-hot" style="width:50%"></div></div></div>
+  </div>
+  <div class="fl-card">
+    <h4><span class="dot dot-cold"></span> Cold brew</h4>
+    <div class="fl-row"><span class="fl-attr">Cuerpo</span><div class="fl-bar-wrap"><div class="fl-bar bar-cold" style="width:55%"></div></div></div>
+    <div class="fl-row"><span class="fl-attr">Acidez</span><div class="fl-bar-wrap"><div class="fl-bar bar-cold" style="width:35%"></div></div></div>
+    <div class="fl-row"><span class="fl-attr">Amargor</span><div class="fl-bar-wrap"><div class="fl-bar bar-cold" style="width:15%"></div></div></div>
+    <div class="fl-row"><span class="fl-attr">Dulzura</span><div class="fl-bar-wrap"><div class="fl-bar bar-cold" style="width:80%"></div></div></div>
+    <div class="fl-row"><span class="fl-attr">Retención aromática</span><div class="fl-bar-wrap"><div class="fl-bar bar-cold" style="width:90%"></div></div></div>
+  </div>
+</div>
+
+<p>El dato más revelador es la <strong>retención aromática</strong>. El cold brew retiene hasta un 90% de los compuestos volátiles aromáticos porque a baja temperatura su presión de vapor es mínima — permanecen disueltos en el líquido en lugar de evaporarse al aire. En el hot brew y el espresso, una fracción significativa de esos volátiles se pierde como vapor durante y después de la preparación. El aroma que sentís al acercar la nariz a un espresso recién hecho es, literalmente, sabor que se escapa de la taza.</p>
+
+<div class="callout">
+  <div class="callout-label">LA PARADOJA DEL FRÍO</div>
+  <p>El cold brew es, paradójicamente, el método que mejor <strong>preserva</strong> la información aromática del grano. Extraer a baja temperatura es como grabar en frío: <strong>menos energía, menos degradación, menos volatilización</strong>. Los compuestos que llegan a tu boca son los más cercanos a lo que el grano contenía originalmente — transformados por el agua pero no distorsionados por el calor. Esto tiene implicaciones profundas para cualquier aplicación donde la cadena de frío se mantenga intacta desde la extracción hasta el consumo.</p>
+</div>
+
+<p>Y aquí se abre una pregunta crucial: si el cold brew preserva mejor los aromáticos, ¿todos los métodos de cold brew lo hacen por igual? La respuesta es no. Dentro del cold brew existe una diferencia fundamental entre dos técnicas — el goteo y la inmersión — que es el tema de nuestro próximo artículo.</p>
+
+<div class="next-series">
+  <div class="ns-label" data-i18n="ns-label">SIGUIENTE EN LA SERIE</div>
+  <div class="ns-title" data-i18n="ns-title">Goteo vs Inmersión: dos caminos en frío</div>
+  <div class="ns-desc" data-i18n="ns-desc">Por qué el método de contacto dentro del cold brew cambia radicalmente el perfil de extracción — y por qué HARA eligió uno sobre el otro.</div>
+</div>
+
+</div>
+
+<!-- ══════ KOREAN ══════ -->
+<div class="lang-content" data-lang="ko" style="display:none;">
+
+<div class="series-nav">
+  <div class="sn-badge">CdGF 시리즈</div>
+  <div class="sn-steps">
+    <span class="sn-step active">01 · T, P, t</span>
+    <span class="sn-arrow">→</span>
+    <a class="sn-step" href="blog-post-cdgf-02.html">02 · 점적 vs 침출</a>
+    <span class="sn-arrow">→</span>
+    <a class="sn-step" href="blog-post-cdgf-03.html">03 · CdGF1% 철학</a>
+  </div>
+</div>
+
+<h2>세 가지 변수, 무한한 커피</h2>
+
+<p>당신이 일생 동안 마신 모든 커피 — 나폴리 에스프레소부터 24시간 콜드브루까지 — 는 같은 단위조작의 결과입니다: <strong>고체-액체 추출</strong>. 물이 다공성 고체(분쇄 커피)에서 가용성 화합물을 용해합니다. 하지만 입에 도달하는 맛은 전적으로 <strong>세 가지 물리적 변수</strong>에 달려 있습니다: 물의 온도, 가해진 압력, 접촉 시간.</p>
+
+<p>이 세 변수는 독립적으로 작용하지 않습니다. <em class="t">3차원 추출 공간</em>을 형성하며, 각 추출 방법은 고유한 좌표를 차지합니다. 이 공간을 이해하는 것은 같은 원두를 사용해도 에스프레소와 콜드브루가 근본적으로 다른 맛을 내는 이유를 이해하는 것입니다 — 그 차이는 우연이 아니라 열역학입니다.</p>
+
+<div class="sep"></div>
+
+<h2>방법의 지도</h2>
+
+<div class="var-table">
+  <div class="vt-header"><div class="vt-label">방법별 추출 파라미터</div></div>
+  <div class="vt-body">
+    <div class="vt-row vt-head">
+      <div class="vt-cell">파라미터</div>
+      <div class="vt-cell">에스프레소</div>
+      <div class="vt-cell">핸드드립</div>
+      <div class="vt-cell">핫브루</div>
+      <div class="vt-cell">콜드브루</div>
+    </div>
+    <div class="vt-row"><div class="vt-cell">온도</div><div class="vt-cell vt-highlight">92–96°C</div><div class="vt-cell">90–96°C</div><div class="vt-cell">90–96°C</div><div class="vt-cell vt-highlight">2–8°C</div></div>
+    <div class="vt-row"><div class="vt-cell">압력</div><div class="vt-cell vt-highlight">9 bar</div><div class="vt-cell">1 atm</div><div class="vt-cell">1 atm</div><div class="vt-cell">1 atm</div></div>
+    <div class="vt-row"><div class="vt-cell">시간</div><div class="vt-cell vt-highlight">25–30초</div><div class="vt-cell">2.5–4분</div><div class="vt-cell">3–5분</div><div class="vt-cell vt-highlight">8–24시간</div></div>
+    <div class="vt-row"><div class="vt-cell">물:커피 비율</div><div class="vt-cell">1.5–2.5:1</div><div class="vt-cell">15–17:1</div><div class="vt-cell">15–17:1</div><div class="vt-cell">5–8:1</div></div>
+    <div class="vt-row"><div class="vt-cell">TDS</div><div class="vt-cell vt-highlight">8–12%</div><div class="vt-cell">1.2–1.5%</div><div class="vt-cell">1.2–1.5%</div><div class="vt-cell vt-highlight">1.5–3.5%</div></div>
+    <div class="vt-row"><div class="vt-cell">분쇄도</div><div class="vt-cell">~200μm</div><div class="vt-cell">~600μm</div><div class="vt-cell">~800μm</div><div class="vt-cell">~1000μm</div></div>
+  </div>
+</div>
+
+<p>에스프레소와 콜드브루는 공간의 양 극단입니다: 최고 온도 + 압력 + 최소 시간 대 최저 온도 + 대기압 + 최대 시간. 두 가지 완전히 다른 추출 철학입니다: 하나는 운동에너지로 용해를 <strong>강제</strong>하고, 다른 하나는 수동적 분자 확산으로 <strong>기다리는</strong> 것.</p>
+
+<div class="sep"></div>
+
+<h2>온도: 분자의 스위치</h2>
+
+<p>온도는 가장 결정적인 변수입니다. 두 현상을 동시에 제어하기 때문입니다: <strong>확산 동역학</strong>(화합물이 얼마나 빨리 녹는지)과 <strong>추출 선택성</strong>(어떤 화합물이 녹는지).</p>
+
+<div class="diffusion-card">
+  <div class="dc-label">확산계수 vs 온도</div>
+  <div class="dc-equation">
+    <div class="formula"><em>D</em> = <em>D₀</em> · exp(−<em>Ea</em> / <em>RT</em>)</div>
+    <div class="note">아레니우스 방정식. D = 확산계수, Ea = 활성화에너지,<br>R = 기체상수, T = 절대온도.</div>
+  </div>
+  <div class="dc-compare">
+    <div class="dc-item">
+      <div class="dc-val val-hot">93°C</div>
+      <div class="dc-unit">핫브루</div>
+      <div class="dc-desc">D ≈ 5.0 × 10⁻¹⁰ m²/s. 높은 운동에너지. 분자가 빠르게 이동하며 세포벽에 빈번히 충돌. 모든 분자량의 화합물 추출.</div>
+    </div>
+    <div class="dc-item">
+      <div class="dc-val val-cold">5°C</div>
+      <div class="dc-unit">콜드브루</div>
+      <div class="dc-desc">D ≈ 2.5 × 10⁻¹⁰ m²/s. 40–50% 낮음. 분자가 느리게 이동. 활성화에너지가 낮은 저분자 화합물만 효율적으로 추출.</div>
+    </div>
+  </div>
+</div>
+
+<p>이 확산율 차이는 선형이 아니라 <strong>선택적</strong>입니다. 5°C에서 저분자 유기산(시트르산, 말산, 퀸산)과 카페인은 비교적 쉽게 추출됩니다 — 분자가 작고 활성화에너지가 낮기 때문입니다. 하지만 고분자 폴리페놀(클로로겐산, 탄닌)과 쓴맛의 퀴노락톤은 세포 매트릭스에서 빠져나오기 위해 훨씬 더 많은 에너지가 필요합니다. 저온에서는 단순히 <strong>빠져나올 에너지가 부족합니다</strong>.</p>
+
+<p>결과는 자연스러운 <strong>분별추출</strong>입니다: 콜드브루는 쾌적한 맛 화합물(부드러운 산, 당류, 낮은 끓는점의 특정 휘발성 물질)을 선택적으로 추출하면서 쓴맛과 수렴미를 담당하는 화합물은 매트릭스에 가둬둡니다. 콜드브루가 "덜 강한" 것이 아닙니다 — 분자적으로 <em class="t">다른</em> 것입니다.</p>
+
+<div class="method-grid">
+  <div class="method-card mc-hot">
+    <div class="mc-label">🔥 핫브루 · 90–96°C</div>
+    <h4>전체 추출</h4>
+    <p>고온에서 물은 <strong>모든 분자량</strong>의 화합물을 추출할 에너지를 가집니다: 산, 당류, 카페인, 폴리페놀, 멜라노이딘. 완전한 프로파일, 풍성한 바디, 뚜렷한 산미, 꽃향부터 초콜릿까지 폭넓은 향미 스펙트럼.</p>
+    <p>위험: 시간을 초과하면 고분자 화합물(탄닌, 분해된 CGA)이 지배하여 쓴맛과 수렴미를 만듭니다.</p>
+    <div class="mc-params"><span class="mc-param param-t">93°C</span><span class="mc-param param-ti">3–5분</span></div>
+  </div>
+  <div class="method-card mc-cold">
+    <div class="mc-label">❄️ 콜드브루 · 2–8°C</div>
+    <h4>선택적 추출</h4>
+    <p>저온은 <strong>분자 필터</strong>로 작용합니다. 저분자 화합물은 느린 확산으로 추출되고, 고분자는 갇혀 있습니다. 결과: 자연스러운 단맛, 둥글고 부드러운 산미, 쓴맛의 부재, 그리고 <strong>휘발성 보존</strong> — 향기 화합물이 열에 의해 교란되지 않아 증발하지 않고 용액에 남습니다.</p>
+    <p>결정적 열역학적 이점: 저온에서 휘발성 방향족 화합물의 증기압이 최소화되어 공기 중으로 분산되지 않고 액체에 잔류합니다.</p>
+    <div class="mc-params"><span class="mc-param param-t-cold">2–8°C</span><span class="mc-param param-ti">8–24시간</span></div>
+  </div>
+</div>
+
+<div class="sep"></div>
+
+<h2>압력: 에스프레소의 네 번째 차원</h2>
+
+<p>에스프레소는 다른 어떤 방법도 사용하지 않는 변수를 도입합니다: <strong>9기압의 압력</strong>. 이것은 사소한 변형이 아닙니다; 추출의 물리학을 완전히 재정의합니다.</p>
+
+<div class="method-grid">
+  <div class="method-card mc-espresso">
+    <div class="mc-label">⚡ 에스프레소 · 9 bar</div>
+    <h4>강제 추출 + 에멀젼</h4>
+    <p>9 bar 압력은 세 가지 기능을 동시에 수행합니다:</p>
+    <p><strong>1. 베드 저항 극복:</strong> 200μm 분쇄가 만드는 초밀 베드는 중력으로는 물이 통과할 수 없습니다. ~10⁶ Pa·s/m²의 저항을 극복하려면 9기압이 필요합니다(Darcy 방정식).</p>
+    <p><strong>2. 확산 가속:</strong> 압력이 입자 기공으로의 용매 침투를 증가시켜 내부 물질전달 저항을 줄입니다. 더 짧은 시간에 더 많이 추출.</p>
+    <p><strong>3. 에멀젼 생성:</strong> 9 bar에서 커피 지질(~15% w/w)이 ~10μm 미세액적으로 분산되어 안정적 O/W 에멀젼을 형성. 압력 하에 용해된 CO₂가 감압 시 미세기포로 방출 → 크레마.</p>
+    <div class="mc-params"><span class="mc-param param-t">93°C</span><span class="mc-param param-p">9 bar</span><span class="mc-param param-ti-short">25–30초</span></div>
+  </div>
+  <div class="method-card mc-pour">
+    <div class="mc-label">💧 핸드드립 · 1 atm</div>
+    <h4>중력 선택 추출</h4>
+    <p>푸어오버(V60, 칼리타, 케멕스)는 중력만을 구동력으로 사용합니다:</p>
+    <p><strong>무압 = 무에멀젼.</strong> 지질은 종이 필터에 걸립니다. 결과는 에스프레소의 점도나 크레마 없는 <strong>수정 같은 투명도</strong>의 커피.</p>
+    <p><strong>느린 유속 = 순차 추출.</strong> 물이 중력으로 커피 베드를 통과하며 수직 농도 기울기를 형성(관류 반응기 유비). 각 층이 위치에 따라 다른 화합물을 추출하여 <strong>명확히 정의된 향미 층위</strong>를 만듭니다.</p>
+    <div class="mc-params"><span class="mc-param param-t">93°C</span><span class="mc-param param-ti">2.5–4분</span></div>
+  </div>
+</div>
+
+<div class="sep"></div>
+
+<h2>통합된 공간</h2>
+
+<p>네 가지 방법을 2차원 지도에 배치하면(온도와 압력을 축으로, 시간을 크기와 위치로 코딩) 명확한 패턴이 드러납니다:</p>
+
+<div class="extraction-space">
+  <div class="es-inner">
+    <div class="es-label">추출 공간 지도</div>
+    <div class="es-map">
+      <div class="es-y-axis">
+        <div class="es-y-label">9 bar ↑</div>
+        <div class="es-y-label">1 atm</div>
+      </div>
+      <div class="es-grid">
+        <div class="es-quadrant eq-tr">
+          <div class="eq-name">에스프레소</div>
+          <div class="eq-vars">93°C · 9 bar · 25초</div>
+          <div class="eq-flavor">콜로이드 에멀젼. 극한의 바디. 크레마. 농축된 강도.</div>
+        </div>
+        <div class="es-quadrant eq-tl" style="opacity:.2">
+          <div class="eq-name" style="opacity:.5">—</div>
+          <div class="eq-vars">저온 · 고압</div>
+          <div class="eq-flavor">미개척 영역. 콜드 에스프레소?</div>
+        </div>
+        <div class="es-quadrant eq-bl">
+          <div class="eq-name">핸드드립 / 핫브루</div>
+          <div class="eq-vars">93°C · 1 atm · 3–5분</div>
+          <div class="eq-flavor">깨끗한 용액. 투명도. 정의된 향미 층위. 밝은 산미.</div>
+        </div>
+        <div class="es-quadrant eq-br">
+          <div class="eq-name">콜드브루</div>
+          <div class="eq-vars">2–8°C · 1 atm · 8–24시간</div>
+          <div class="eq-flavor">선택적 추출. 자연 단맛. 보존된 휘발성 물질. 부드러움.</div>
+        </div>
+      </div>
+    </div>
+    <div class="es-x-row">
+      <div class="es-x-spacer"></div>
+      <div class="es-x-labels">
+        <div class="es-x-label">← 고온</div>
+        <div class="es-x-label">저온 →</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<h3>결과적 맛 프로파일</h3>
+
+<div class="flavor-compare">
+  <div class="fl-card">
+    <h4><span class="dot dot-esp"></span> 에스프레소</h4>
+    <div class="fl-row"><span class="fl-attr">바디</span><div class="fl-bar-wrap"><div class="fl-bar bar-esp" style="width:95%"></div></div></div>
+    <div class="fl-row"><span class="fl-attr">산미</span><div class="fl-bar-wrap"><div class="fl-bar bar-esp" style="width:60%"></div></div></div>
+    <div class="fl-row"><span class="fl-attr">쓴맛</span><div class="fl-bar-wrap"><div class="fl-bar bar-esp" style="width:70%"></div></div></div>
+    <div class="fl-row"><span class="fl-attr">단맛</span><div class="fl-bar-wrap"><div class="fl-bar bar-esp" style="width:50%"></div></div></div>
+    <div class="fl-row"><span class="fl-attr">향 보존도</span><div class="fl-bar-wrap"><div class="fl-bar bar-esp" style="width:40%"></div></div></div>
+  </div>
+  <div class="fl-card">
+    <h4><span class="dot dot-pour"></span> 핸드드립</h4>
+    <div class="fl-row"><span class="fl-attr">바디</span><div class="fl-bar-wrap"><div class="fl-bar bar-pour" style="width:45%"></div></div></div>
+    <div class="fl-row"><span class="fl-attr">산미</span><div class="fl-bar-wrap"><div class="fl-bar bar-pour" style="width:85%"></div></div></div>
+    <div class="fl-row"><span class="fl-attr">쓴맛</span><div class="fl-bar-wrap"><div class="fl-bar bar-pour" style="width:30%"></div></div></div>
+    <div class="fl-row"><span class="fl-attr">단맛</span><div class="fl-bar-wrap"><div class="fl-bar bar-pour" style="width:65%"></div></div></div>
+    <div class="fl-row"><span class="fl-attr">향 보존도</span><div class="fl-bar-wrap"><div class="fl-bar bar-pour" style="width:55%"></div></div></div>
+  </div>
+  <div class="fl-card">
+    <h4><span class="dot dot-hot"></span> 핫브루 (침출)</h4>
+    <div class="fl-row"><span class="fl-attr">바디</span><div class="fl-bar-wrap"><div class="fl-bar bar-hot" style="width:70%"></div></div></div>
+    <div class="fl-row"><span class="fl-attr">산미</span><div class="fl-bar-wrap"><div class="fl-bar bar-hot" style="width:65%"></div></div></div>
+    <div class="fl-row"><span class="fl-attr">쓴맛</span><div class="fl-bar-wrap"><div class="fl-bar bar-hot" style="width:55%"></div></div></div>
+    <div class="fl-row"><span class="fl-attr">단맛</span><div class="fl-bar-wrap"><div class="fl-bar bar-hot" style="width:55%"></div></div></div>
+    <div class="fl-row"><span class="fl-attr">향 보존도</span><div class="fl-bar-wrap"><div class="fl-bar bar-hot" style="width:50%"></div></div></div>
+  </div>
+  <div class="fl-card">
+    <h4><span class="dot dot-cold"></span> 콜드브루</h4>
+    <div class="fl-row"><span class="fl-attr">바디</span><div class="fl-bar-wrap"><div class="fl-bar bar-cold" style="width:55%"></div></div></div>
+    <div class="fl-row"><span class="fl-attr">산미</span><div class="fl-bar-wrap"><div class="fl-bar bar-cold" style="width:35%"></div></div></div>
+    <div class="fl-row"><span class="fl-attr">쓴맛</span><div class="fl-bar-wrap"><div class="fl-bar bar-cold" style="width:15%"></div></div></div>
+    <div class="fl-row"><span class="fl-attr">단맛</span><div class="fl-bar-wrap"><div class="fl-bar bar-cold" style="width:80%"></div></div></div>
+    <div class="fl-row"><span class="fl-attr">향 보존도</span><div class="fl-bar-wrap"><div class="fl-bar bar-cold" style="width:90%"></div></div></div>
+  </div>
+</div>
+
+<p>가장 시사적인 데이터는 <strong>향 보존도</strong>입니다. 콜드브루는 휘발성 향기 화합물의 최대 90%를 보존합니다. 저온에서 증기압이 최소화되어 공기 중으로 증발하지 않고 액체에 용존하기 때문입니다. 핫브루와 에스프레소에서는 상당량의 휘발성 물질이 추출 중과 후에 증기로 손실됩니다. 갓 뽑은 에스프레소에 코를 가져갈 때 느끼는 그 향은, 문자 그대로 잔에서 빠져나가는 맛입니다.</p>
+
+<div class="callout">
+  <div class="callout-label">냉각의 역설</div>
+  <p>콜드브루는 역설적으로 원두의 향미 정보를 가장 잘 <strong>보존</strong>하는 방법입니다. 저온 추출은 냉동 녹음과 같습니다: <strong>적은 에너지, 적은 분해, 적은 휘발</strong>. 입에 도달하는 화합물은 원두가 원래 품고 있던 것에 가장 가까운 상태입니다 — 물에 의해 변환되었지만 열에 의해 왜곡되지 않은. 이것은 추출에서 소비까지 콜드체인이 유지되는 모든 응용에서 심오한 함의를 갖습니다.</p>
+</div>
+
+<p>여기서 결정적 질문이 열립니다: 콜드브루가 향을 더 잘 보존한다면, 모든 콜드브루 방법이 똑같이 보존할까요? 답은 아니오입니다. 콜드브루 안에는 두 가지 기법 — 점적식과 침출식 — 사이에 근본적 차이가 존재하며, 이것이 다음 글의 주제입니다.</p>
+
+<div class="next-series">
+  <div class="ns-label">시리즈 다음 편</div>
+  <div class="ns-title">점적 vs 침출: 냉추출의 두 갈래 길</div>
+  <div class="ns-desc">콜드브루 내에서 접촉 방식이 추출 프로파일을 근본적으로 바꾸는 이유 — 그리고 HARA가 하나를 선택한 이유.</div>
+</div>
+
+</div>
+
+<!-- ══════ ENGLISH ══════ -->
+<div class="lang-content" data-lang="en" style="display:none;">
+
+<div class="series-nav">
+  <div class="sn-badge">CdGF SERIES</div>
+  <div class="sn-steps">
+    <span class="sn-step active">01 · T, P, t</span>
+    <span class="sn-arrow">→</span>
+    <a class="sn-step" href="blog-post-cdgf-02.html">02 · Drip vs Immersion</a>
+    <span class="sn-arrow">→</span>
+    <a class="sn-step" href="blog-post-cdgf-03.html">03 · CdGF1% Philosophy</a>
+  </div>
+</div>
+
+<h2>Three variables, infinite coffees</h2>
+
+<p>Every coffee you've ever drunk — from a Neapolitan espresso to a 24-hour cold brew — is the result of the same unit operation: <strong>solid-liquid extraction</strong>. Water dissolves soluble compounds from a porous solid (ground coffee). But the flavor that reaches your mouth depends entirely on <strong>three physical variables</strong>: water temperature, applied pressure, and contact time.</p>
+
+<p>These three variables don't act independently. They form a <em class="t">three-dimensional extraction space</em> where each brewing method occupies a unique coordinate. Understanding this space means understanding why an espresso and a cold brew, using the same beans, can taste radically different — and why that difference isn't accidental but thermodynamic.</p>
+
+<div class="sep"></div>
+
+<h2>The method map</h2>
+
+<div class="var-table">
+  <div class="vt-header"><div class="vt-label">EXTRACTION PARAMETERS BY METHOD</div></div>
+  <div class="vt-body">
+    <div class="vt-row vt-head">
+      <div class="vt-cell">Parameter</div>
+      <div class="vt-cell">Espresso</div>
+      <div class="vt-cell">Pour-over</div>
+      <div class="vt-cell">Hot brew</div>
+      <div class="vt-cell">Cold brew</div>
+    </div>
+    <div class="vt-row"><div class="vt-cell">Temperature</div><div class="vt-cell vt-highlight">92–96°C</div><div class="vt-cell">90–96°C</div><div class="vt-cell">90–96°C</div><div class="vt-cell vt-highlight">2–8°C</div></div>
+    <div class="vt-row"><div class="vt-cell">Pressure</div><div class="vt-cell vt-highlight">9 bar</div><div class="vt-cell">1 atm</div><div class="vt-cell">1 atm</div><div class="vt-cell">1 atm</div></div>
+    <div class="vt-row"><div class="vt-cell">Time</div><div class="vt-cell vt-highlight">25–30 s</div><div class="vt-cell">2.5–4 min</div><div class="vt-cell">3–5 min</div><div class="vt-cell vt-highlight">8–24 h</div></div>
+    <div class="vt-row"><div class="vt-cell">Water:coffee</div><div class="vt-cell">1.5–2.5:1</div><div class="vt-cell">15–17:1</div><div class="vt-cell">15–17:1</div><div class="vt-cell">5–8:1</div></div>
+    <div class="vt-row"><div class="vt-cell">TDS</div><div class="vt-cell vt-highlight">8–12%</div><div class="vt-cell">1.2–1.5%</div><div class="vt-cell">1.2–1.5%</div><div class="vt-cell vt-highlight">1.5–3.5%</div></div>
+    <div class="vt-row"><div class="vt-cell">Grind</div><div class="vt-cell">~200 μm</div><div class="vt-cell">~600 μm</div><div class="vt-cell">~800 μm</div><div class="vt-cell">~1000 μm</div></div>
+  </div>
+</div>
+
+<p>Espresso and cold brew are opposite extremes of the space: maximum temperature + pressure + minimum time versus minimum temperature + atmospheric pressure + maximum time. Two entirely different extraction philosophies: one that <strong>forces</strong> dissolution through kinetic energy, and one that <strong>waits</strong> for passive molecular diffusion.</p>
+
+<div class="sep"></div>
+
+<h2>Temperature: the molecular switch</h2>
+
+<p>Temperature is the most decisive variable because it controls two phenomena simultaneously: <strong>diffusion kinetics</strong> (how fast compounds dissolve) and <strong>extraction selectivity</strong> (which compounds dissolve).</p>
+
+<div class="diffusion-card">
+  <div class="dc-label">DIFFUSION COEFFICIENT vs TEMPERATURE</div>
+  <div class="dc-equation">
+    <div class="formula"><em>D</em> = <em>D₀</em> · exp(−<em>Ea</em> / <em>RT</em>)</div>
+    <div class="note">Arrhenius equation. D = diffusion coefficient, Ea = activation energy,<br>R = gas constant, T = absolute temperature.</div>
+  </div>
+  <div class="dc-compare">
+    <div class="dc-item">
+      <div class="dc-val val-hot">93°C</div>
+      <div class="dc-unit">HOT BREW</div>
+      <div class="dc-desc">D ≈ 5.0 × 10⁻¹⁰ m²/s. High kinetic energy. Molecules move fast, colliding frequently with the cell wall. Extraction of compounds across all molecular weights.</div>
+    </div>
+    <div class="dc-item">
+      <div class="dc-val val-cold">5°C</div>
+      <div class="dc-unit">COLD BREW</div>
+      <div class="dc-desc">D ≈ 2.5 × 10⁻¹⁰ m²/s. 40–50% lower. Molecules move slowly. Only low-molecular-weight compounds with lower activation energy extract efficiently.</div>
+    </div>
+  </div>
+</div>
+
+<p>This diffusivity difference is not linear but <strong>selective</strong>. At 5°C, low-molecular-weight organic acids (citric, malic, quinic) and caffeine extract with relative ease — their molecules are small and their activation energy is low. But high-molecular-weight polyphenols (chlorogenic acids, tannins) and bitter quinolactones need significantly more energy to detach from the cellular matrix. At low temperature, they simply <strong>don't have enough energy to escape</strong>.</p>
+
+<p>The result is naturally <strong>fractional</strong> extraction: cold brew selectively extracts pleasant flavor compounds (gentle acids, sugars, certain low-boiling-point volatiles) while trapping the compounds responsible for bitterness and astringency in the matrix. Cold brew isn't "weaker" — it's molecularly <em class="t">different</em>.</p>
+
+<div class="method-grid">
+  <div class="method-card mc-hot">
+    <div class="mc-label">🔥 HOT BREW · 90–96°C</div>
+    <h4>Total extraction</h4>
+    <p>At high temperature, water has enough energy to extract compounds across <strong>all molecular weights</strong>: acids, sugars, caffeine, polyphenols, melanoidins. The resulting profile is complete, with full body, pronounced acidity, and a broad aromatic spectrum from floral to chocolate.</p>
+    <p>The risk: exceeding time lets high-MW compounds (tannins, degraded CGA) dominate, producing bitterness and astringency.</p>
+    <div class="mc-params"><span class="mc-param param-t">93°C</span><span class="mc-param param-ti">3–5 min</span></div>
+  </div>
+  <div class="method-card mc-cold">
+    <div class="mc-label">❄️ COLD BREW · 2–8°C</div>
+    <h4>Selective extraction</h4>
+    <p>Low temperature acts as a <strong>molecular filter</strong>. Low-MW compounds extract via slow diffusion; high-MW ones stay trapped. Result: natural sweetness, round and gentle acidity, absence of bitterness, and <strong>retained volatility</strong> — aromatic compounds, undisturbed by heat, remain in solution instead of evaporating.</p>
+    <p>A crucial thermodynamic advantage: at low temperature, aromatic volatiles have minimal vapor pressure, so they stay dissolved rather than dispersing into the air.</p>
+    <div class="mc-params"><span class="mc-param param-t-cold">2–8°C</span><span class="mc-param param-ti">8–24 h</span></div>
+  </div>
+</div>
+
+<div class="sep"></div>
+
+<h2>Pressure: espresso's fourth dimension</h2>
+
+<p>Espresso introduces a variable no other method uses: <strong>9 atmospheres of pressure</strong>. This isn't a minor variant; it completely redefines extraction physics.</p>
+
+<div class="method-grid">
+  <div class="method-card mc-espresso">
+    <div class="mc-label">⚡ ESPRESSO · 9 bar</div>
+    <h4>Forced extraction + emulsion</h4>
+    <p>9 bar pressure serves three simultaneous functions:</p>
+    <p><strong>1. Overcome bed resistance:</strong> 200 μm grind creates a bed so dense that water cannot pass by gravity. 9 atm is needed to force flow through particles offering ~10⁶ Pa·s/m² resistance (Darcy's equation).</p>
+    <p><strong>2. Accelerate diffusion:</strong> Pressure increases solvent penetration into particle pores, reducing internal mass transfer resistance. More extraction in less time.</p>
+    <p><strong>3. Create emulsion:</strong> At 9 bar, coffee lipids (~15% w/w) disperse as ~10 μm microdroplets in a stable O/W emulsion. CO₂ dissolved under pressure releases as microbubbles upon depressurization → crema.</p>
+    <div class="mc-params"><span class="mc-param param-t">93°C</span><span class="mc-param param-p">9 bar</span><span class="mc-param param-ti-short">25–30 s</span></div>
+  </div>
+  <div class="method-card mc-pour">
+    <div class="mc-label">💧 POUR-OVER · 1 atm</div>
+    <h4>Gravitational selective extraction</h4>
+    <p>Pour-over (V60, Kalita, Chemex) uses gravity alone as the driving force:</p>
+    <p><strong>No pressure = no emulsion.</strong> Lipids are retained by the paper filter. The result is <strong>crystalline clarity</strong> without the viscosity or crema of espresso.</p>
+    <p><strong>Slow flow = sequential extraction.</strong> Water passes through the coffee bed by gravity, creating a vertical concentration gradient (plug flow reactor analogy). Each layer extracts different compounds by position, yielding <strong>defined aromatic layers</strong>.</p>
+    <div class="mc-params"><span class="mc-param param-t">93°C</span><span class="mc-param param-ti">2.5–4 min</span></div>
+  </div>
+</div>
+
+<div class="sep"></div>
+
+<h2>The unified space</h2>
+
+<div class="extraction-space">
+  <div class="es-inner">
+    <div class="es-label">EXTRACTION SPACE MAP</div>
+    <div class="es-map">
+      <div class="es-y-axis">
+        <div class="es-y-label">9 bar ↑</div>
+        <div class="es-y-label">1 atm</div>
+      </div>
+      <div class="es-grid">
+        <div class="es-quadrant eq-tr">
+          <div class="eq-name">Espresso</div>
+          <div class="eq-vars">93°C · 9 bar · 25 s</div>
+          <div class="eq-flavor">Colloidal emulsion. Extreme body. Crema. Concentrated intensity.</div>
+        </div>
+        <div class="es-quadrant eq-tl" style="opacity:.2">
+          <div class="eq-name" style="opacity:.5">—</div>
+          <div class="eq-vars">Low T · High P</div>
+          <div class="eq-flavor">Unexplored zone. Cold espresso?</div>
+        </div>
+        <div class="es-quadrant eq-bl">
+          <div class="eq-name">Pour-over / Hot brew</div>
+          <div class="eq-vars">93°C · 1 atm · 3–5 min</div>
+          <div class="eq-flavor">Clean solution. Clarity. Defined aromatic layers. Bright acidity.</div>
+        </div>
+        <div class="es-quadrant eq-br">
+          <div class="eq-name">Cold brew</div>
+          <div class="eq-vars">2–8°C · 1 atm · 8–24 h</div>
+          <div class="eq-flavor">Selective extraction. Natural sweetness. Retained volatiles. Smoothness.</div>
+        </div>
+      </div>
+    </div>
+    <div class="es-x-row">
+      <div class="es-x-spacer"></div>
+      <div class="es-x-labels">
+        <div class="es-x-label">← High T°</div>
+        <div class="es-x-label">Low T° →</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<h3>Resulting flavor profiles</h3>
+
+<div class="flavor-compare">
+  <div class="fl-card">
+    <h4><span class="dot dot-esp"></span> Espresso</h4>
+    <div class="fl-row"><span class="fl-attr">Body</span><div class="fl-bar-wrap"><div class="fl-bar bar-esp" style="width:95%"></div></div></div>
+    <div class="fl-row"><span class="fl-attr">Acidity</span><div class="fl-bar-wrap"><div class="fl-bar bar-esp" style="width:60%"></div></div></div>
+    <div class="fl-row"><span class="fl-attr">Bitterness</span><div class="fl-bar-wrap"><div class="fl-bar bar-esp" style="width:70%"></div></div></div>
+    <div class="fl-row"><span class="fl-attr">Sweetness</span><div class="fl-bar-wrap"><div class="fl-bar bar-esp" style="width:50%"></div></div></div>
+    <div class="fl-row"><span class="fl-attr">Aroma retention</span><div class="fl-bar-wrap"><div class="fl-bar bar-esp" style="width:40%"></div></div></div>
+  </div>
+  <div class="fl-card">
+    <h4><span class="dot dot-pour"></span> Pour-over</h4>
+    <div class="fl-row"><span class="fl-attr">Body</span><div class="fl-bar-wrap"><div class="fl-bar bar-pour" style="width:45%"></div></div></div>
+    <div class="fl-row"><span class="fl-attr">Acidity</span><div class="fl-bar-wrap"><div class="fl-bar bar-pour" style="width:85%"></div></div></div>
+    <div class="fl-row"><span class="fl-attr">Bitterness</span><div class="fl-bar-wrap"><div class="fl-bar bar-pour" style="width:30%"></div></div></div>
+    <div class="fl-row"><span class="fl-attr">Sweetness</span><div class="fl-bar-wrap"><div class="fl-bar bar-pour" style="width:65%"></div></div></div>
+    <div class="fl-row"><span class="fl-attr">Aroma retention</span><div class="fl-bar-wrap"><div class="fl-bar bar-pour" style="width:55%"></div></div></div>
+  </div>
+  <div class="fl-card">
+    <h4><span class="dot dot-hot"></span> Hot brew (immersion)</h4>
+    <div class="fl-row"><span class="fl-attr">Body</span><div class="fl-bar-wrap"><div class="fl-bar bar-hot" style="width:70%"></div></div></div>
+    <div class="fl-row"><span class="fl-attr">Acidity</span><div class="fl-bar-wrap"><div class="fl-bar bar-hot" style="width:65%"></div></div></div>
+    <div class="fl-row"><span class="fl-attr">Bitterness</span><div class="fl-bar-wrap"><div class="fl-bar bar-hot" style="width:55%"></div></div></div>
+    <div class="fl-row"><span class="fl-attr">Sweetness</span><div class="fl-bar-wrap"><div class="fl-bar bar-hot" style="width:55%"></div></div></div>
+    <div class="fl-row"><span class="fl-attr">Aroma retention</span><div class="fl-bar-wrap"><div class="fl-bar bar-hot" style="width:50%"></div></div></div>
+  </div>
+  <div class="fl-card">
+    <h4><span class="dot dot-cold"></span> Cold brew</h4>
+    <div class="fl-row"><span class="fl-attr">Body</span><div class="fl-bar-wrap"><div class="fl-bar bar-cold" style="width:55%"></div></div></div>
+    <div class="fl-row"><span class="fl-attr">Acidity</span><div class="fl-bar-wrap"><div class="fl-bar bar-cold" style="width:35%"></div></div></div>
+    <div class="fl-row"><span class="fl-attr">Bitterness</span><div class="fl-bar-wrap"><div class="fl-bar bar-cold" style="width:15%"></div></div></div>
+    <div class="fl-row"><span class="fl-attr">Sweetness</span><div class="fl-bar-wrap"><div class="fl-bar bar-cold" style="width:80%"></div></div></div>
+    <div class="fl-row"><span class="fl-attr">Aroma retention</span><div class="fl-bar-wrap"><div class="fl-bar bar-cold" style="width:90%"></div></div></div>
+  </div>
+</div>
+
+<p>The most revealing data point is <strong>aroma retention</strong>. Cold brew retains up to 90% of volatile aromatic compounds because at low temperature their vapor pressure is minimal — they remain dissolved in the liquid instead of evaporating. In hot brew and espresso, a significant fraction is lost as vapor. The aroma you smell hovering over a fresh espresso is, literally, flavor escaping the cup.</p>
+
+<div class="callout">
+  <div class="callout-label">THE COLD PARADOX</div>
+  <p>Cold brew is, paradoxically, the method that best <strong>preserves</strong> the bean's aromatic information. Low-temperature extraction is like cold recording: <strong>less energy, less degradation, less volatilization</strong>. The compounds reaching your mouth are the closest to what the bean originally contained — transformed by water but not distorted by heat. This has profound implications for any application where the cold chain is maintained from extraction to consumption.</p>
+</div>
+
+<p>And here a crucial question opens: if cold brew preserves aromatics better, do all cold brew methods do so equally? The answer is no. Within cold brew there is a fundamental difference between two techniques — drip and immersion — which is the subject of our next article.</p>
+
+<div class="next-series">
+  <div class="ns-label">NEXT IN THE SERIES</div>
+  <div class="ns-title">Drip vs Immersion: two cold paths</div>
+  <div class="ns-desc">Why the contact method within cold brew radically changes the extraction profile — and why HARA chose one over the other.</div>
+</div>
+
+</div>
+
+</article>
+
+<div class="author-card">
+  <div class="author-avatar"><span>H</span></div>
+  <div class="author-info">
+    <h4>HARA Coffee Lab</h4>
+    <p data-i18n="ab">Ciencia, precisión y pasión por el café de especialidad. Salta, Argentina.</p>
+  </div>
+</div>
+<footer><div class="footer-brand">© 2026 HARA COFFEE LAB · SALTA, ARGENTINA · CADA GOTA CUENTA</div></footer>
+
+<script>
+let currentLang='es';
+const ui={
+  es:{st:'CdGF SERIES',sn:'01 / 03',ht:'<span class="v-temp">Temperatura</span>, <span class="v-press">Presión</span>, <span class="v-time">Tiempo</span><br>el espacio de extracción',hs:'Cuatro métodos de preparación. Tres variables físicas. Un mapa unificado que explica por qué cada café sabe diferente.',hb:'CIENCIA',hr:'13 min lectura',ax1:'TEMPERATURA',ax2:'PRESIÓN',ax3:'TIEMPO',ab:'Ciencia, precisión y pasión por el café de especialidad. Salta, Argentina.','ns-label':'SIGUIENTE EN LA SERIE','ns-title':'Goteo vs Inmersión: dos caminos en frío','ns-desc':'Por qué el método de contacto dentro del cold brew cambia radicalmente el perfil de extracción — y por qué HARA eligió uno sobre el otro.'},
+  ko:{st:'CdGF 시리즈',sn:'01 / 03',ht:'<span class="v-temp">온도</span>, <span class="v-press">압력</span>, <span class="v-time">시간</span><br>추출의 공간',hs:'네 가지 추출법. 세 가지 물리 변수. 모든 커피 맛의 차이를 설명하는 통합 지도.',hb:'과학',hr:'13분 소요',ax1:'온도',ax2:'압력',ax3:'시간',ab:'과학, 정밀함, 그리고 스페셜티 커피에 대한 열정. 아르헨티나 살타.','ns-label':'시리즈 다음 편','ns-title':'점적 vs 침출: 냉추출의 두 갈래 길','ns-desc':'콜드브루 내에서 접촉 방식이 추출 프로파일을 근본적으로 바꾸는 이유 — 그리고 HARA가 하나를 선택한 이유.'},
+  en:{st:'CdGF SERIES',sn:'01 / 03',ht:'<span class="v-temp">Temperature</span>, <span class="v-press">Pressure</span>, <span class="v-time">Time</span><br>the extraction space',hs:'Four brewing methods. Three physical variables. One unified map explaining why every coffee tastes different.',hb:'SCIENCE',hr:'13 min read',ax1:'TEMPERATURE',ax2:'PRESSURE',ax3:'TIME',ab:'Science, precision, and passion for specialty coffee. Salta, Argentina.','ns-label':'NEXT IN THE SERIES','ns-title':'Drip vs Immersion: two cold paths','ns-desc':'Why the contact method within cold brew radically changes the extraction profile — and why HARA chose one over the other.'}
+};
+function switchLang(l){currentLang=l;document.documentElement.lang=l==='ko'?'ko':l==='en'?'en':'es';document.querySelectorAll('[data-i18n]').forEach(e=>{const k=e.dataset.i18n;if(ui[l][k])e.innerHTML=ui[l][k]});document.querySelectorAll('.lang-content').forEach(e=>{e.style.display=e.dataset.lang===l?'block':'none'});document.querySelectorAll('.lang-btn').forEach(b=>b.classList.toggle('active',b.dataset.lang===l))}
+document.querySelectorAll('.lang-btn').forEach(b=>{b.addEventListener('click',()=>switchLang(b.dataset.lang))});
+window.addEventListener('scroll',()=>{const d=document.documentElement;document.getElementById('progressBar').style.width=(d.scrollTop/(d.scrollHeight-d.clientHeight))*100+'%';document.getElementById('mainNav').classList.toggle('scrolled',d.scrollTop>60)});
+</script>
+</body>
+</html>
